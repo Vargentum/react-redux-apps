@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 
 type Props = {
 
@@ -18,8 +18,8 @@ export class <%= pascalEntityName %> extends React.Component {
 const mapStateToProps = (state) => {
   return {}
 }
-const mapDispatchToProps = (dispatch) => {
-  return {}
+const mapDispatchToProps = {
+  
 }
 
 export default connect(
