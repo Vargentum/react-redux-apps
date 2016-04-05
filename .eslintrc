@@ -24,6 +24,9 @@
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
     "quotes": 0,
-    "space-before-function-paren": 0
+    "space-before-function-paren": 0,
+    "jsx-quotes": 0,
+    "react/jsx-indent-props": 0,
+    "operator-linebreak": 0
   }
 }
