@@ -1,13 +1,15 @@
 import React from 'react'
 import SearchBar from '../common/SearchBar'
+import SearchResults from "../common/SearchResults"
 
 type Props = {
-  response: PropTypes.array.isRequired,
+  results: PropTypes.array.isRequired,
   error: ProptTypes.object,
   loading: PropTypes.book,
   searchWiki: PropTypes.func,
   token: PropTypes.string
 };
+
 export class WikipediaUI extends React.Component {
   props: Props;
 
@@ -16,7 +18,7 @@ export class WikipediaUI extends React.Component {
       loading,
       searchWiki,
       token,
-      response
+      results
     } = this.props
 
     return (
@@ -25,13 +27,11 @@ export class WikipediaUI extends React.Component {
         {loading ?
           <h4>Loading...</h4>
           :
-          <h6>{response.toString()}</h6>
+          <SearchResults data={results} />
         }
       </div>
     )
   }
 }
 
-
 export default WikipediaUI
-

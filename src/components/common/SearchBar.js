@@ -8,15 +8,9 @@ type Props = {
 export class SearchBar extends React.Component {
   props: Props;
 
-  state = {
-    token: ''
-  }
-
   handleChange = (ev) => {
-    _.throttle(this.props.onSearch, 1000)(ev.target.value)
-    this.setState({
-      token: ev.target.value
-    });
+    console.log(ev.target)
+    this.props.onSearch(ev.target.value)
   }
 
   render () {
@@ -29,8 +23,8 @@ export class SearchBar extends React.Component {
       <div>
         <input type="search"
                placeholder="Search smth..."
-               onChange={this.handleChange}
-               value={this.state.token} />
+               onChange={_.throttle(this.handleChange, 1500, {trailing: false})}
+               value={this.props.token} />
       </div>
     )
   }

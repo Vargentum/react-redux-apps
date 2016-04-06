@@ -1,12 +1,14 @@
 import reqwest from 'reqwest'
+import _ from "lodash"
 
 // Constants
 export const REQUEST_WIKI_SEARCH = 'REQUEST_WIKI_SEARCH'
 export const WIKI_API = 'https://www.mediawiki.org/w/api.php?action=opensearch&search='
 
-function startRequest () {
+function startRequest (token) {
   return {
-    type: "START"
+    type: "START",
+    payload: token
   }
 }
 
@@ -24,22 +26,16 @@ function errorResponse (error) {
   }
 }
 
-function completeRequest (token) {
+function completeRequest () {
   return {
-    type: "COMPLETE",
-    payload: token
+    type: "COMPLETE"
   }
 }
 
 // Thunk
 export const searchWiki = (token) => {
   return (dispatch, getState) => {
-    console.log('search-wiki')
-
-    if (!token.length) return
-
-    dispatch(startRequest())
-
+    dispatch(startRequest(token))
     reqwest({
       url: WIKI_API + token,
       crossOrigin: true,
@@ -48,37 +44,45 @@ export const searchWiki = (token) => {
       error: (error) => dispatch(errorResponse(error)),
       complete: () => dispatch(completeRequest(token))
     })
-
-    // return new Promise((resolve) => {
-    //   dispatch(increment(getState().counter))
-    //   resolve()
-    // })
   }
+}
+
+function parseOpenSearchResponse ([token, titles, subTitles, links]) {
+  return _.times(titles.length - 1, (i) => {
+    // all arrays has euqal length
+    return {
+      title: titles[i],
+      subTitle: subTitles[i],
+      link: links[i]
+    }
+  })
 }
 
 // Reducer
 export const initialState = {
+  token: '',
   loading: false,
-  response: [],
+  loaded: false,
+  results: [],
   error: null
 }
 export default function (state = initialState, {type, payload}) {
   switch (type) {
-    case "START": 
+    case "START":
       return Object.assign({}, state, {
-        response: payload,
-        loading: true
+        loading: true,
+        token: payload
       })
 
     case "SUCCESS":
       return Object.assign({}, state, {
-        response: payload
+        results: parseOpenSearchResponse(payload)
       })
 
     case "COMPLETE":
       return Object.assign({}, state, {
-        token: payload,
-        loading: false
+        loading: false,
+        loaded: true
       })
 
     default:
