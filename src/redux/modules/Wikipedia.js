@@ -62,14 +62,13 @@ export const searchWiki = (token) => {
       type: 'jsonp',
       success: (response) => dispatch(successResponse(response)),
       error: (error) => dispatch(errorResponse(error)),
-      complete: () => dispatch(completeRequest(token))
+      complete: () => dispatch(completeRequest())
     })
   }
 }
 
 // Reducer
 export const initialState = {
-  token: '',
   loading: false,
   loaded: false,
   results: [],
@@ -87,6 +86,11 @@ export default function (state = initialState, {type, payload}) {
     case "SUCCESS":
       return Object.assign({}, state, {
         results: parseWikiResponse(payload)
+      })
+
+    case "ERROR":
+      return Object.assign({}, state, {
+        error: payload
       })
 
     case "COMPLETE":

@@ -2,6 +2,7 @@ import React from 'react'
 import SearchBar from '../common/SearchBar'
 import SearchResults from "../common/SearchResults"
 import WikiArticlePreview from './WikiArticlePreview'
+import ErrorArea from '../common/ErrorArea'
 import {WIKI_RANDOM_ARTICLE_URL} from '../../redux/modules/Wikipedia'
 
 type Props = {
@@ -20,22 +21,24 @@ export class WikipediaUI extends React.Component {
       loading,
       loaded,
       searchWiki,
-      results
+      results,
+      error
     } = this.props
 
     return (
       <div>
         <SearchBar searchByToken={searchWiki}
                    randomResultUrl={WIKI_RANDOM_ARTICLE_URL} />
-        {loading && !loaded ?
+        {loading ?
           <h3 className="f-box f-align--1-2">Loading...</h3>
           :
-          null
-        }
-        {loaded && !results.length ?
-          <h3 className="f-box f-align--1-2">Sorry, no results. Try another search.</h3>
-          :
-          <SearchResults data={results} Item={WikiArticlePreview} />
+          error ?
+            <ErrorArea error={error} />
+            :
+            loaded && !results.length ?
+              <h3 className="f-box f-align--1-2">Sorry, no results. Try another search.</h3>
+              :
+              <SearchResults data={results} Item={WikiArticlePreview} />
         }
       </div>
     )
