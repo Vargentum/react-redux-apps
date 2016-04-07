@@ -5,7 +5,7 @@ import URI from 'urijs'
 // Constants
 export const REQUEST_WIKI_SEARCH = 'REQUEST_WIKI_SEARCH'
 const WIKI_API_ENDPOINT = 'https://en.wikipedia.org/w/api.php?'
-const WIKI_LINK_ENDPOINT = 'http://en.wikipedia.org/wiki/'
+export const WIKI_RANDOM_ARTICLE_URL = 'http://en.wikipedia.org/wiki/Special:Random'
 
 function buildWikiQuery(token) {
   const query = {

@@ -1,9 +1,8 @@
 import React, {PropTypes} from 'react'
-import _ from 'lodash'
 
 type Props = {
   searchByToken: PropTypes.func.isRequred,
-  searchRandom: PropTypes.func
+  randomResultUrl: PropTypes.string
 };
 export class SearchBar extends React.Component {
   props: Props;
@@ -19,7 +18,7 @@ export class SearchBar extends React.Component {
   }
 
   render () {
-    const { searchByToken, searchRandom } = this.props
+    const { searchByToken, randomResultUrl } = this.props
     const { token } = this.state
 
     return (
@@ -27,9 +26,13 @@ export class SearchBar extends React.Component {
         <input type="search"
                placeholder="Search smth..."
                onChange={this.updateToken}
-               value={this.state.token} />
+               value={token} />
         <button onClick={() => searchByToken(token)}>Search</button>
-        <button onClick={searchRandom}>Random</button>
+        {randomResultUrl ? 
+          <a target="_blank" href={randomResultUrl}>Random Article</a>
+          :
+          null
+        }
       </div>
     )
   }

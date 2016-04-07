@@ -2,6 +2,7 @@ import React from 'react'
 import SearchBar from '../common/SearchBar'
 import SearchResults from "../common/SearchResults"
 import WikiArticlePreview from './WikiArticlePreview'
+import {WIKI_RANDOM_ARTICLE_URL} from '../../redux/modules/Wikipedia'
 
 type Props = {
   results: PropTypes.array.isRequired,
@@ -23,7 +24,8 @@ export class WikipediaUI extends React.Component {
 
     return (
       <div>
-        <SearchBar searchByToken={searchWiki} />
+        <SearchBar searchByToken={searchWiki}
+                   randomResultUrl={WIKI_RANDOM_ARTICLE_URL} />
         {loading ?
           <h4>Loading...</h4>
           :
