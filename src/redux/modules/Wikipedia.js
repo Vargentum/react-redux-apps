@@ -4,7 +4,7 @@ import URI from 'urijs'
 
 // Constants
 export const REQUEST_WIKI_SEARCH = 'REQUEST_WIKI_SEARCH'
-const WIKI_API_ENDPOINT = 'https://www.mediawiki.org/w/api.php?'
+const WIKI_API_ENDPOINT = 'https://en.wikipedia.org/w/api.php?'
 const WIKI_LINK_ENDPOINT = 'http://en.wikipedia.org/wiki/'
 
 function buildWikiQuery(token) {
@@ -13,22 +13,19 @@ function buildWikiQuery(token) {
     list: 'search',
     srsearch: token,
     srprop: 'snippet|titlesnippet',
-    format: 'json'
+    format: 'json',
+    generator: 'search',
+    gsrsearch: token,
+    prop: 'info',
+    inprop: 'url'
   }
   return WIKI_API_ENDPOINT + URI.buildQuery(query)
 } 
 
-function convertTitleToLink (title) {
-  return WIKI_LINK_ENDPOINT + _.snakeCase(title)
-}
 
-function augmentResultsWithLinks (results) {
-  return results.map((entry) => Object.assign(
-    {}, 
-    entry, 
-    {
-      link: convertTitleToLink(entry.title)
-    }))
+function parseWikiResponse ({query: {pages, search}}) {
+  const pagesSortedArray = _.toArray(pages).sort((a,b) => a.index - b.index)
+  return search.map((item, idx) => Object.assign({}, item, pagesSortedArray[idx]))
 }
 
 function startRequest () {
@@ -90,7 +87,7 @@ export default function (state = initialState, {type, payload}) {
 
     case "SUCCESS":
       return Object.assign({}, state, {
-        results: augmentResultsWithLinks(payload.query.search)
+        results: parseWikiResponse(payload)
       })
 
     case "COMPLETE":

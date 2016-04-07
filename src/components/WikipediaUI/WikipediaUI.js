@@ -1,6 +1,7 @@
 import React from 'react'
 import SearchBar from '../common/SearchBar'
 import SearchResults from "../common/SearchResults"
+import WikiArticlePreview from './WikiArticlePreview'
 
 type Props = {
   results: PropTypes.array.isRequired,
@@ -26,7 +27,7 @@ export class WikipediaUI extends React.Component {
         {loading ?
           <h4>Loading...</h4>
           :
-          <SearchResults data={results} />
+          <SearchResults data={results} Item={WikiArticlePreview} />
         }
       </div>
     )
