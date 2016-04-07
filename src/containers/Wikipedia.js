@@ -8,8 +8,7 @@ type Props = {
   results: PropTypes.array.isRequired, 
   error: ProptTypes.object,
   loading: PropTypes.book,
-  searchWiki: PropTypes.func,
-  token: PropTypes.string
+  searchWiki: PropTypes.func
 }
 export class Wikipedia extends React.Component {
   props: Props;
@@ -24,8 +23,8 @@ export class Wikipedia extends React.Component {
 }
 
 const mapStateToProps = ({wikipedia}) => {
-  const {results, error, loading, token} = wikipedia
-  return {results, error, loading, token}
+  const {results, error, loading} = wikipedia
+  return {results, error, loading}
 }
 
 const mapDispatchToProps = {

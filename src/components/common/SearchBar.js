@@ -2,29 +2,34 @@ import React, {PropTypes} from 'react'
 import _ from 'lodash'
 
 type Props = {
-  onSearch: PropTypes.func.isRequred,
-  token: PropTypes.string.isRequred
+  searchByToken: PropTypes.func.isRequred,
+  searchRandom: PropTypes.func
 };
 export class SearchBar extends React.Component {
   props: Props;
 
-  handleChange = (ev) => {
-    console.log(ev.target)
-    this.props.onSearch(ev.target.value)
+  state = {
+    token: 'position'
+  }
+
+  updateToken = (ev) => {
+    this.setState({
+      token: ev.target.value
+    });
   }
 
   render () {
-    const {
-      onSearch,
-      token
-    } = this.props
+    const { searchByToken, searchRandom } = this.props
+    const { token } = this.state
 
     return (
       <div>
         <input type="search"
                placeholder="Search smth..."
-               onChange={_.throttle(this.handleChange, 1500, {trailing: false})}
-               value={this.props.token} />
+               onChange={this.updateToken}
+               value={this.state.token} />
+        <button onClick={() => searchByToken(token)}>Search</button>
+        <button onClick={searchRandom}>Random</button>
       </div>
     )
   }

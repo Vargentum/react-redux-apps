@@ -1,14 +1,39 @@
 import reqwest from 'reqwest'
 import _ from "lodash"
+import URI from 'urijs'
 
 // Constants
 export const REQUEST_WIKI_SEARCH = 'REQUEST_WIKI_SEARCH'
-export const WIKI_API = 'https://www.mediawiki.org/w/api.php?action=opensearch&search='
+const WIKI_API_ENDPOINT = 'https://www.mediawiki.org/w/api.php?'
+const WIKI_LINK_ENDPOINT = 'http://en.wikipedia.org/wiki/'
 
-function startRequest (token) {
+function buildWikiQuery(token) {
+  const query = {
+    action: 'query',
+    list: 'search',
+    srsearch: token,
+    srprop: 'snippet|titlesnippet',
+    format: 'json'
+  }
+  return WIKI_API_ENDPOINT + URI.buildQuery(query)
+} 
+
+function convertTitleToLink (title) {
+  return WIKI_LINK_ENDPOINT + _.snakeCase(title)
+}
+
+function augmentResultsWithLinks (results) {
+  return results.map((entry) => Object.assign(
+    {}, 
+    entry, 
+    {
+      link: convertTitleToLink(entry.title)
+    }))
+}
+
+function startRequest () {
   return {
-    type: "START",
-    payload: token
+    type: "START"
   }
 }
 
@@ -37,7 +62,7 @@ export const searchWiki = (token) => {
   return (dispatch, getState) => {
     dispatch(startRequest(token))
     reqwest({
-      url: WIKI_API + token,
+      url: buildWikiQuery(token),
       crossOrigin: true,
       type: 'jsonp',
       success: (response) => dispatch(successResponse(response)),
@@ -45,17 +70,6 @@ export const searchWiki = (token) => {
       complete: () => dispatch(completeRequest(token))
     })
   }
-}
-
-function parseOpenSearchResponse ([token, titles, subTitles, links]) {
-  return _.times(titles.length - 1, (i) => {
-    // all arrays has euqal length
-    return {
-      title: titles[i],
-      subTitle: subTitles[i],
-      link: links[i]
-    }
-  })
 }
 
 // Reducer
@@ -66,17 +80,17 @@ export const initialState = {
   results: [],
   error: null
 }
+
 export default function (state = initialState, {type, payload}) {
   switch (type) {
     case "START":
       return Object.assign({}, state, {
-        loading: true,
-        token: payload
+        loading: true
       })
 
     case "SUCCESS":
       return Object.assign({}, state, {
-        results: parseOpenSearchResponse(payload)
+        results: augmentResultsWithLinks(payload.query.search)
       })
 
     case "COMPLETE":

@@ -6,8 +6,7 @@ type Props = {
   results: PropTypes.array.isRequired,
   error: ProptTypes.object,
   loading: PropTypes.book,
-  searchWiki: PropTypes.func,
-  token: PropTypes.string
+  searchWiki: PropTypes.func
 };
 
 export class WikipediaUI extends React.Component {
@@ -23,7 +22,7 @@ export class WikipediaUI extends React.Component {
 
     return (
       <div>
-        <SearchBar onSearch={searchWiki} token={token} />
+        <SearchBar searchByToken={searchWiki} />
         {loading ?
           <h4>Loading...</h4>
           :

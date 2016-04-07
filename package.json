@@ -79,7 +79,8 @@
     "react-router-redux": "^4.0.0",
     "redux": "^3.0.0",
     "redux-thunk": "^2.0.0",
-    "reqwest": "^2.0.5"
+    "reqwest": "^2.0.5",
+    "urijs": "^1.17.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
