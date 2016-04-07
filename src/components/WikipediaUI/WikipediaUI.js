@@ -7,7 +7,8 @@ import {WIKI_RANDOM_ARTICLE_URL} from '../../redux/modules/Wikipedia'
 type Props = {
   results: PropTypes.array.isRequired,
   error: ProptTypes.object,
-  loading: PropTypes.book,
+  loaded: PropTypes.bool,
+  loading: PropTypes.bool,
   searchWiki: PropTypes.func
 };
 
@@ -17,8 +18,8 @@ export class WikipediaUI extends React.Component {
   render () {
     const {
       loading,
+      loaded,
       searchWiki,
-      token,
       results
     } = this.props
 
@@ -26,8 +27,13 @@ export class WikipediaUI extends React.Component {
       <div>
         <SearchBar searchByToken={searchWiki}
                    randomResultUrl={WIKI_RANDOM_ARTICLE_URL} />
-        {loading ?
-          <h4>Loading...</h4>
+        {loading && !loaded ?
+          <h3 className="f-box f-align--1-2">Loading...</h3>
+          :
+          null
+        }
+        {loaded && !results.length ?
+          <h3 className="f-box f-align--1-2">Sorry, no results. Try another search.</h3>
           :
           <SearchResults data={results} Item={WikiArticlePreview} />
         }

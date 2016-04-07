@@ -5,11 +5,13 @@ import {searchWiki} from 'redux/modules/Wikipedia'
 // import { bindActionCreators } from 'redux'
 
 type Props = {
-  results: PropTypes.array.isRequired, 
+  results: PropTypes.array.isRequired,
   error: ProptTypes.object,
-  loading: PropTypes.book,
+  loaded: PropTypes.bool,
+  loading: PropTypes.bool,
   searchWiki: PropTypes.func
 }
+
 export class Wikipedia extends React.Component {
   props: Props;
 
@@ -23,8 +25,8 @@ export class Wikipedia extends React.Component {
 }
 
 const mapStateToProps = ({wikipedia}) => {
-  const {results, error, loading} = wikipedia
-  return {results, error, loading}
+  const {results, error, loading, loaded} = wikipedia
+  return {results, error, loading, loaded}
 }
 
 const mapDispatchToProps = {

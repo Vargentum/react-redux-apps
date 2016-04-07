@@ -3,7 +3,6 @@ import _ from "lodash"
 import URI from 'urijs'
 
 // Constants
-export const REQUEST_WIKI_SEARCH = 'REQUEST_WIKI_SEARCH'
 const WIKI_API_ENDPOINT = 'https://en.wikipedia.org/w/api.php?'
 export const WIKI_RANDOM_ARTICLE_URL = 'http://en.wikipedia.org/wiki/Special:Random'
 
@@ -20,11 +19,10 @@ function buildWikiQuery(token) {
     inprop: 'url'
   }
   return WIKI_API_ENDPOINT + URI.buildQuery(query)
-} 
-
+}
 
 function parseWikiResponse ({query: {pages, search}}) {
-  const pagesSortedArray = _.toArray(pages).sort((a,b) => a.index - b.index)
+  const pagesSortedArray = _.toArray(pages).sort((a, b) => a.index - b.index)
   return search.map((item, idx) => Object.assign({}, item, pagesSortedArray[idx]))
 }
 
@@ -82,7 +80,8 @@ export default function (state = initialState, {type, payload}) {
   switch (type) {
     case "START":
       return Object.assign({}, state, {
-        loading: true
+        loading: true,
+        loaded: false
       })
 
     case "SUCCESS":

@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
 
 class WikiArticlePreview extends Component {
   static propTypes = {
@@ -19,17 +19,17 @@ class WikiArticlePreview extends Component {
 
     return (
       <article>
-        <h3><a href={fullurl} target="_blank">
-          {titlesnippet.length ? 
+        <h4><a href={fullurl} target="_blank">
+          {titlesnippet.length ?
             <span dangerouslySetInnerHTML={{__html: titlesnippet}} />
             :
             title
           }
-        </a></h3>
+        </a></h4>
         <p dangerouslySetInnerHTML={{__html: snippet}} />
       </article>
     )
   }
 }
 
-export default WikiArticlePreview;
+export default WikiArticlePreview
