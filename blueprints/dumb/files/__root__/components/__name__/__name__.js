@@ -1,12 +1,16 @@
-import React from 'react'
+import React, {PropTypes, Component} from 'react'
 
 type Props = {
 
 };
-export class <%= pascalEntityName %> extends React.Component {
+export class <%= pascalEntityName %> extends Component {
   props: Props;
 
   render () {
+    const {
+
+    } = this.props
+
     return (
       <div></div>
     )
