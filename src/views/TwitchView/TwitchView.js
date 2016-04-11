@@ -1,4 +1,5 @@
 import React from 'react'
+import Twitch from '../../containers/Twitch'
 
 import {Grid, Row, Jumbotron} from 'react-bootstrap'
 
@@ -27,6 +28,8 @@ class TwitchView extends React.Component {
             </p>
             <h6>by Vargentum</h6>
           </Jumbotron>
+
+          <Twitch />
         </Row>
       </Grid>
     )
