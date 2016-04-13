@@ -1,24 +1,30 @@
 import React, {PropTypes, Component} from 'react'
 import SearchResults from '../common/SearchResults'
 import TwitchItemPreview from './TwitchItemPreview'
+import ErrorArea from '../common/ErrorArea'
 
 type Props = {
-  data: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
+  streams: PropTypes.array.isRequired,
   loading: PropTypes.bool,
-  loaded: PropTypes.bool
+  error: PropTypes.any
 };
 
 export class TwitchUI extends Component {
   props: Props;
 
   render () {
-    const {data, loading, loaded} = this.props
+    const {users, streams, loading, error} = this.props
+    const data = users.map((user, i) => Object.assign({}, user, streams[i]))
     return (
       <div>
-        {data && data.length ?
-          <SearchResults data={data} Item={TwitchItemPreview} />
+        {loading ?
+          <h3>Loading...</h3>
           :
-          "Loading..."
+          error ?
+            <ErrorArea error={error} />
+            :
+            <SearchResults data={data} Item={TwitchItemPreview} />
         }
       </div>
     )

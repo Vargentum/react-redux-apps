@@ -1,17 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import { bindActionCreators } from 'redux'
-import {loadAllUsers} from '../redux/modules/Twitch'
+import {loadAllUsers, loadAllStreams} from '../redux/modules/Twitch'
 import TwitchUI from '../components/TwitchUI/TwitchUI'
 
 type Props = {
+  users: PropTypes.array.isRequired,
+  streams: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
+  error: PropTypes.any,
+  loadAllStreams: PropTypes.func.isRequired,
+  loadAllUsers: PropTypes.func.isRequired
+};
 
-}
 export class Twitch extends React.Component {
   props: Props;
 
   componentDidMount() {
     this.props.loadAllUsers()
+    this.props.loadAllStreams()
   }
 
   render() {
@@ -22,11 +28,12 @@ export class Twitch extends React.Component {
 }
 
 const mapStateToProps = ({twitch}) => {
-  const {loading, loaded, data} = twitch
-  return {loading, loaded, data}
+  const {loading, error, users, streams} = twitch
+  return {loading, error, users, streams}
 }
 const mapDispatchToProps = {
-  loadAllUsers
+  loadAllUsers,
+  loadAllStreams
 }
 
 export default connect(
