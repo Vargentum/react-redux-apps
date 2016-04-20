@@ -47,11 +47,13 @@ export class TwitchItemPreview extends Component {
   render () {
     const {
       display_name,
+      url,
       bio,
       logo,
       error,
       stream
     } = this.props
+
     return (
       <Row>
         <Col xs={2}>
@@ -59,7 +61,7 @@ export class TwitchItemPreview extends Component {
                  rounded responsive />
         </Col>
         <Col xs={10}>
-          <h4>{display_name}</h4>
+          <h4><a target="_blank" href={url}>{display_name}</a></h4>
           <p>{bio}</p>
           {error ?
             <ErrorStreamView {...this.props} />
@@ -77,6 +79,7 @@ export class TwitchItemPreview extends Component {
 
 TwitchItemPreview.propTypes = {
   display_name: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   bio: PropTypes.string,
   logo: PropTypes.string,
   error: PropTypes.string,

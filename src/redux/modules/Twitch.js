@@ -3,6 +3,7 @@ import _ from 'lodash'
 // import URI from 'urijs'
 
 export const API_ENDPOINT = "https://api.twitch.tv/kraken/"
+export const TWITCH_TW_DOMAIN = 'https://twitch.tv/'
 
 // Constants
 const USERS = [
@@ -63,6 +64,9 @@ export const loadAllUsers = () => (dispatch, getState) => {
     })
 }
 
+const augmentUsersWithUrl = (users) => users
+  .map((user) => Object.assign({}, user, {url: TWITCH_TW_DOMAIN + user.name}))
+
 export const loadAllStreams = () => (dispatch, getState) => {
   const streamsData = USERS.map(_.partial(requestResource, 'streams'))
   const onSuccess = (response) => dispatch({
@@ -100,7 +104,8 @@ export default function (state = initialState, {type, payload}) {
       return Object.assign({}, state, {loading: true})
 
     case "USERS_LOADING_SUCCESS":
-      return Object.assign({}, state, {loading: false, users: payload})
+      const users = augmentUsersWithUrl(payload)
+      return Object.assign({}, state, {loading: false, users})
 
     case "USERS_LOADING_ERROR":
       return Object.assign({}, state, {loading: false, error: payload})
