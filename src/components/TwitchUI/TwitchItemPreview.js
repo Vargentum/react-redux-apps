@@ -25,6 +25,17 @@ function StreamView(props) {
     </Alert>
   )
 }
+StreamView.propTypes = {
+  stream: PropTypes.shape({
+    viewers: PropTypes.number.isRequired,
+    average_fps: PropTypes.number.isRequired,
+    channel: PropTypes.shape({
+      game: PropTypes.string,
+      status: PropTypes.string,
+      url: PropTypes.string
+    }).isRequired
+  })
+}
 
 function NoStreamView(props) {
   return (
@@ -33,14 +44,13 @@ function NoStreamView(props) {
 }
 
 function ErrorStreamView(props) {
-  const {
-    error,
-    message
-  } = props
-
+  const {message} = props
   return (
     <Alert bsStyle="danger">Error: {message}</Alert>
   )
+}
+ErrorStreamView.propTypes = {
+  message: PropTypes.string
 }
 
 export class TwitchItemPreview extends Component {
@@ -76,7 +86,6 @@ export class TwitchItemPreview extends Component {
     )
   }
 }
-
 TwitchItemPreview.propTypes = {
   display_name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
@@ -96,4 +105,3 @@ TwitchItemPreview.propTypes = {
 }
 
 export default TwitchItemPreview
-
