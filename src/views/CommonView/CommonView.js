@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {Grid, Row, Jumbotron} from 'react-bootstrap'
+import {Link} from 'react-router'
 
 type Props = {
   title: PropTypes.string.isRequired,
@@ -16,26 +17,25 @@ class CommonView extends Component {
     const {title, description, criteriaUrl, sourceCodeUrl, Component} = this.props
 
     return (
-      <Grid>
-        <Row>
-          <Jumbotron>
-            <h2>FreeCodeCamp {title}</h2>
-            <p>
-              {description}
-              <br />
-              App builded according to these <a target="_blank"
-                href={criteriaUrl}>criteria.</a>
-            </p>
-            <p>
-              You can check out the source code <a target="_blank"
-              href={sourceCodeUrl}>here.</a>
-            </p>
-            <h6>by Vargentum</h6>
-          </Jumbotron>
+      <Row>
+        <Jumbotron>
+          <Link to="/">Back to apps list</Link>
+          <h2>FreeCodeCamp {title}</h2>
+          <p>
+            {description}
+            <br />
+            App builded according to these <a target="_blank"
+              href={criteriaUrl}>criteria.</a>
+          </p>
+          <p>
+            You can check out the source code <a target="_blank"
+            href={sourceCodeUrl}>here.</a>
+          </p>
+          <h6>by Vargentum</h6>
+        </Jumbotron>
 
-          <Component />
-        </Row>
-      </Grid>
+        <Component />
+      </Row>
     )
   }
 }
