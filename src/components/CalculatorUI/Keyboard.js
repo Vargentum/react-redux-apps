@@ -1,23 +1,17 @@
 import React, {PropTypes, Component} from 'react'
-import Display from './Display'
-import Keyboard from './Keyboard'
+import {Button} from 'react-bootstrap'
 
 type Props = {
-  queque:             PropTypes.array,
-  calculationResult:  PropTypes.number,
   updateActiveNumber: PropTypes.func,
   doOperation:        PropTypes.func,
   doReset:            PropTypes.func,
   convertToFloat:     PropTypes.func
 };
-
-export class CalculatorUI extends Component {
+export class Keyboard extends Component {
   props: Props;
 
   render () {
     const {
-      queque,
-      calculationResult,
       updateActiveNumber,
       doOperation,
       doReset,
@@ -26,12 +20,13 @@ export class CalculatorUI extends Component {
 
     return (
       <div>
-        <Display {...this.props} />
-        <Keyboard {...this.props} />
+        <Button onClick={_.partial(updateActiveNumber, 1)}>1</Button>
+        <Button onClick={_.partial(updateActiveNumber, 5)}>5</Button>
+        <Button onClick={_.partial(doOperation, 'plus')}>+</Button>
       </div>
     )
   }
 }
 
-export default CalculatorUI
+export default Keyboard
 

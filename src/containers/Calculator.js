@@ -1,30 +1,25 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-// import { bindActionCreators } from 'redux'
+import {updateActiveNumber, doOperation, doReset, convertToFloat} from '../redux/modules/Calculator'
+import {CalculatorUI} from '../components/CalculatorUI/CalculatorUI'
 
-type Props = {
-
-}
 export class Calculator extends Component {
-  props: Props;
-
   render() {
-    const {
-      test
-    } = this.props
-
     return (
-      <div>Calculator</div>
+      <CalculatorUI {...this.props} />
     )
   }
 }
 
-const mapStateToProps = ({Calculator}) => {
-  // const {} = Calculator
-  return {}
+const mapStateToProps = ({calculator}) => {
+  const {queque, calculationResult} = calculator
+  return {queque, calculationResult}
 }
 const mapDispatchToProps = {
-  
+  updateActiveNumber,
+  doOperation,
+  doReset,
+  convertToFloat
 }
 
 export default connect(
