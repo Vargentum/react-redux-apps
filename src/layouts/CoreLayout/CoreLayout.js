@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import {Grid} from 'react-bootstrap'
 import '../../styles/core.scss'
 
 export class CoreLayout extends React.Component {
@@ -8,9 +9,9 @@ export class CoreLayout extends React.Component {
 
   render () {
     return (
-      <div>
+      <Grid>
         {this.props.children}
-      </div>
+      </Grid>
     )
   }
 }
