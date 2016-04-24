@@ -26,7 +26,7 @@ export class HomeView extends React.Component {
               key={link + name}
               >
               <Link to={link}>{name}</Link>
-              </ListGroupItem>
+            </ListGroupItem>
             )}
           </ListGroup>
         </Jumbotron>
