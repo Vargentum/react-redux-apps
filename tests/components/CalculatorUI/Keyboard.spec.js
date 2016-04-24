@@ -1,7 +1,7 @@
 import React from 'react'
-import CalculatorUI/Keyboard from 'components/CalculatorUI/Keyboard/CalculatorUI/Keyboard'
+import Keyboard from 'components/CalculatorUI/Keyboard'
 
-describe('(Component) CalculatorUI/Keyboard', () => {
+describe('(Component) Keyboard', () => {
   it('should exist', () => {
 
   })

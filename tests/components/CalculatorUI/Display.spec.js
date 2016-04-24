@@ -1,7 +1,7 @@
 import React from 'react'
-import CalculatorUI/Display from 'components/CalculatorUI/Display/CalculatorUI/Display'
+import Display from 'components/CalculatorUI/Display'
 
-describe('(Component) CalculatorUI/Display', () => {
+describe('(Component) Display', () => {
   it('should exist', () => {
 
   })
