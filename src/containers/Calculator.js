@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import {updateActiveNumber, doOperation, doReset, convertToFloat} from '../redux/modules/Calculator'
+import {updateActiveNumber, doOperation, displayResult, doReset, convertToFloat} from '../redux/modules/Calculator'
 import {CalculatorUI} from '../components/CalculatorUI/CalculatorUI'
 
 export class Calculator extends Component {
@@ -19,6 +19,7 @@ const mapDispatchToProps = {
   updateActiveNumber,
   doOperation,
   doReset,
+  displayResult,
   convertToFloat
 }
 

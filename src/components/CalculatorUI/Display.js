@@ -17,11 +17,7 @@ export class Display extends Component {
     return (
       <div>
         <Input value={calculationResult} type="text" />
-        {queque ? 
-          <Input value={queque} type="text" />
-          : 
-          null
-        }
+        <Input value={queque} type="text" />
       </div>
     )
   }

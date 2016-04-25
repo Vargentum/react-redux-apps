@@ -7,6 +7,7 @@ const UPDATE_NUMBER = 'update active number'
 const DO_OPERATION = 'perform calculation operation'
 const DO_RESET = 'calculator reset'
 const CONVERT_TO_FLOAT = 'convert active number to float'
+const DISPLAY_RESULT = 'display calculation result'
 
 export const OPERATORS = {
   sum: {
@@ -166,6 +167,10 @@ export const doReset = () => ({
   type: DO_RESET,
   payload: null
 })
+export const displayResult = () => ({
+  type: DISPLAY_RESULT,
+  payload: null
+})
 export const convertToFloat = () => ({
   type: CONVERT_TO_FLOAT,
   payload: null
@@ -188,7 +193,7 @@ const ACTION_HANDLERS = {
     isNewNumber = false
     return Object.assign({}, state, {
       queque: queque.getQueque(),
-      calculationResult: queque.getResult()
+      calculationResult: aNumber.getValue()
     })
   },
   [DO_OPERATION]: (state, {payload}) => {
@@ -196,8 +201,16 @@ const ACTION_HANDLERS = {
     queque.add(payload)
     isNewNumber = true
     return Object.assign({}, state, {
+      queque: queque.getQueque()
+    })
+  },
+  [DISPLAY_RESULT]: (state, {payload}) => {
+    const calculationResult = queque.getResult()
+    queque.reset()
+    isNewNumber = true
+    return Object.assign({}, state, {
       queque: queque.getQueque(),
-      calculationResult: queque.getResult()
+      calculationResult
     })
   },
   [DO_RESET]: () => {

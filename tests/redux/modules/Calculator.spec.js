@@ -52,8 +52,12 @@ describe(`Queque`, () => {
     expect(queque.reset()
       .add(5).updateLastNumber(55)
       .add(sum).add(5)
-      .updateLastNumber(10)
-      .getResult()).to.eql(55 + 10);
+      .updateLastNumber(51)
+      .getResult()).to.eql(55 + 51);
+    expect(queque.reset()
+      .add(5).updateLastNumber(55)
+      .add(sum).add(5).updateLastNumber(55).updateLastNumber(555)
+      .getResult()).to.eql(55 + 555);
   });
   it(`Should provide correct string history`, () => {
     expect(queque.reset()

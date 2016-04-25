@@ -8,6 +8,7 @@ type Props = {
   updateActiveNumber: PropTypes.func,
   doOperation:        PropTypes.func,
   doReset:            PropTypes.func,
+  displayResult:      PropTypes.func,
   convertToFloat:     PropTypes.func
 };
 
