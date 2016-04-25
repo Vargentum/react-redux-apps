@@ -28,22 +28,24 @@ describe(`AddableNumber`, () => {
 describe(`Queque`, () => {
   const [add, substract, multiple, divide] = Object.keys(OPERATORS)
   const queque = new Queque()
-  // it('Should add and substract numbers', () => {
-  //   expect(queque.reset().add(5).add(add).add(5).getResult()).to.eql(5 + 5)
-  //   expect(queque.add(substract).add(5).getResult()).to.eql(10 - 5)
-  //   expect(queque.add(substract).add(5).getResult()).to.eql(5 - 5)
-  //   expect(queque.add(add).add(55).getResult()).to.eql(55)
-  // })
-  // it('Should multiply and divide numbers', () => {
-  //   expect(queque.reset().add(5).add(multiple).add(5).getResult()).to.eql(5 * 5)
-  //   expect(queque.add(divide).add(5).getResult()).to.eql(25 / 5)
-  // })
+  it('Should add and substract numbers', () => {
+    expect(queque.reset().add(5).add(add).add(5).getResult()).to.eql(5 + 5)
+    expect(queque.add(substract).add(5).getResult()).to.eql(10 - 5)
+    expect(queque.add(substract).add(5).getResult()).to.eql(5 - 5)
+    expect(queque.add(add).add(55).getResult()).to.eql(55)
+  })
+  it('Should multiply and divide numbers', () => {
+    expect(queque.reset().add(5).add(multiple).add(5).getResult()).to.eql(5 * 5)
+    expect(queque.add(divide).add(5).getResult()).to.eql(25 / 5)
+  })
   it('Should calculate with rules of priority', () => {
     expect(queque.reset().add(5)
       .add(add).add(5)
       .add(multiple).add(3)
       .add(substract).add(5)
       .add(divide).add(5)
-      .getResult()).to.eql(5 + 5 * 3 - 5 / 5)
+      .add(substract).add(5)
+      .add(multiple).add(3)
+      .getResult()).to.eql(5 + 5 * 3 - 5 / 5 - 5 * 3)
   })
 })

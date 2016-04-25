@@ -12,27 +12,25 @@ export const OPERATORS = {
   add: {
     operate: (i1,i2) => i1 + i2,
     name: '+',
-    priority: 1
   },
   substract: {
     operate: (i1,i2) => i1 - i2,
     name: '-',
-    priority: 1
   },
   multiple: {
     operate: (i1,i2) => i1 * i2,
     name: '*',
-    priority: 2
+    priority: 1
   },
   divide: {
     operate: (i1,i2) => i1 / i2,
     name: '/',
-    priority: 2
+    priority: 1
   }
 }
+const OPERATOR_PRIORITIES = [1]
 
 // ------------------------------------
-// AddableNumber
 // ------------------------------------
 export class AddableNumber {
   static initState = 0
@@ -75,117 +73,75 @@ export class AddableNumber {
 export class Queque {
   static initQueque = [0]
 
-  constructor(queque = Queque.initQueque.slice()) {
-    this._q = queque
+  constructor() {
+    this.reset()
   }
   _isOperator = (entry) => !!OPERATORS[entry]
-  _getOperator = (o) => OPERATORS[o]
-  _getTriade = (n,i,a) => [a[i-1] || 0, n, a[i+1] || 0]
-  _breakToTriades = (p,n,i,a) => {
-    const triade = this._getTriade(n,i,a)
-    return this._isOperator(n) ? p.concat([triade]) : p
+  _getOperator = (entry) => OPERATORS[entry]
+  _updateQueque(smth) {
+    this._queque.push(smth)
   }
-  _collapseRepeated = (n,i,a) => n !== a[i+1]
-  _flattenTriades = (ary) => {
-    return _(ary).flatten().filter(this._collapseRepeated).value()
+  _addNumber(number) {
+    this._numbers.push(number)
   }
-  _sortByPriority = (ary) => {
-    const sortedTriades = ary
-      .reduce(this._breakToTriades, [])
-      // .sort(([x1,o1,x2], [y1,o2,y2]) => {
-      //   return this._getOperator(o2).priority - this._getOperator(o1).priority
-      // })
-    console.log(sortedTriades)
-    return this._flattenTriades(sortedTriades)
+  _addOperator(operator) {
+    const lastOperator = _.last(this._operators)
+    if (lastOperator !== operator ) {
+      this._operators.push(this._getOperator(operator))
+    }
   }
-  _calculateTriade = ([n1, o, n2]) => {
-    return this._getOperator(o).operate(n1, n2)
+  _calculateTriade = (operator, num1, num2) => operator.operate(num1, num2)
+  _performOperation = (operator, idx) => {
+    // console.log(this._numbers)
+    // console.log(this._operators.map(o => o.name))
+    const [n1, n2] = this._numbers.splice(idx, 2)
+    const triadeResult = this._calculateTriade(operator, n1, n2)
+    this._operators.splice(idx, 1)
+    this._numbers.splice(idx, 0, triadeResult)
+    debugger
   }
-
-  add(smth) {
-    this._q.push(smth)
+  _calculatePriorityOperations = () => {
+    OPERATOR_PRIORITIES.forEach((priority) => {
+      this._operators.forEach((operator, index) => {
+        if (operator.priority !== priority) return
+        this._performOperation(operator, index)
+      })
+    })
+  }
+  _calculateBaseOperations = () => {
+    while (this._operators.length) {
+      this._performOperation(this._operators[0], 0)
+    }
+  }
+  add(entry) {
+    this._updateQueque(entry)
+    this._isOperator(entry)
+      ? this._addOperator(entry)
+      : this._addNumber(entry)
     return this
   }
-  update(num) {
-    let last = _.last(this._q) 
-    last = num
+  updateLastNumber(num) {
+    this._numbers.splice(-1, 1, num)
     return this
   }
   reset() {
-    this._q = Queque.initQueque.slice()
+    this._queque = []
+    this._numbers = []
+    this._operators = []
     return this
   }
   getResult() {
-    const sortedQ = this._sortByPriority(this._q)
-    return sortedQ.reduce((result, item, idx, ary) => {
-      return this._isOperator(item)
-        ? this._calculateTriade([result, item, ary[idx+1] || 0])
-        : result
-    })
+    this._calculatePriorityOperations()
+    this._calculateBaseOperations()
+    return this._numbers[0]
   }
-  toString() {
-    return this._q
+  getQueque() {
+    return this._queque
       .map((x) => this._isOperator(x) ? x.name : x)
       .join(' ')
   }
 }
 
-
-// ------------------------------------
-// History
-// ------------------------------------
-// class Calculator {
-//   static initState = [0]
-
-//   constructor(initQueque = Calculator.initState) {
-//     this._queque = initQueque
-//   }
-  
-//   _getOperations = () => this._queque.filter(this._isOperator)
-//   _getNumbers = () =>    this._queque.filter(this._isNumber)
-//   _updateEntry = (oVal, nVal) => {
-//     console.log(oVal, nVal)
-//     switch (oVal) {
-//       case 0: return nVal
-//       default: return parseInt('' + oVal + nVal)
-//     }
-//   }
-//   addCharacter(char) {
-//     const lastEntry = _.last(this._queque)
-//     this._isOperator(char) || this._isOperator(lastEntry)
-//       ? this._queque.push(char)
-//       : this._queque.splice(-1, 1, this._updateEntry(lastEntry, char))
-//   }
-//   isReadyToCalculate() {
-//     return this._getOperations().length > 0
-//            && this._getNumbers().length > 1
-//   }
-//   isValidExpression(o1, op, o2) {
-//     return this._isOperator(op) 
-//            && typeof o1 === 'number' 
-//            && typeof o2 === 'number'
-//   }
-//   calculateExpression(o1, op, o2) {
-//     return OPERATORS[op].operate(o1, o2)
-//   }
-//   calculateResult() {
-//     return this._queque.reduce((result, entry, idx, history) => {
-//       const [o1, o2] = [history[idx - 1], history[idx + 1]]
-//       return this.isValidExpression(o1, entry, o2)
-//         ? result = this.calculateExpression(o1, entry, o2)
-//         : result
-//     }, 0)
-//   }
-//   getLastCalculatedValue() {
-//     return _.findLast(this._queque, this._isNumber)
-//   }
-//   getQueque() {
-//     return this._queque.join(' ')
-//   }
-//   reset() {
-//     this._queque = Calculator.initState
-//   }
-// }
 
 // ------------------------------------
 // Actions
@@ -207,32 +163,39 @@ export const convertToFloat = () => ({
   payload: null
 })
 
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const queque = new Queque()
 const aNumber = new AddableNumber()
+let isNewNumber = true
 
 const ACTION_HANDLERS = {
   [UPDATE_NUMBER]: (state, {payload}) => {
     aNumber.add(payload)
-    queque.update(aNumber.getValue())
+    isNewNumber
+      ? queque.add(aNumber.getValue())
+      : queque.updateLastNumber(aNumber.getValue())
+    isNewNumber = false
     return Object.assign({}, state, {
-      queque: queque.toString(),
+      queque: queque.getQueque(),
       calculationResult: queque.getResult()
     })
   },
   [DO_OPERATION]: (state, {payload}) => {
     aNumber.reset()
     queque.add(payload)
+    isNewNumber = true
     return Object.assign({}, state, {
-      queque: queque.toString(),
+      queque: queque.getQueque(),
       calculationResult: queque.getResult()
     })
   },
   [DO_RESET]: () => {
     aNumber.reset()
     queque.reset()
+    isNewNumber = true
     Object.assign({}, initialState)
   }
 }
