@@ -26,13 +26,13 @@ describe(`AddableNumber`, () => {
 })
 
 describe(`Queque`, () => {
-  const [add, substract, multiple, divide] = Object.keys(OPERATORS)
+  const [sum, substract, multiple, divide] = Object.keys(OPERATORS)
   const queque = new Queque()
   it('Should add and substract numbers', () => {
-    expect(queque.reset().add(5).add(add).add(5).getResult()).to.eql(5 + 5)
+    expect(queque.add(5).add(sum).add(5).getResult()).to.eql(5 + 5)
     expect(queque.add(substract).add(5).getResult()).to.eql(10 - 5)
     expect(queque.add(substract).add(5).getResult()).to.eql(5 - 5)
-    expect(queque.add(add).add(55).getResult()).to.eql(55)
+    expect(queque.add(sum).add(55).getResult()).to.eql(55)
   })
   it('Should multiply and divide numbers', () => {
     expect(queque.reset().add(5).add(multiple).add(5).getResult()).to.eql(5 * 5)
@@ -40,7 +40,7 @@ describe(`Queque`, () => {
   })
   it('Should calculate with rules of priority', () => {
     expect(queque.reset().add(5)
-      .add(add).add(5)
+      .add(sum).add(5)
       .add(multiple).add(3)
       .add(substract).add(5)
       .add(divide).add(5)
@@ -48,4 +48,25 @@ describe(`Queque`, () => {
       .add(multiple).add(3)
       .getResult()).to.eql(5 + 5 * 3 - 5 / 5 - 5 * 3)
   })
+  it(`Should be able to update last number in queque`, () => {
+    expect(queque.reset()
+      .add(5).updateLastNumber(55)
+      .add(sum).add(5)
+      .updateLastNumber(10)
+      .getResult()).to.eql(55 + 10);
+  });
+  it(`Should provide correct string history`, () => {
+    expect(queque.reset()
+      .add(5).add(sum).add(5).getQueque()).to.eql('5 + 5');
+    expect(queque.reset().add(5)
+      .add(substract).add(5)
+      .add(sum).add(5)
+      .add(divide).add(7)
+      .add(multiple).add(10)
+      .getQueque()).to.eql('5 - 5 + 5 / 7 * 10');
+  });
+  it(`Should remove duplicated consecued operators`, () => {
+    expect(queque.reset()
+      .add(5).add(sum).add(sum).add(5).getQueque()).to.eql('5 + 5');
+  });
 })

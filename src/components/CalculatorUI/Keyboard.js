@@ -1,5 +1,8 @@
 import React, {PropTypes, Component} from 'react'
 import {Button} from 'react-bootstrap'
+import {OPERATORS} from '../../redux/modules/Calculator'
+
+const [sum, substract, multiple, divide] = Object.keys(OPERATORS)
 
 type Props = {
   updateActiveNumber: PropTypes.func,
@@ -22,7 +25,7 @@ export class Keyboard extends Component {
       <div>
         <Button onClick={_.partial(updateActiveNumber, 1)}>1</Button>
         <Button onClick={_.partial(updateActiveNumber, 5)}>5</Button>
-        <Button onClick={_.partial(doOperation, 'plus')}>+</Button>
+        <Button onClick={_.partial(doOperation, sum)}>+</Button>
       </div>
     )
   }

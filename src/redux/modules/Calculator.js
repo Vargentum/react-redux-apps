@@ -9,7 +9,7 @@ const DO_RESET = 'calculator reset'
 const CONVERT_TO_FLOAT = 'convert active number to float'
 
 export const OPERATORS = {
-  add: {
+  sum: {
     operate: (i1,i2) => i1 + i2,
     name: '+',
   },
@@ -78,27 +78,23 @@ export class Queque {
   }
   _isOperator = (entry) => !!OPERATORS[entry]
   _getOperator = (entry) => OPERATORS[entry]
-  _updateQueque(smth) {
-    this._queque.push(smth)
-  }
-  _addNumber(number) {
+  _updateQueque = (entry) => this._queque.push(entry)
+  _addNumber = (number) => {
     this._numbers.push(number)
+    this._updateQueque(number)
   }
-  _addOperator(operator) {
-    const lastOperator = _.last(this._operators)
-    if (lastOperator !== operator ) {
-      this._operators.push(this._getOperator(operator))
-    }
+  _addOperator = (name) => {
+    const lastEntry = _.findLast(this._queque)
+    if (this._isOperator(lastEntry) || lastEntry === name) return
+    this._operators.push(this._getOperator(name))
+    this._updateQueque(name)
   }
   _calculateTriade = (operator, num1, num2) => operator.operate(num1, num2)
   _performOperation = (operator, idx) => {
-    // console.log(this._numbers)
-    // console.log(this._operators.map(o => o.name))
     const [n1, n2] = this._numbers.splice(idx, 2)
     const triadeResult = this._calculateTriade(operator, n1, n2)
     this._operators.splice(idx, 1)
     this._numbers.splice(idx, 0, triadeResult)
-    debugger
   }
   _calculatePriorityOperations = () => {
     OPERATOR_PRIORITIES.forEach((priority) => {
@@ -113,8 +109,19 @@ export class Queque {
       this._performOperation(this._operators[0], 0)
     }
   }
+  _toReadableQuequeOperators = (entry) => this._isOperator(entry) 
+    ? this._getOperator(entry).name
+    : entry
+
+  _isReadyToCalculateResult = () => !this._isOperator(_.last(this._queque))
+  _calculateResult() {
+    this._calculatePriorityOperations()
+    this._calculateBaseOperations()
+    return this._numbers[0]  
+  }
+  _getLastNumber = () => _.last(this._numbers)
+
   add(entry) {
-    this._updateQueque(entry)
     this._isOperator(entry)
       ? this._addOperator(entry)
       : this._addNumber(entry)
@@ -122,6 +129,7 @@ export class Queque {
   }
   updateLastNumber(num) {
     this._numbers.splice(-1, 1, num)
+    this._queque.splice(-1, 1, num)
     return this
   }
   reset() {
@@ -131,13 +139,13 @@ export class Queque {
     return this
   }
   getResult() {
-    this._calculatePriorityOperations()
-    this._calculateBaseOperations()
-    return this._numbers[0]
+    return this._isReadyToCalculateResult()
+      ? this._calculateResult()
+      : this._getLastNumber()
   }
   getQueque() {
     return this._queque
-      .map((x) => this._isOperator(x) ? x.name : x)
+      .map(this._toReadableQuequeOperators)
       .join(' ')
   }
 }
