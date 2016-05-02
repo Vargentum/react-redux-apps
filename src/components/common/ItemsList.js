@@ -6,12 +6,12 @@ class ItemsList extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     Item: PropTypes.element.isRequired,
-    itemProps: PropTypes.object,
-    listProps: PropTypes.object
+    itemProps: PropTypes.object
   }
 
   static defaultProps = {
-    data: []
+    data: [],
+    itemProps: {}
   }
 
   r_item = (Item, props) => <ListGroupItem key={_.uniqueId()} {...this.props.itemProps}>
@@ -23,7 +23,6 @@ class ItemsList extends Component {
       data,
       Item
     } = this.props
-    console.log(data)
     
     return (
       <ListGroup>

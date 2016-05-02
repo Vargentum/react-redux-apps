@@ -5,7 +5,6 @@ import ItemsList from '../../common/ItemsList'
 class AnswersList extends Component {
   render() {
     const {data} = this.props
-    console.log(data)
 
     return (
       <div>

@@ -8,7 +8,6 @@ class QuestionsListUI extends Component {
       questions,
       loaded
     } = this.props
-    
 
     return loaded ? 
       (<ItemsList data={questions} Item={QuestionPreview} />)

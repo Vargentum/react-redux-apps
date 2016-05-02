@@ -2,7 +2,10 @@ import reqwest from 'reqwest'
 import {getResource, asyncRequest} from './common'
 
 // Action Creators
-export const loadQuestionsList = () => asyncRequest('questions')
+export const loadQuestionsList = () => asyncRequest({
+  resource: 'questions',
+  event: 'QUESTIONS'
+})
 
 // Action Handlers
 const ACTION_HANDLERS = {

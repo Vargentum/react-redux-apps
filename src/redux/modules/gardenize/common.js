@@ -24,21 +24,20 @@ export const getResource = (type, onSuccess, onFail) => {
   })
 }
 
-
 // load & process resource
-export const asyncRequest = (type, fn) =>
+export const asyncRequest = (config, fn) =>
   (dispatch, getState) => {
     dispatch({
-      type: type.toUpperCase() + ASYNC_STAGES.start //TODO: make DRY
+      type: config.event + ASYNC_STAGES.start
     })
     getResource(
-      type,
+      config.resource,
       (response) => dispatch({
-        type: type.toUpperCase() + ASYNC_STAGES.success,
+        type: config.event + ASYNC_STAGES.success,
         payload: fn && _.isFunction(fn) ? fn(response) : response
       }),
       (error) => dispatch({
-        type: type.toUpperCase() + ASYNC_STAGES.error,
+        type: config.event + ASYNC_STAGES.error,
         payload: error
       }))
   }
