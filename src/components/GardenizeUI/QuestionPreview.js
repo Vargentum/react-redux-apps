@@ -11,15 +11,17 @@ class QuestionPreview extends Component {
 
   render () {
     const {
+      id,
       question,
       author
     } = this.props
 
     return (
       <div>
-        <h3>{question}</h3>
+        <h4>
+          <Link to={`/gardenize/${id}`}>{question}</Link>
+        </h4>
         <p>{author}</p>
-        <Link to=""/>
       </div>
     )
   }

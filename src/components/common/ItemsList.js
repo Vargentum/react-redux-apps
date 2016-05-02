@@ -2,14 +2,17 @@ import React, {Component, PropTypes} from 'react'
 import {ListGroup, ListGroupItem} from 'react-bootstrap'
 import _ from 'lodash'
 
-type Props = {
-  data: PropTypes.array.isRequired,
-  Item: PropTypes.component.isRequired,
-  itemProps: PropTypes.object,
-  listProps: PropTypes.object
-};
 class ItemsList extends Component {
-  props: Props;
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    Item: PropTypes.element.isRequired,
+    itemProps: PropTypes.object,
+    listProps: PropTypes.object
+  }
+
+  static defaultProps = {
+    data: []
+  }
 
   r_item = (Item, props) => <ListGroupItem key={_.uniqueId()} {...this.props.itemProps}>
     <Item {...props} />
@@ -20,6 +23,7 @@ class ItemsList extends Component {
       data,
       Item
     } = this.props
+    console.log(data)
     
     return (
       <ListGroup>
