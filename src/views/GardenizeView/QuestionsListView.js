@@ -9,7 +9,7 @@ class QuestionsListView extends React.Component {
         title="Test application for Gardenize"
         description="There is a simple QA platform as a skills-proof for junior javascript developer position."
         criteriaUrl="https://docs.google.com/document/d/1FUJ-dnKqeVGJBJ7YaeexeYK7HpusfxLR5K-Lr8ZPJac"
-        sourceCodeUrl="https://github.com/Vargentum/react-redux-apps/tree/gardenize"
+        sourceCodeUrl="https://github.com/Vargentum/react-redux-apps/tree/gardenize-test"
         Component={QuestionsList}
       />
     )
