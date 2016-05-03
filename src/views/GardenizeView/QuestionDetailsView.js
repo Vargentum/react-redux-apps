@@ -7,7 +7,9 @@ class QuestionDetailsView extends Component {
   render() {
     return (
       <div>
-        <Link to="/gardenize">Back to questions list</Link>
+        <div style={{padding: "15px 0"}}>
+          <Link to="/gardenize">Back to questions list</Link>
+        </div>
         <QuestionDetails {...this.props} />
       </div>
     )

@@ -26,7 +26,9 @@ class QuestionDetailsUI extends Component {
         }
         <NewItemForm
           onSubmit={postNewAnswer}
-          Form={NewAnswerForm} />
+          Form={NewAnswerForm} 
+          showBtnLabel="Answer for this question"
+          successAlertContent="Thanks for your answer!" />
       </div>
     )
   }

@@ -64,7 +64,7 @@ export const createAnswerEntry = (answers, data) => Object.assign(
   {},
   data,
   {
-    id: generateNextId(answers),
+    id: generateNextId(answers), //TODO: generate id based on full answers list
     votes: 0,
   }  
 )

@@ -18,7 +18,9 @@ export const getAnswersFromIdList = (idList) =>
       resource: 'answers',
       event: 'ANSWERS'
     },
-    (response) => response.filter(x => idList.indexOf(x.id) !== -1)
+    (response) => response
+      .filter(x => idList.indexOf(x.id) !== -1)
+      .sort((a, b) => b.votes - a.votes)
   )
 
 
@@ -39,7 +41,6 @@ const ACTION_HANDLERS = {
 
   NEW_ANSWER_POSTED: (state, {type, payload}) => {
     const answerEntry = createAnswerEntry(state.answersList, payload)
-    debugger
     return Object.assign({}, state, {
       answersList: postEntryAsLast(state.answersList, answerEntry)
     })

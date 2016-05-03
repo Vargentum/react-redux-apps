@@ -20,7 +20,9 @@ class QuestionsListUI extends Component {
         <Filter filters={filters} />
         <NewItemForm 
           onSubmit={postNewQuestion}
-          Form={NewQuestionForm} />
+          Form={NewQuestionForm} 
+          showBtnLabel="Create a new question"
+          successAlertContent="Your question has been created!" />
         <hr />
         {loaded ? 
           <ItemsList data={questions} Item={QuestionPreview} />
