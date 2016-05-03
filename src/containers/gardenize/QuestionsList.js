@@ -3,17 +3,21 @@ import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import ItemsList from '../../components/common/ItemsList'
 import QuestionsListUI from '../../components/GardenizeUI/QuestionsListUI'
-import {loadQuestionsList,  filterQuestionsBy, filters } from '../../redux/modules/gardenize/QuestionsList'
+import {
+    loadQuestionsList, 
+    filterQuestionsBy, 
+    filters, 
+    postNewQuestion } from '../../redux/modules/gardenize/QuestionsList'
 
-type Props = {
-  questions: PropTypes.array.isRequired,
-  loadQuestionsList: PropTypes.func.isRequired,
-  filterQuestionsBy: PropTypes.func,
-  loaded: PropTypes.bool.isRequired
-};
 
 export class QuestionsList extends Component {
-  props: Props;
+  static propTypes = {
+    questions: PropTypes.array.isRequired,
+    loadQuestionsList: PropTypes.func.isRequired,
+    filterQuestionsBy: PropTypes.func,
+    postNewQuestion: PropTypes.func,
+    loaded: PropTypes.bool.isRequired
+  }
 
   componentDidMount () {
     this.props.loadQuestionsList()
@@ -38,7 +42,8 @@ const mapStateToProps = ({gardenizeQuestionsList}) => {
 }
 const mapDispatchToProps = {
   loadQuestionsList,
-  filterQuestionsBy
+  filterQuestionsBy,
+  postNewQuestion
 }
 
 export default connect(

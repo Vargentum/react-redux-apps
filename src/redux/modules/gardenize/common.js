@@ -41,3 +41,27 @@ export const asyncRequest = (config, fn) =>
         payload: error
       }))
   }
+
+const existy = x => x != null
+
+const generateNextId = (ary) => {
+  if (existy(_.last(ary) && _.last(ary).id)) {
+    return _.last(ary).id + 1
+  }
+}
+
+export const createQuestionEntry = (questions, data) => Object.assign(
+  {},
+  data,
+  {
+    id: generateNextId(questions),
+    answers: [],
+    rating: 0
+  }
+)
+
+export const postEntryAsFirst = (table, entry) => [entry].concat(table)
+
+
+
+

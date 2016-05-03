@@ -1,5 +1,5 @@
 import reqwest from 'reqwest'
-import {getResource, asyncRequest} from './common'
+import {getResource, asyncRequest, createQuestionEntry, postEntryAsFirst} from './common'
 
 
 export const filters = {
@@ -38,23 +38,38 @@ export const filterQuestionsBy = (filterType) =>
   })
 
 
+export const postNewQuestion = (formData) => ({
+  type: "POST_NEW_QUESTION",
+  payload: formData
+})
+
+
+
 // Action Handlers
 const ACTION_HANDLERS = {
   QUESTIONS_LOAD_SUCCESS: (state, {type, payload}) =>
     Object.assign({}, state, {
-      questions: payload, 
-      loaded: true,
-      cachedQuestions: payload
+      questions: state.cachedQuestions || payload, 
+      cachedQuestions: state.cachedQuestions || payload,
+      loaded: true
     })
   ,
   FILTER_QUESTIONS: (state, {type, payload}) => {
     return Object.assign({}, state, {questions: payload})
+  },
+  POST_NEW_QUESTION: (state, {type, payload}) => {
+    const questionEntry = createQuestionEntry(state.questions, payload)
+    console.log(postEntryAsFirst(state.questions, questionEntry), '----')
+    return Object.assign({}, state, {
+      questions: postEntryAsFirst(state.questions, questionEntry),
+      cachedQuestions: postEntryAsFirst(state.cachedQuestions, questionEntry)
+    })
   }
 }
 
 // Reducer
 const initialState = {
-  cachedQuestions: [],
+  cachedQuestions: null,
   questions: [],
   answer: {},
   loaded: false
