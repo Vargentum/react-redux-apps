@@ -1,14 +1,12 @@
 import _ from 'lodash'
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import ItemsList from '../../components/common/ItemsList'
 import QuestionsListUI from '../../components/GardenizeUI/QuestionsListUI'
 import {
-    loadQuestionsList, 
-    filterQuestionsBy, 
-    filters, 
+    loadQuestionsList,
+    filterQuestionsBy,
+    filters,
     postNewQuestion } from '../../redux/modules/gardenize/QuestionsList'
-
 
 export class QuestionsList extends Component {
   static propTypes = {
@@ -16,7 +14,8 @@ export class QuestionsList extends Component {
     loadQuestionsList: PropTypes.func.isRequired,
     filterQuestionsBy: PropTypes.func,
     postNewQuestion: PropTypes.func,
-    loaded: PropTypes.bool.isRequired
+    loaded: PropTypes.bool.isRequired,
+    filters: PropTypes.array.isRequired
   }
 
   componentDidMount () {

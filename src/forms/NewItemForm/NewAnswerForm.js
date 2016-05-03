@@ -14,7 +14,7 @@ const validate = (values) => {
   if (!values.author) {
     errors.author = "Author field shouldn't be empty"
   }
-  
+
   return errors
 }
 
@@ -22,7 +22,9 @@ export class NewAnswerForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
     onSuccessSubmit: PropTypes.func,
+    resetForm: PropTypes.func,
     fields: PropTypes.object,
+    errors: PropTypes.object,
     footerComponent: PropTypes.element
   }
 
@@ -38,16 +40,16 @@ export class NewAnswerForm extends Component {
   }
 
   render() {
-    const { fields: {answer, author}, errors, handleSubmit, footerComponent } = this.props
+    const { fields: {answer, author}, errors, footerComponent } = this.props
     return (
       <form onSubmit={this.onSubmit.bind(this)}>
-        <Input type="textarea" bsStyle={answer.error ? "error" : 'success'} 
+        <Input type="textarea" bsStyle={answer.error ? "error" : 'success'}
                placeholder="Your answer"
-               label={answer.error} 
+               label={answer.error}
                {...answer} />
-        <Input type="text" bsStyle={author.error ? "error" : 'success'} 
-              placeholder="Your name" 
-              label={author.error} 
+        <Input type="text" bsStyle={author.error ? "error" : 'success'}
+              placeholder="Your name"
+              label={author.error}
               {...author} />
         <div className="f-box f-gap--L">
           <Button type="submit" disabled={!_.isEmpty(errors)}>Create Answer</Button>

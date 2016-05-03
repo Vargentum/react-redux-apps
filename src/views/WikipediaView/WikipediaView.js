@@ -5,7 +5,7 @@ import CommonView from '../CommonView'
 export class WikipediaView extends React.Component {
   render () {
     return (
-      <CommonView 
+      <CommonView
         title="Wikipedia Viewer"
         description="Provide simple search application via Wikipedia API"
         criteriaUrl="https://www.freecodecamp.com/challenges/build-a-wikipedia-viewer"

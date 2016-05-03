@@ -16,7 +16,8 @@ export class QuestionDetails extends Component {
       author: PropTypes.string,
       answers: PropTypes.array
     }).isRequired,
-    postNewAnswer: PropTypes.func
+    postNewAnswer: PropTypes.func,
+    params: PropTypes.object
   }
 
   componentDidMount () {

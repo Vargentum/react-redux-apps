@@ -4,15 +4,25 @@ import AnswersList from './answers/AnswersList'
 import NewAnswerForm from '../../forms/NewItemForm/NewAnswerForm'
 import NewItemForm from "../../forms/NewItemForm"
 
-
 class QuestionDetailsUI extends Component {
+  static propTypes = {
+    getQuestionData: PropTypes.func.isRequired,
+    getAnswersFromIdList: PropTypes.func.isRequired,
+    answersLoaded: PropTypes.bool,
+    questionLoaded: PropTypes.bool,
+    answersList: PropTypes.array,
+    questionData: PropTypes.shape({
+      id: PropTypes.number,
+      question: PropTypes.string,
+      author: PropTypes.string,
+      answers: PropTypes.array
+    }).isRequired,
+    postNewAnswer: PropTypes.func
+  }
 
   render() {
-    const {answersLoaded, questionLoaded, answersList, questionData, postNewAnswer} = this.props
-    const {id, question, author} = questionData
-
-    console.log(NewAnswerForm)
-
+    const {answersLoaded, answersList, questionData, postNewAnswer} = this.props
+    const {question, author} = questionData
     return (
       <div>
         <Jumbotron>
@@ -26,7 +36,7 @@ class QuestionDetailsUI extends Component {
         }
         <NewItemForm
           onSubmit={postNewAnswer}
-          Form={NewAnswerForm} 
+          Form={NewAnswerForm}
           showBtnLabel="Answer for this question"
           successAlertContent="Thanks for your answer!" />
       </div>

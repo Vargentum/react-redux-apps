@@ -13,22 +13,22 @@ class Filter extends Component {
   handleAction = (action, idx) => () => {
     this.setState({
       checkedIndex: idx
-    });
+    })
     action()
   }
 
   r_filter = ({label, filter}, index) => {
     const name = _.uniqueId('filter-')
     return <label key={_.uniqueId()} className="f-box f-align--21-1 f-gap--M">
-      <input 
+      <input
         onChange={this.handleAction(filter, index)}
-        type='radio' 
-        name={name} 
+        type='radio'
+        name={name}
         checked={index === this.state.checkedIndex} />
       {label}
     </label>
   }
-    
+
   render() {
     const {
       filters
@@ -41,7 +41,7 @@ class Filter extends Component {
 
     return (
       <div className="f-box f-align--21-1 f-gap--L">
-        <h5>Filters:</h5> 
+        <h5>Filters:</h5>
         {filterInputs}
       </div>
     )

@@ -23,7 +23,7 @@ class ItemsList extends Component {
       data,
       Item
     } = this.props
-    
+
     return (
       <ListGroup>
         {data.map(this.r_item.bind(this, Item))}

@@ -11,14 +11,13 @@ const validate = (values) => {
 
   if (!values.question) {
     errors.question = "Question shouldn't be empty"
-  }
-  else if (values.question.length < questionMinLength) {
+  } else if (values.question.length < questionMinLength) {
     errors.question = `Question length should be more than ${questionMinLength}`
   }
   if (!values.author) {
     errors.author = "Username shouldn't be empty"
   }
-  
+
   return errors
 }
 
@@ -26,7 +25,9 @@ export class NewQuestionForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
     onSuccessSubmit: PropTypes.func,
+    resetForm: PropTypes.func,
     fields: PropTypes.object,
+    errors: PropTypes.object,
     footerComponent: PropTypes.element
   }
 
@@ -42,16 +43,16 @@ export class NewQuestionForm extends Component {
   }
 
   render() {
-    const { fields: {question, author}, errors, handleSubmit, footerComponent } = this.props
+    const { fields: {question, author}, errors, footerComponent } = this.props
     return (
       <form onSubmit={this.onSubmit.bind(this)}>
-        <Input type="text" bsStyle={question.error ? "error" : 'success'} 
+        <Input type="text" bsStyle={question.error ? "error" : 'success'}
                placeholder="Your question"
-               label={question.error} 
+               label={question.error}
                {...question} />
-        <Input type="text" bsStyle={author.error ? "error" : 'success'} 
-              placeholder="Your name" 
-              label={author.error} 
+        <Input type="text" bsStyle={author.error ? "error" : 'success'}
+              placeholder="Your name"
+              label={author.error}
               {...author} />
         <div className="f-box f-gap--L">
           <Button type="submit" disabled={!_.isEmpty(errors)}>Create Question</Button>

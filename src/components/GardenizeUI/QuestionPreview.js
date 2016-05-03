@@ -1,21 +1,14 @@
 import React, {PropTypes, Component} from 'react'
 import {Link} from 'react-router'
 
-type Props = {
-  question: PropTypes.string.isRequired,
-  author: PropTypes.string
-};
-
 class QuestionPreview extends Component {
-  props: Props;
-
+  static propTypes = {
+    id: PropTypes.number,
+    question: PropTypes.string.isRequired,
+    author: PropTypes.string
+  }
   render () {
-    const {
-      id,
-      question,
-      author
-    } = this.props
-
+    const { id, question, author } = this.props
     return (
       <div>
         <h4>
@@ -28,4 +21,3 @@ class QuestionPreview extends Component {
 }
 
 export default QuestionPreview
-

@@ -4,7 +4,7 @@ import CoreLayout from 'layouts/CoreLayout/CoreLayout'
 import HomeView from 'views/HomeView'
 import WikipediaView from 'views/WikipediaView'
 import TwitchView from 'views/TwitchView'
-//gardenize
+// gardenize
 import QuestionsListView from '../views/GardenizeView/QuestionsListView'
 import QuestionDetailsView from '../views/GardenizeView/QuestionDetailsView'
 

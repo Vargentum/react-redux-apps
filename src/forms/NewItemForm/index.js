@@ -28,7 +28,7 @@ class NewItemForm extends Component {
   toggleVisibility = (type, state = null) => {
     this.setState({
       [type]: state || !this.state[type]
-    });
+    })
   }
 
   handleSuccessSubmit = () => {
@@ -44,24 +44,24 @@ class NewItemForm extends Component {
     if (this.state.success) {
       return (
         <Alert bsStyle="success"
-               onDismiss={_.partial(this.toggleVisibility, 'success', false)} 
+               onDismiss={_.partial(this.toggleVisibility, 'success', false)}
                dismissAfter={2000}>
           {this.props.successAlertContent}
         </Alert>
       )
     }
   }
-    
+
   render() {
     const {Form, showBtnLabel, hideBtnLabel} = this.props
     const {form} = this.state
     return (
       <div>
-        {form ? 
+        {form ?
           <Form {...this.props}
                 footerComponent={this.r_formVisibilityToggler(hideBtnLabel)}
                 onSuccessSubmit={this.handleSuccessSubmit} />
-          : 
+          :
           this.r_formVisibilityToggler(showBtnLabel)
         }
         {this.r_successAlert()}

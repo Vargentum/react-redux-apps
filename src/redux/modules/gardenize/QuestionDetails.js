@@ -1,8 +1,6 @@
-import reqwest from 'reqwest'
 import {asyncRequest, createAnswerEntry, postEntryAsLast} from './common'
 
-
-//Action Creators
+// Action Creators
 export const getQuestionData = (id) =>
   asyncRequest(
     {
@@ -23,13 +21,10 @@ export const getAnswersFromIdList = (idList) =>
       .sort((a, b) => b.votes - a.votes)
   )
 
-
 export const postNewAnswer = (data) => ({
   type: "NEW_ANSWER_POSTED",
-  payload: data 
+  payload: data
 })
-  
-
 
 // Action Handlers
 const ACTION_HANDLERS = {

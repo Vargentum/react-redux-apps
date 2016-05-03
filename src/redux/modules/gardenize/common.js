@@ -12,7 +12,6 @@ const DATA_URL = {
   answers: '/gardenize/answers.json'
 }
 
-
 export const getResource = (type, onSuccess, onFail) => {
   if (!DATA_URL[type]) throw new Error(`No such resource: ${type}`)
   reqwest({
@@ -42,7 +41,7 @@ export const asyncRequest = (config, fn) =>
       }))
   }
 
-const existy = x => x != null
+const existy = (x) => x != null
 
 const generateNextId = (ary) => {
   if (existy(_.last(ary) && _.last(ary).id)) {
@@ -64,15 +63,10 @@ export const createAnswerEntry = (answers, data) => Object.assign(
   {},
   data,
   {
-    id: generateNextId(answers), //TODO: generate id based on full answers list
-    votes: 0,
-  }  
+    id: generateNextId(answers), // TODO: generate id based on full answers list
+    votes: 0
+  }
 )
 
 export const postEntryAsFirst = (coll, entry) => [entry].concat(coll)
 export const postEntryAsLast = (coll, entry) => coll.concat([entry])
-
-
-
-
-

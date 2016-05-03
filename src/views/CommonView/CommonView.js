@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {Grid, Row, Jumbotron} from 'react-bootstrap'
+import {Row, Jumbotron} from 'react-bootstrap'
 import {Link} from 'react-router'
 
 type Props = {
