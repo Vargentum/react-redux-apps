@@ -59,7 +59,6 @@ const ACTION_HANDLERS = {
   },
   POST_NEW_QUESTION: (state, {type, payload}) => {
     const questionEntry = createQuestionEntry(state.questions, payload)
-    console.log(postEntryAsFirst(state.questions, questionEntry), '----')
     return Object.assign({}, state, {
       questions: postEntryAsFirst(state.questions, questionEntry),
       cachedQuestions: postEntryAsFirst(state.cachedQuestions, questionEntry)

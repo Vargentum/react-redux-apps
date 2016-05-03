@@ -19,8 +19,8 @@ export class QuestionDetails extends Component {
   }
 
   componentDidMount () {
-    console.log(this.params)
-    this.props.getQuestionData(1)
+    const {getQuestionData, params: {id}} = this.props
+    getQuestionData(parseInt(id))
   }
 
   componentWillReceiveProps ({questionLoaded, answersLoaded, getAnswersFromIdList, questionData: {answers}}) {
