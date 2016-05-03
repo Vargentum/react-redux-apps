@@ -67,7 +67,7 @@ const initialState = {
   answer: {},
   loaded: false
 }
-export default function counterReducer (state = initialState, action) {
+export default function questionsListReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }
