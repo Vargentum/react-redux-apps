@@ -7,22 +7,18 @@ export const fields = []
 
 const validate = (values) => {
   const errors = {}
-  const questionMinLength = 10
 
-  if (!values.question) {
-    errors.question = "Question shouldn't be empty"
-  }
-  else if (values.question.length < questionMinLength) {
-    errors.question = `Question length should be more than ${questionMinLength}`
+  if (!values.answer) {
+    errors.answer = "Answer shouldn't be empty"
   }
   if (!values.author) {
-    errors.author = "Username shouldn't be empty"
+    errors.author = "Author field shouldn't be empty"
   }
   
   return errors
 }
 
-export class NewQuestion extends Component {
+export class NewAnswerForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
     onSuccessSubmit: PropTypes.func,
@@ -42,19 +38,19 @@ export class NewQuestion extends Component {
   }
 
   render() {
-    const { fields: {question, author}, errors, handleSubmit, footerComponent } = this.props
+    const { fields: {answer, author}, errors, handleSubmit, footerComponent } = this.props
     return (
       <form onSubmit={this.onSubmit.bind(this)}>
-        <Input type="text" bsStyle={question.error ? "error" : 'success'} 
-               placeholder="Your question"
-               label={question.error} 
-               {...question} />
+        <Input type="textarea" bsStyle={answer.error ? "error" : 'success'} 
+               placeholder="Your answer"
+               label={answer.error} 
+               {...answer} />
         <Input type="text" bsStyle={author.error ? "error" : 'success'} 
               placeholder="Your name" 
               label={author.error} 
               {...author} />
         <div className="f-box f-gap--L">
-          <Button type="submit" disabled={!_.isEmpty(errors)}>Create Question</Button>
+          <Button type="submit" disabled={!_.isEmpty(errors)}>Create Answer</Button>
           {footerComponent}
         </div>
       </form>
@@ -62,10 +58,10 @@ export class NewQuestion extends Component {
   }
 }
 
-NewQuestion = reduxForm({
-  form: 'NewQuestion',
-  fields: ['question', 'author'],
+NewAnswerForm = reduxForm({
+  form: 'NewAnswerForm',
+  fields: ['answer', 'author'],
   validate
-})(NewQuestion)
+})(NewAnswerForm)
 
-export default NewQuestion
+export default NewAnswerForm

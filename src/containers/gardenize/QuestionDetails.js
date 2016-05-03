@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import QuestionDetailsUI from '../../components/GardenizeUI/QuestionDetailsUI'
-import {getQuestionData, getAnswersFromIdList} from '../../redux/modules/gardenize/QuestionDetails'
+import {getQuestionData, getAnswersFromIdList, postNewAnswer} from '../../redux/modules/gardenize/QuestionDetails'
 
 export class QuestionDetails extends Component {
   static propTypes = {
@@ -15,7 +15,8 @@ export class QuestionDetails extends Component {
       question: PropTypes.string,
       author: PropTypes.string,
       answers: PropTypes.array
-    }).isRequired
+    }).isRequired,
+    postNewAnswer: PropTypes.func
   }
 
   componentDidMount () {
@@ -38,7 +39,8 @@ const mapStateToProps = ({gardenizeQuestionDetails}) => {
 }
 const mapDispatchToProps = {
   getQuestionData,
-  getAnswersFromIdList
+  getAnswersFromIdList,
+  postNewAnswer
 }
 
 export default connect(

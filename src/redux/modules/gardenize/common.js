@@ -60,7 +60,18 @@ export const createQuestionEntry = (questions, data) => Object.assign(
   }
 )
 
-export const postEntryAsFirst = (table, entry) => [entry].concat(table)
+export const createAnswerEntry = (answers, data) => Object.assign(
+  {},
+  data,
+  {
+    id: generateNextId(answers),
+    votes: 0,
+  }  
+)
+
+export const postEntryAsFirst = (coll, entry) => [entry].concat(coll)
+export const postEntryAsLast = (coll, entry) => coll.concat([entry])
+
 
 
 

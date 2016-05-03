@@ -1,7 +1,8 @@
 import reqwest from 'reqwest'
-import {asyncRequest} from './common'
+import {asyncRequest, createAnswerEntry, postEntryAsLast} from './common'
 
 
+//Action Creators
 export const getQuestionData = (id) =>
   asyncRequest(
     {
@@ -20,13 +21,29 @@ export const getAnswersFromIdList = (idList) =>
     (response) => response.filter(x => idList.indexOf(x.id) !== -1)
   )
 
+
+export const postNewAnswer = (data) => ({
+  type: "NEW_ANSWER_POSTED",
+  payload: data 
+})
+  
+
+
 // Action Handlers
 const ACTION_HANDLERS = {
   QUESTION_LOAD_SUCCESS: (state, {type, payload}) =>
     Object.assign({}, state, {questionData: payload, questionLoaded: true}),
 
   ANSWERS_LOAD_SUCCESS: (state, {type, payload}) =>
-    Object.assign({}, state, {answersList: payload, answersLoaded: true})
+    Object.assign({}, state, {answersList: payload, answersLoaded: true}),
+
+  NEW_ANSWER_POSTED: (state, {type, payload}) => {
+    const answerEntry = createAnswerEntry(state.answersList, payload)
+    debugger
+    return Object.assign({}, state, {
+      answersList: postEntryAsLast(state.answersList, answerEntry)
+    })
+  }
 }
 
 // Reducer
