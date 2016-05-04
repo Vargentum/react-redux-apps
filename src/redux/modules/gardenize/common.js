@@ -71,5 +71,4 @@ export const createAnswerEntry = (answers, data) => Object.assign(
 export const postEntryAsFirst = (coll, entry) => [entry].concat(coll)
 export const postEntryAsLast = (coll, entry) => coll.concat([entry])
 
-
-export const resetScrollPosition = () => window.scrollTo(0,0)
+export const resetScrollPosition = () => window.scrollTo(0, 0)

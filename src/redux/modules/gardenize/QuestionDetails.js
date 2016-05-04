@@ -7,7 +7,7 @@ export const getQuestionData = (id) =>
       resource: 'questions',
       event: 'QUESTION'
     },
-    (response) => response.filter(x => x.id === id)[0]
+    (response) => response.filter((x) => x.id === id)[0]
   )
 
 export const getAnswersFromIdList = (idList) =>
@@ -17,7 +17,7 @@ export const getAnswersFromIdList = (idList) =>
       event: 'ANSWERS'
     },
     (response) => response
-      .filter(x => idList.indexOf(x.id) !== -1)
+      .filter((x) => idList.indexOf(x.id) !== -1)
       .sort((a, b) => b.votes - a.votes)
   )
 
