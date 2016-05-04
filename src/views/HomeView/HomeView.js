@@ -9,7 +9,11 @@ const Projects = [
   },
   {
     link: 'twitch',
-    name: 'Twitch.tw Streamers Table'
+    name: 'Twitch.tv Streamers Table'
+  },
+  {
+    link: 'gardenize',
+    name: 'Simple Q/A service for Gardenize junior js developer position'
   }
 ]
 
