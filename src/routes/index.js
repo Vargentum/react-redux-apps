@@ -7,6 +7,7 @@ import TwitchView from 'views/TwitchView'
 // gardenize
 import QuestionsListView from '../views/GardenizeView/QuestionsListView'
 import QuestionDetailsView from '../views/GardenizeView/QuestionDetailsView'
+import {resetScrollPosition} from '../redux/modules/gardenize/common'
 
 export default (store) => (
   <Route path='/' component={CoreLayout}>
@@ -15,7 +16,9 @@ export default (store) => (
     <Route path='twitch' component={TwitchView} />
     <Route path='gardenize'>
       <IndexRoute component={QuestionsListView} />
-      <Route path=':id' component={QuestionDetailsView} />
+      <Route path=':id' 
+             component={QuestionDetailsView}
+             onEnter={resetScrollPosition}  />
     </Route>
   </Route>
 )
