@@ -20,7 +20,7 @@ class CommonView extends Component {
       <Row>
         <Jumbotron>
           <Link to="/">Back to apps list</Link>
-          <h2>FreeCodeCamp {title}</h2>
+          <h2>{title}</h2>
           <p>
             {description}
             <br />

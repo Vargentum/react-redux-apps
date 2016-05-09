@@ -27,6 +27,9 @@
     "space-before-function-paren": 0,
     "jsx-quotes": 0,
     "react/jsx-indent-props": 0,
-    "operator-linebreak": 0
+    "operator-linebreak": 0,
+    "no-class-assign": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-no-bind": 0
   }
 }
