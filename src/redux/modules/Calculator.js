@@ -206,7 +206,7 @@ const ACTION_HANDLERS = {
   },
   [DISPLAY_RESULT]: (state, {payload}) => {
     const calculationResult = queque.getResult()
-    queque.reset()
+    queque.reset().add(calculationResult)
     isNewNumber = true
     return Object.assign({}, state, {
       queque: queque.getQueque(),
@@ -216,8 +216,8 @@ const ACTION_HANDLERS = {
   [DO_RESET]: () => {
     aNumber.reset()
     queque.reset()
-    isNewNumber = true
-    Object.assign({}, initialState)
+    isNewNumber = false
+    return Object.assign({}, initialState)
   }
 }
 
