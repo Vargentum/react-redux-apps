@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react'
-import {Button} from 'react-bootstrap'
+import {Button, Col, OverlayTrigger, Tooltip} from 'react-bootstrap'
 
 type Props = {
   updateActiveNumber: PropTypes.func,
@@ -13,12 +13,6 @@ type Props = {
 export class Keyboard extends Component {
   props: Props;
 
-  static layout = [
-    [1,2,3,divide],
-    [4,5,6,multiple],
-    [7,8,9,substract],
-    ['C', 0, '=', sum]
-  ]
   static buttons = { //TIP: move down items with specific codes
     zero: {
       label: '0',
@@ -73,19 +67,22 @@ export class Keyboard extends Component {
     result: {
       label: '=',
       code: [187, 13],
-      type: 'result'
+      type: 'result',
+      tip: "Press = or Enter"
     },
     reset: {
       label: 'C',
       code: [67, 32],
-      type: 'reset'
+      type: 'reset',
+      tip: 'Press C or Space'
     },
     sum: {
       label: '+',
       code: [107, {code: 187, metakeys: {
         shiftKey: true
       }}],
-      type: 'operation'
+      type: 'operation',
+      tip: 'Press shift-+'
     },
     substract: {
       label: '-',
@@ -97,18 +94,17 @@ export class Keyboard extends Component {
       code: [106, {code: 56, metakeys: {
         shiftKey: true
       }}],
-      type: 'operation'
+      type: 'operation',
+      tip: 'Press shift-8'
     },
     divide: {
       label: '/',
-      code: [111, {code: 191, metakeys: {
-        shiftKey: true
-      }}],
+      code: [111, {code: 191}],
       type: 'operation'
     }
   }
 
-  mapActionsToButtons = (btn, name) => {
+  integrateActionToButton = (btn, name) => {
     const {updateActiveNumber, doOperation, doReset, displayResult, convertToFloat} = this.props
     const {label, type} = btn
     let action = null
@@ -126,14 +122,15 @@ export class Keyboard extends Component {
   }
 
   state = {
-    actionedButtons: _.map(Keyboard.buttons, this.mapActionsToButtons)
+    buttonsWithActions: _.mapValues(Keyboard.buttons, this.integrateActionToButton),
+    layout: [
+      ['one', 'two', 'three', 'divide'],
+      ['four', 'five', 'six', 'multiple'],
+      ['seven', 'eight', 'nine', 'substract'],
+      ['reset', 'zero', 'result', 'sum']
+    ]
   }
-
-  r_button = ({label, action}) => <li 
-    key={_.uniqueId('btn-')}>
-      <Button onClick={action}>{label}</Button>
-    </li>
-
+  
   addKeyboardSupport (ev) {
     const isEventKeyCode = (val) => val === ev.keyCode
     const getPressedBtn = ({code}) => {
@@ -144,7 +141,7 @@ export class Keyboard extends Component {
           : isEventKeyCode(item)
       })
     }
-    const pressedBtn = _.findLast(this.state.actionedButtons, getPressedBtn)
+    const pressedBtn = _.findLast(this.state.buttonsWithActions, getPressedBtn)
     if (pressedBtn) pressedBtn.action(pressedBtn.label)
   }
 
@@ -156,6 +153,33 @@ export class Keyboard extends Component {
     document.removeEventListener('keyup', this.addKeyboardSupport)
   }
 
+  getButtonStyle =  (type) => {
+    switch (type) {
+      case 'number'    : return 'primary'
+      case 'operation' : return 'info'
+      case 'reset'     : return 'danger'
+      case 'result'    : return 'success'
+    }
+  }
+
+  r_buttonTip = (text) => <Tooltip id={_.uniqueId('tip-')}>{text}</Tooltip>
+
+  r_button = ({label, action, type, tip}) => <li 
+    key={_.uniqueId('btn-')}>
+      <OverlayTrigger placement="top" overlay={this.r_buttonTip(tip || label)} delayShow={1000}>
+        <Button onClick={action} 
+                bsSize="large"
+                bsStyle={this.getButtonStyle(type)}
+                className="calc-keyboard__btn">{label}</Button>
+      </OverlayTrigger>
+    </li>
+
+  r_buttonsRow = (row) => <ul
+    className="util-list_reset f-box"
+    key={_.uniqueId('row-')}>
+      {_.map(row, (name) => this.r_button(this.state.buttonsWithActions[name]))}
+    </ul>
+
   render () {
     const {
       updateActiveNumber,
@@ -166,8 +190,8 @@ export class Keyboard extends Component {
     } = this.props
 
     return (
-      <div>
-        {this.state.actionedButtons.map(this.r_button)}
+      <div className="calc-keyboard">
+        {_.map(this.state.layout, this.r_buttonsRow)}
       </div>
     )
   }
