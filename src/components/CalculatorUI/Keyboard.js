@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import {Button, Col, OverlayTrigger, Tooltip} from 'react-bootstrap'
+import styles from "../../styles/Calculator.styl"
 
 type Props = {
   updateActiveNumber: PropTypes.func,
@@ -170,7 +171,7 @@ export class Keyboard extends Component {
         <Button onClick={action} 
                 bsSize="large"
                 bsStyle={this.getButtonStyle(type)}
-                className="calc-keyboard__btn">{label}</Button>
+                className={styles.keyboardBtn}>{label}</Button>
       </OverlayTrigger>
     </li>
 
