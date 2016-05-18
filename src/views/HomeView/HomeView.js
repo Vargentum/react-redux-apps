@@ -18,6 +18,10 @@ const Projects = [
   {
     link: 'calculator',
     name: 'Calculator with keyboard support'
+  },
+  {
+    link: 'pomodoro',
+    name: 'Pomodoro timer'
   }
 ]
 

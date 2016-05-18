@@ -152,6 +152,7 @@
     "style-loader": "^0.13.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.0.0",
+    "tock": "^0.2.1",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.4.0",
