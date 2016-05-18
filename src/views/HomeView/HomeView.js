@@ -14,6 +14,10 @@ const Projects = [
   {
     link: 'gardenize',
     name: 'Simple Q/A service for Gardenize junior js developer position'
+  },
+  {
+    link: 'calculator',
+    name: 'Calculator with keyboard support'
   }
 ]
 
