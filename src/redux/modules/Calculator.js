@@ -12,11 +12,11 @@ const DISPLAY_RESULT = 'display calculation result'
 export const OPERATORS = {
   sum: {
     operate: (i1,i2) => i1 + i2,
-    name: '+',
+    name: '+'
   },
   substract: {
     operate: (i1,i2) => i1 - i2,
-    name: '-',
+    name: '-'
   },
   multiple: {
     operate: (i1,i2) => i1 * i2,
@@ -50,16 +50,15 @@ export class AddableNumber {
     }
     return this
   }
-  switchValueSign() {
-    this._val = this._val === 0 ? 0 : this._val * -1
-    return this
-  }
-  switchFloatPoint() {
-    if (!this._isFloat()) {
-      this._val += '.'
-    } else {}
-
-  }
+  // switchValueSign() {
+  //   this._val = this._val === 0 ? 0 : this._val * -1
+  //   return this
+  // }
+  // switchFloatPoint() {
+  //   if (!this._isFloat()) {
+  //     this._val += '.'
+  //   } else {}
+  // }
   reset() {
     this._val = AddableNumber.initState
     return this
@@ -110,7 +109,7 @@ export class Queque {
       this._performOperation(this._operators[0], 0)
     }
   }
-  _toReadableQuequeOperators = (entry) => this._isOperator(entry) 
+  _toReadableQuequeOperators = (entry) => this._isOperator(entry)
     ? this._getOperator(entry).name
     : entry
 
@@ -118,7 +117,7 @@ export class Queque {
   _calculateResult() {
     this._calculatePriorityOperations()
     this._calculateBaseOperations()
-    return this._numbers[0]  
+    return this._numbers[0]
   }
   _getLastNumber = () => _.last(this._numbers)
 
@@ -151,7 +150,6 @@ export class Queque {
   }
 }
 
-
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -175,7 +173,6 @@ export const convertToFloat = () => ({
   type: CONVERT_TO_FLOAT,
   payload: null
 })
-
 
 // ------------------------------------
 // Action Handlers
@@ -221,7 +218,6 @@ const ACTION_HANDLERS = {
   }
 }
 
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -233,4 +229,3 @@ export default function (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }
-

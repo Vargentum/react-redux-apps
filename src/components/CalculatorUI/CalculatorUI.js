@@ -2,17 +2,6 @@ import React, {PropTypes, Component} from 'react'
 import {Row, Col} from 'react-bootstrap'
 import Display from './Display'
 import Keyboard from './Keyboard'
-import styles from '../../styles/Calculator.styl'
-
-type Props = {
-  queque:             PropTypes.array,
-  calculationResult:  PropTypes.number,
-  updateActiveNumber: PropTypes.func,
-  doOperation:        PropTypes.func,
-  doReset:            PropTypes.func,
-  displayResult:      PropTypes.func,
-  convertToFloat:     PropTypes.func
-};
 
 class HelpTexts extends Component {
 
@@ -24,7 +13,7 @@ class HelpTexts extends Component {
       'Keyboard is supported',
       'Hold cursor over button to display keyboard shortcut',
       'Hit Enter to get result',
-      'Hit Space to reset' 
+      'Hit Space to reset'
     ]
 
     return (
@@ -38,20 +27,18 @@ class HelpTexts extends Component {
   }
 }
 
-
 export class CalculatorUI extends Component {
-  props: Props;
+  static propTypes = {
+    queque:             PropTypes.array,
+    calculationResult:  PropTypes.number,
+    updateActiveNumber: PropTypes.func,
+    doOperation:        PropTypes.func,
+    doReset:            PropTypes.func,
+    displayResult:      PropTypes.func,
+    convertToFloat:     PropTypes.func
+  }
 
   render () {
-    const {
-      queque,
-      calculationResult,
-      updateActiveNumber,
-      doOperation,
-      doReset,
-      convertToFloat
-    } = this.props
-
     return (
       <Row>
         <Col xs="12" sm="6" md="3">

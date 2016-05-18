@@ -1,20 +1,18 @@
 import React, {PropTypes, Component} from 'react'
-import {Button, Col, OverlayTrigger, Tooltip} from 'react-bootstrap'
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap'
 import styles from "../../styles/Calculator.styl"
-
-type Props = {
-  updateActiveNumber: PropTypes.func,
-  doOperation:        PropTypes.func,
-  doReset:            PropTypes.func,
-  displayResult:      PropTypes.func,
-  convertToFloat:     PropTypes.func
-};
-
+import _ from 'lodash'
 
 export class Keyboard extends Component {
-  props: Props;
+  static propTypes = {
+    updateActiveNumber: PropTypes.func,
+    doOperation:        PropTypes.func,
+    doReset:            PropTypes.func,
+    displayResult:      PropTypes.func,
+    convertToFloat:     PropTypes.func
+  }
 
-  static buttons = { //TIP: move down items with specific codes
+  static buttons = { // TIP: move down items with specific codes
     zero: {
       label: '0',
       code: 48,
@@ -106,18 +104,18 @@ export class Keyboard extends Component {
   }
 
   integrateActionToButton = (btn, name) => {
-    const {updateActiveNumber, doOperation, doReset, displayResult, convertToFloat} = this.props
+    const {updateActiveNumber, doOperation, doReset, displayResult} = this.props
     const {label, type} = btn
     let action = null
     switch (type) {
       case 'number'    : action = _.partial(updateActiveNumber, label)
-      break;
+      break
       case 'operation' : action = _.partial(doOperation, name)
-      break;
+      break
       case 'reset'     : action = doReset
-      break;
+      break
       case 'result'    : action = displayResult
-      break;
+      break
     }
     return _.assign({}, btn, {action})
   }
@@ -131,14 +129,14 @@ export class Keyboard extends Component {
       ['reset', 'zero', 'result', 'sum']
     ]
   }
-  
+
   addKeyboardSupport (ev) {
     const isEventKeyCode = (val) => val === ev.keyCode
     const getPressedBtn = ({code}) => {
       if (!code.length) return isEventKeyCode(code)
       return _.find(code, (item) => {
-        return _.isObject(item) 
-          ? _.every(item.metakeys, (v,k) => ev[k]) && isEventKeyCode(item.code)
+        return _.isObject(item)
+          ? _.every(item.metakeys, (v, k) => ev[k]) && isEventKeyCode(item.code)
           : isEventKeyCode(item)
       })
     }
@@ -165,10 +163,10 @@ export class Keyboard extends Component {
 
   r_buttonTip = (text) => <Tooltip id={_.uniqueId('tip-')}>{text}</Tooltip>
 
-  r_button = ({label, action, type, tip}) => <li 
+  r_button = ({label, action, type, tip}) => <li
     key={_.uniqueId('btn-')}>
       <OverlayTrigger placement="top" overlay={this.r_buttonTip(tip || label)} delayShow={1000}>
-        <Button onClick={action} 
+        <Button onClick={action}
                 bsSize="large"
                 bsStyle={this.getButtonStyle(type)}
                 className={styles.keyboardBtn}>{label}</Button>
@@ -182,14 +180,6 @@ export class Keyboard extends Component {
     </ul>
 
   render () {
-    const {
-      updateActiveNumber,
-      doOperation,
-      doReset,
-      displayResult,
-      convertToFloat
-    } = this.props
-
     return (
       <div>
         {_.map(this.state.layout, this.r_buttonsRow)}

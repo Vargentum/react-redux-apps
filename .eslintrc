@@ -30,6 +30,10 @@
     "operator-linebreak": 0,
     "no-class-assign": 0,
     "react/jsx-indent": 0,
-    "react/jsx-no-bind": 0
+    "react/jsx-no-bind": 0,
+    "no-multi-spaces": 0,
+    "indent": 0,
+    "key-spacing": 0,
+    "comma-spacing": 0
   }
 }
