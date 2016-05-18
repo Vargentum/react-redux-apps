@@ -191,7 +191,7 @@ export class Keyboard extends Component {
     } = this.props
 
     return (
-      <div className="calc-keyboard">
+      <div>
         {_.map(this.state.layout, this.r_buttonsRow)}
       </div>
     )

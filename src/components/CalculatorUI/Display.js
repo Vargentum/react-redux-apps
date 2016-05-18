@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import {Input} from 'react-bootstrap'
+import styles from '../../styles/Calculator.styl'
 
 type Props = {
   queque:             PropTypes.array,
@@ -16,8 +17,14 @@ export class Display extends Component {
 
     return (
       <div>
-        <Input value={calculationResult} type="text" className="calc-result-display" />
-        <Input value={queque} type="text" className="calc-queque-display" />
+        <Input value={calculationResult} type="text" 
+               bsSize="large"
+               placeholder="Result Display"
+               className={styles.display} />
+        <Input value={queque} type="text" 
+               bsSize="small"
+               placeholder="Calculation Queque Display"
+               className={styles.display} />
       </div>
     )
   }
