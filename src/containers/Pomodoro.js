@@ -1,7 +1,8 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import {applyToTimer, update, setWorkInterval, setBreakInterval} from '../redux/modules/Pomodoro'
+import {applyToTimer, onTimerComplete, update, setWorkInterval, setBreakInterval} from '../redux/modules/Pomodoro'
 import Tock from 'tocktimer'
+import Countdown from '../components/PomodoroUI/Countdown'
 
 export class Pomodoro extends Component {
   static propTypes = {
@@ -10,8 +11,28 @@ export class Pomodoro extends Component {
     setBreakInterval: PropTypes.func.isRequired
   }
 
+  state = {
+    isBreakTime: false,
+    converter: new Tock()
+  }
+
   componentDidMount() {
+    const {breakInterval, workInterval} = this.props
     setInterval(this.props.update, 1000)
+    this.props.onTimerComplete(() => {
+      this.toggleBreakTime(
+        this.timerRestart(this.state.isBreakTime ? breakInterval : workInterval)
+      )
+    })
+  }
+
+  toggleBreakTime = (cb) => this.setState({
+    isBreakTime: !this.state.isBreakTime 
+  }, cb);
+
+  timerRestart = (time) => () => {
+    this.props.applyToTimer('pause')
+    this.props.applyToTimer('start', this.state.converter.timeToMS(time))
   }
 
   render() {
@@ -19,12 +40,17 @@ export class Pomodoro extends Component {
       applyToTimer, update, setWorkInterval, setBreakInterval, 
       workInterval, breakInterval, time
     } = this.props
-    const timer = new Tock()
+
+    console.log(this.state.isBreakTime)
 
     return (
       <div>
-        {time}
-        <button onClick={() => applyToTimer('start', timer.timeToMS(workInterval))}>Start</button>
+        {
+          this.state.isBreakTime 
+            ? <Countdown time={time}>Break</Countdown>
+            : <Countdown time={time}>Work</Countdown>
+        }
+        <button onClick={() => applyToTimer('start', this.state.converter.timeToMS(workInterval))}>Start</button>
         <button onClick={() => applyToTimer('pause')}>Pause</button>
       </div>
     )
@@ -36,7 +62,7 @@ const mapStateToProps = ({pomodoro}) => {
   return {workInterval, breakInterval, time}
 }
 const mapDispatchToProps = {
-  applyToTimer, update, setWorkInterval, setBreakInterval
+  applyToTimer, onTimerComplete, update, setWorkInterval, setBreakInterval
 }
 
 export default connect(

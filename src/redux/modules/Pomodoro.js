@@ -43,19 +43,15 @@ export const setBreakInterval = (interval) => ({
   type: SET_BREAK_INTERVAL,
   payload: interval
 })
-export const onSuccess = (callback) => ({
-  type: SET_SUCCESS_CALLBACK,
-  payload: callback
-})
+export const onTimerComplete = (callback) => (dispatch, getState) => {
+  timer.complete = callback
+}
 
 // ------------------------------------
 // Action Creators
 // ------------------------------------
 
 const ACTION_CREATORS = {
-  // [SET_SUCCESS_CALLBACK]: (state, {payload: success}) => Object.assign({}, state, {
-  //   tock: 
-  // }),
   [UPDATE]: (state, {payload: time}) => Object.assign({}, state, {time}),
   [SET_WORK_INTERVAL]: (state, {payload}) => Object.assign({}, state, {
     workInterval: payload
@@ -69,8 +65,8 @@ const ACTION_CREATORS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  workInterval: '25:00',
-  breakInterval: '5:00',
+  workInterval: '00:05',
+  breakInterval: '00:03',
   time: null
 }
 export default function (state = initialState, action) {
