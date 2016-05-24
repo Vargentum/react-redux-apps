@@ -31,7 +31,6 @@ export const update = () => ({
 })
 export const applyToTimer = (method, ...args) => (dispatch, getState) => {
   if (!timer || !timer[method] || typeof timer[method] !== 'function') return
-  console.log(timer[method]);
   timer[method](args)
   dispatch(update())
 }

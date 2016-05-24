@@ -12,27 +12,52 @@ export class Pomodoro extends Component {
   }
 
   state = {
+    converter: new Tock(),
     isBreakTime: false,
-    converter: new Tock()
+    updateScheduler: null
   }
 
   componentDidMount() {
-    const {breakInterval, workInterval} = this.props
-    setInterval(this.props.update, 1000)
-    this.props.onTimerComplete(() => {
-      this.toggleBreakTime(
-        this.timerRestart(this.state.isBreakTime ? breakInterval : workInterval)
-      )
-    })
+    this.initPomodoroCycle()
+    this.syncTime(true)
+  }
+
+  componentWillUnmount() {
+    this.syncTime(false)
+  }
+
+  syncTime = (state) => {
+    this.setState({
+      updateScheduler: state 
+        ? setInterval(this.props.update, 1000) 
+        : clearInterval(this.state.updateScheduler)
+    });
   }
 
   toggleBreakTime = (cb) => this.setState({
     isBreakTime: !this.state.isBreakTime 
   }, cb);
 
-  timerRestart = (time) => () => {
+  timerRestart = (time) => {
     this.props.applyToTimer('pause')
     this.props.applyToTimer('start', this.state.converter.timeToMS(time))
+  }
+
+  timerReset = (time) => {
+    this.props.applyToTimer('start', this.state.converter.timeToMS(time))
+    this.props.applyToTimer('pause')
+  }
+
+  switchPomodoroTimers = (bp, wI, bI) => () => {
+    return bp ? this.timerReset(wI) : this.timerRestart(bI)
+  }
+
+  initPomodoroCycle = () => {
+    const {update, breakInterval, workInterval} = this.props
+    this.timerReset(workInterval)
+    this.props.onTimerComplete(() => {
+      this.toggleBreakTime(this.switchPomodoroTimers(this.state.isBreakTime, workInterval, breakInterval))
+    })
   }
 
   render() {
@@ -41,15 +66,10 @@ export class Pomodoro extends Component {
       workInterval, breakInterval, time
     } = this.props
 
-    console.log(this.state.isBreakTime)
-
     return (
       <div>
-        {
-          this.state.isBreakTime 
-            ? <Countdown time={time}>Break</Countdown>
-            : <Countdown time={time}>Work</Countdown>
-        }
+        <input type="range" val={workInterval} onChange="" />
+        <Countdown time={time} />
         <button onClick={() => applyToTimer('start', this.state.converter.timeToMS(workInterval))}>Start</button>
         <button onClick={() => applyToTimer('pause')}>Pause</button>
       </div>
