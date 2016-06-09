@@ -3,10 +3,6 @@ import { connect } from 'react-redux'
 import {applyToTimer, onTimerComplete, update, setWorkInterval, setBreakInterval} from '../redux/modules/Pomodoro'
 import Tock from 'tocktimer'
 import Countdown from '../components/PomodoroUI/Countdown'
-import {Input} from "react-bootstrap"
-
-
-const minToMs = (min) => min * 60 * 1000
 
 export class Pomodoro extends Component {
   static propTypes = {
@@ -16,6 +12,7 @@ export class Pomodoro extends Component {
   }
 
   state = {
+    converter: new Tock(),
     isBreakTime: false,
     updateScheduler: null
   }
@@ -43,11 +40,11 @@ export class Pomodoro extends Component {
 
   timerRestart = (time) => {
     this.props.applyToTimer('pause')
-    this.props.applyToTimer('start', minToMs(time))
+    this.props.applyToTimer('start', this.state.converter.timeToMS(time))
   }
 
   timerReset = (time) => {
-    this.props.applyToTimer('start', minToMs(time))
+    this.props.applyToTimer('start', this.state.converter.timeToMS(time))
     this.props.applyToTimer('pause')
   }
 
@@ -63,11 +60,6 @@ export class Pomodoro extends Component {
     })
   }
 
-  r_input = (action, value, label) => {
-    const handleInputChangeWith = (handler) => (ev) => handler(ev.target.value)
-    return <Input type="number" value={value} onChange={handleInputChangeWith(action)} label={label} />
-  }
-
   render() {
     const {
       applyToTimer, update, setWorkInterval, setBreakInterval, 
@@ -76,10 +68,9 @@ export class Pomodoro extends Component {
 
     return (
       <div>
-        {this.r_input(setWorkInterval, workInterval, "Work Interval")}
-        {this.r_input(setBreakInterval, breakInterval, "Break Interval")}
+        <input type="range" val={workInterval} onChange="" />
         <Countdown time={time} />
-        <button onClick={() => applyToTimer('start', minToMs(workInterval))}>Start</button>
+        <button onClick={() => applyToTimer('start', this.state.converter.timeToMS(workInterval))}>Start</button>
         <button onClick={() => applyToTimer('pause')}>Pause</button>
       </div>
     )

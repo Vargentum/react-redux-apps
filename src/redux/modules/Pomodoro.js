@@ -64,8 +64,8 @@ const ACTION_CREATORS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  workInterval: 25,
-  breakInterval: 5,
+  workInterval: '00:05',
+  breakInterval: '00:03',
   time: null
 }
 export default function (state = initialState, action) {
