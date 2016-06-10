@@ -1,3 +1,6 @@
+import React, {Component, PropTypes} from 'react'
+import {createStore} from 'redux'
+
 
 /*lesson 8: createStore implementation*/
 
@@ -58,5 +61,37 @@ const todoApp1 = combineReducers({
 })
 
 
+/* lesson 22: force updates the component */
+
+const store = createStore(() => {})
+
+class FilterLink extends Component {
+  componentDidMount () {
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate()
+    })
+  }
+  componentWillUnmount () {
+    this.unsubscribe() 
+  }
+  render() {
+    const state = store.getState()
+    return (
+      <div 
+        onClick={store.dispatch({
+          type: 'SOME_ACTION'
+        })} />
+    )
+  }
+}
+
+
+/* lesson 28: inject dispatch into Component */
+let Stateless = ({ dispatch }) => 
+  <div onClick={dispatch({
+    type: 'SOME_ACTION'
+  })} />
+
+Stateless = connect(/*null, null*/)(Stateless)
 
 
