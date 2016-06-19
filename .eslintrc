@@ -34,6 +34,7 @@
     "no-multi-spaces": 0,
     "indent": 0,
     "key-spacing": 0,
-    "comma-spacing": 0
+    "comma-spacing": 0,
+    'react/prop-types': 0
   }
 }

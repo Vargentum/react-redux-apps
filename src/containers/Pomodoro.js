@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import {Pomodoro, Controls, DurationSetup} from '../components/PomodoroUI'
 import {doStart, doPause, doInit, updateDuration} from '../redux/modules/pomodoro'
@@ -22,7 +22,7 @@ class PomodoroContainer extends Component {
     doStart('rest')
   }
 
-  getPomodoroTypeBasedOn(prop){
+  getPomodoroTypeBasedOn(prop) {
     return this.props.work[prop] ? 'work' : 'rest'
   }
 

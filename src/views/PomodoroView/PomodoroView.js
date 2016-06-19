@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
 import Pomodoro from 'containers/Pomodoro'
 import CommonView from 'views/CommonView'
 
