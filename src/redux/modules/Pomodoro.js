@@ -6,14 +6,14 @@ import moment from 'moment'
 export const initialState = {
   work: {
     active: true,
-    duration: moment.duration(25, 'minutes').asMilliseconds(),
+    duration: moment.duration(7, 'seconds').asMilliseconds(),
     inProgress: false,
     isInit: true,
   },
   rest: {
     active: false,
-    duration: moment.duration(5, 'minutes').asMilliseconds(),
-    inProgress: false,
+    duration: moment.duration(3, 'seconds').asMilliseconds(),
+    inProgress: true,
     isInit: true
   }
 }

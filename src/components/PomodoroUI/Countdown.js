@@ -85,9 +85,7 @@ class Countdown extends Component {
   }
 
   checkForPause(nextIsPaused) {
-    if (nextIsPaused !== this.props.isPaused || this.props.shouldReset) {
-      this.timer.pause()
-    }
+    if (nextIsPaused !== this.props.isPaused) this.timer.pause()
   }
 
   getTimeDiff({end, start} = this.props) {
@@ -126,15 +124,9 @@ class Countdown extends Component {
     delete this.timer
   }
 
-  /*if true -> not startCoundown, but init Timer 
-
-  now: inited and paused
-  should be: inited as numbers, started when isPaused 
-  */
-
   startCountdown = () => {
     this.timer.start(this.getTimeDiff())
-    this.checkForPause()
+    if (this.props.isPaused) this.timer.pause()
     this.setState({
       started: true 
     }, this.props.onStart());

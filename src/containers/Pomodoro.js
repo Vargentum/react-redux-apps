@@ -21,12 +21,12 @@ type Props = {
 export class PomodoroContainer extends Component {
   props: Props;
 
-  handleRestEnd() {
+  handleRestEnd = () => {
     const {doStart, doInit} = this.props
-    doInit('start')
+    doInit('work')
   }
 
-  handleWorkEnd() {
+  handleWorkEnd = () => {
     const {doStart, doInit} = this.props
     doInit('rest')
     doStart('rest')
