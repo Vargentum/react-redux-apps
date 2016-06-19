@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 // import { bindActionCreators } from 'redux'
 import Pomodoro from '../components/PomodoroUI'
 import {Button} from 'react-bootstrap'
-import {doStart, doPause, doReset} from '../redux/modules/pomodoro'
+import {doStart, doPause, doInit} from '../redux/modules/pomodoro'
 
 
-const Controls = ({onStartClick, onPauseClick, onStopClick, startDisabled}) =>
+const Controls = ({onStartClick, onPauseClick, onResetClick, startDisabled}) =>
   <div>
     <Button onClick={onStartClick} disabled={startDisabled}>Start</Button>
     <Button onClick={onPauseClick} disabled={!startDisabled}>Pause</Button>
-    <Button onClick={onStopClick} disabled={!startDisabled}>Stop</Button>
+    <Button onClick={onResetClick} disabled={!startDisabled}>Reset</Button>
   </div>
 
 
@@ -21,24 +21,27 @@ type Props = {
 export class PomodoroContainer extends Component {
   props: Props;
 
-  handleWorkStart() {
-
+  handleRestEnd() {
+    const {doStart, doInit} = this.props
+    doInit('start')
   }
 
   handleWorkEnd() {
-
+    const {doStart, doInit} = this.props
+    doInit('rest')
+    doStart('rest')
   }
 
   getPomodoroTypeBasedOn(prop){
     return this.props.work[prop] ? 'work' : 'rest'
   }
 
-  generateControlsProps({doStart, doPause, doReset, work, rest}) {
+  generateControlsProps({doStart, doPause, doInit, work, rest}) {
     return {
       onStartClick: () => doStart(this.getPomodoroTypeBasedOn('active')),
       onPauseClick: () => doPause(this.getPomodoroTypeBasedOn('active')),
-      onStopClick:  () => doReset(this.getPomodoroTypeBasedOn('active')),
-      startDisabled: this.props[this.getPomodoroTypeBasedOn('active')].inProgress
+      onResetClick: () => doInit('work'),
+      startDisabled:this.props[this.getPomodoroTypeBasedOn('active')].inProgress
     }
   }
 
@@ -48,7 +51,7 @@ export class PomodoroContainer extends Component {
     return (
       <div>
         <Pomodoro onEnd={this.handleWorkEnd} {...work} />
-        <Pomodoro onEnd={this.handleBreakEnd} {...rest} />
+        <Pomodoro onEnd={this.handleRestEnd} {...rest} />
         <Controls {...this.generateControlsProps(this.props)} />
       </div>
     )
@@ -60,7 +63,7 @@ const mapStateToProps = ({pomodoro}) => {
   return {work, rest}
 }
 const mapDispatchToProps = {
-  doStart, doPause, doReset
+  doStart, doPause, doInit
 }
 
 export default connect(

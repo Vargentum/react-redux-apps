@@ -60,18 +60,13 @@ class Countdown extends Component {
   state = {...Countdown.defaultState}
 
   componentDidMount () {
-    const {start, end} = this.props
-    this.createTimer()
-    this.validateDates([start, end])
-    _.delay(this.startCountdown, this.getTimeDiff({
-      start: Date.now(),
-      end: start
-    }))
+    this.startTimer()
   }
 
-  componentWillReceiveProps({start, end, isPaused}) {
+  componentWillReceiveProps({start, end, isPaused, shouldReset}) {
     this.validateDates([start, end])
     this.checkForPause(isPaused)
+    if (shouldReset) this.reloadTimer()
   }
 
   componentWillUnmount() {
@@ -90,8 +85,52 @@ class Countdown extends Component {
   }
 
   checkForPause(nextIsPaused) {
-    nextIsPaused !== this.props.isPaused && this.timer.pause()
+    if (nextIsPaused !== this.props.isPaused || this.props.shouldReset) {
+      this.timer.pause()
+    }
   }
+
+  getTimeDiff({end, start} = this.props) {
+    return moment(end) - moment(start)
+  }
+
+  createTimer() {
+    const config = _.assign({},
+      Countdown.defaultTimerConfig, 
+      {
+        complete: this.completeCountdown,
+        callback: this.updateCountdown,
+        frequency: this.props.frequency
+      }
+    )
+    this.timer = new Tock(config)
+  }
+
+  startTimer() {
+    const {start, end} = this.props
+    this.createTimer()
+    this.validateDates([start, end])
+    _.delay(this.startCountdown, this.getTimeDiff({
+      start: Date.now(),
+      end: start
+    }))
+  }
+
+  reloadTimer() {
+    this.destroyTimer()
+    this.startTimer()
+  }
+
+  destroyTimer() {
+    this.timer.stop()
+    delete this.timer
+  }
+
+  /*if true -> not startCoundown, but init Timer 
+
+  now: inited and paused
+  should be: inited as numbers, started when isPaused 
+  */
 
   startCountdown = () => {
     this.timer.start(this.getTimeDiff())
@@ -112,27 +151,6 @@ class Countdown extends Component {
       completed: true 
     });
     this.props.onEnd()
-  }
-
-  getTimeDiff({end, start} = this.props) {
-    return moment(end) - moment(start)
-  }
-
-  createTimer() {
-    const config = _.assign({},
-      Countdown.defaultTimerConfig, 
-      {
-        complete: this.completeCountdown,
-        callback: this.updateCountdown,
-        frequency: this.props.frequency
-      }
-    )
-    this.timer = new Tock(config)
-  }
-
-  destroyTimer() {
-    this.timer.stop()
-    delete this.timer
   }
 
   render() {

@@ -4,9 +4,15 @@ import moment from 'moment'
 
 /*TODO: add flow */
 
-const Pomodoro = ({active, inProgress, duration, onEnd}) =>
+const Pomodoro = ({active, inProgress, isInit, duration, onEnd}) =>
   active 
-    ? <Countdown isPaused={!inProgress} size={200} formatter="mm:ss" start={0} end={duration} onEnd={onEnd} />
+    ? <Countdown 
+        isPaused={!inProgress} 
+        shouldReset={isInit} 
+        size={200} 
+        formatter="mm:ss" 
+        start={0} 
+        end={duration} onEnd={onEnd} />
     : <noscript/>
 
 
