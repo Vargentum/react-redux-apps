@@ -1,30 +1,32 @@
 import moment from 'moment'
+import _ from 'lodash'
 
 // ------------------------------------
-// INITIAL STATE
+// INITIAL STATE & helpers
 // ------------------------------------
+const getOppositePomodoroType = (type) => type === 'work' ? 'rest' : 'work'
+
 export const initialState = {
   work: {
     active: true,
-    duration: moment.duration(7, 'seconds').asMilliseconds(),
+    duration: moment.duration(25, 'm').asMilliseconds(),
     inProgress: false,
     isInit: true,
   },
   rest: {
     active: false,
-    duration: moment.duration(3, 'seconds').asMilliseconds(),
+    duration: moment.duration(5, 'm').asMilliseconds(),
     inProgress: true,
     isInit: true
   }
 }
-const getOppositePomodoroType = (type) => type === 'work' ? 'rest' : 'work'
-
 // ------------------------------------
 // Constants
 // ------------------------------------
 const INIT = 'pomodoro/init'
 const START = 'pomodoro/start'
 const PAUSE = 'pomodoro/pause'
+const UPD_DURATION = 'pomodoro/set_duration'
 
 // ------------------------------------
 // Actions
@@ -41,6 +43,13 @@ export const doPause = (type) => ({
   type: PAUSE,
   payload: {type}
 })
+export const updateDuration = (duration, type) => ({
+  type: UPD_DURATION,
+  payload: {
+    duration,
+    type
+  }
+})
 
 // ------------------------------------
 // Action Creators
@@ -51,10 +60,12 @@ const ACTION_CREATORS = {
     ...state,
     [type]: {
       ...initialState[type],
+      duration: state[type].duration,
       active: true
     },
     [getOppositePomodoroType(type)]: {
       ...initialState[getOppositePomodoroType(type)],
+      duration: state[getOppositePomodoroType(type)].duration,
       active: false
     }
   }),
@@ -71,6 +82,13 @@ const ACTION_CREATORS = {
     [type]: {
       ...state[type],
       inProgress: false
+    }
+  }),
+  [UPD_DURATION]: (state, {payload: {duration, type}}) => ({
+    ...state,
+    [type]: {
+      ...state[type],
+      duration      
     }
   })
   // [THUNK]: () => (dispatch, getState) => {}
