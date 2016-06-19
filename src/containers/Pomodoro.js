@@ -1,47 +1,18 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import Pomodoro from '../components/PomodoroUI'
-import {Button} from 'react-bootstrap'
+import {Pomodoro, Controls, DurationSetup} from '../components/PomodoroUI'
 import {doStart, doPause, doInit, updateDuration} from '../redux/modules/pomodoro'
-import moment from 'moment'
-
-
-const Controls = ({onStartClick, onPauseClick, onResetClick, startDisabled}) =>
-  <div>
-    <Button onClick={onStartClick} disabled={startDisabled}>Start</Button>
-    <Button onClick={onPauseClick} disabled={!startDisabled}>Pause</Button>
-    <Button onClick={onResetClick} disabled={!startDisabled}>Reset</Button>
-  </div>
-
-const DurationSetup = ({onChange, durations: {work, rest}}) => {
-  const handleChange = (type) => ({currentTarget: {value}}) => {
-    const ms = moment.duration(parseInt(value), 'm').asMilliseconds()
-    onChange(ms, type)
-  }
-  return (
-    <form>
-      <input 
-        type="number" step="1" min="15" max="75" 
-        value={moment.duration(work, 'ms').asMinutes()} 
-        onChange={handleChange('work')} />
-      <input 
-        type="number" step="1" min="1" max="25" 
-        value={moment.duration(rest, 'ms').asMinutes()} 
-        onChange={handleChange('rest')} />
-    </form>
-  )
-}
-
+import {pomodoroContainer} from 'styles/Pomodoro'
 
 type Props = {
   work: Object,
   rest: Object
 }
-export class PomodoroContainer extends Component {
+class PomodoroContainer extends Component {
   props: Props;
 
   handleRestEnd = () => {
-    const {doStart, doInit} = this.props
+    const {doInit} = this.props
     doInit('work')
   }
 
@@ -75,7 +46,7 @@ export class PomodoroContainer extends Component {
       rest: rest.duration
     }
     return (
-      <div>
+      <div className={`f-box f-align--13-2 f-dir--col ${pomodoroContainer}`}>
         <DurationSetup onChange={updateDuration} durations={durations} />
         <Pomodoro theme="work" onEnd={this.handleWorkEnd} {...work} />
         <Pomodoro theme="rest" onEnd={this.handleRestEnd} {...rest} />

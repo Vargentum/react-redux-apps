@@ -3,6 +3,7 @@ import _ from 'lodash'
 import Tock from 'tocktimer'
 import moment from 'moment'
 import Timebar from './Timebar'
+import {countdownString} from 'styles/Pomodoro.styl'
 
 class Countdown extends Component {
   static propTypes = {
@@ -15,8 +16,8 @@ class Countdown extends Component {
     end: PT.oneOfType([
       PT.string,
       PT.number,
-      PT.array, 
-      PT.object 
+      PT.array,
+      PT.object
     ]).isRequired,
     theme: PT.string,
     onStart: PT.func,
@@ -67,13 +68,13 @@ class Countdown extends Component {
   }
 
   validateDates(dates) {
-    const isValidFormat = dates.every(date => moment(date).isValid)
+    const isValidFormat = dates.every((date) => moment(date).isValid)
     const countdown = this.getTimeDiff()
     if (!isValidFormat) {
       throw new Error(`Invalid start or end time format.`)
     } else if (countdown < 0) {
       throw new Error(`End time shouldn't be earlier then start one.`)
-    }    
+    }
   }
 
   checkForPause(nextIsPaused) {
@@ -86,7 +87,7 @@ class Countdown extends Component {
 
   createTimer() {
     const config = _.assign({},
-      Countdown.defaultTimerConfig, 
+      Countdown.defaultTimerConfig,
       {
         complete: this.completeCountdown,
         callback: this.updateCountdown,
@@ -123,33 +124,33 @@ class Countdown extends Component {
     this.setState({
       started: true,
       initCountdown: initCountdown
-    }, this.props.onStart());
+    }, this.props.onStart())
   }
 
   updateCountdown = () => {
     this.setState({
-      countdown: this.timer.lap() 
-    }, this.props.onUpdate(this.timer));
+      countdown: this.timer.lap()
+    }, this.props.onUpdate(this.timer))
   }
 
   completeCountdown = () => {
     this.setState({
-      completed: true 
-    });
+      completed: true
+    })
     this.props.onEnd()
   }
 
   render() {
-    const { countdown, started, completed, initCountdown } = this.state
+    const { countdown, started } = this.state
     const { formatter, theme } = this.props
     const time = moment(countdown).format(formatter)
 
     return (
       <div>
-        { started && 
-          <div className="va-Countdown">
+        {started &&
+          <div>
             <Timebar {...this.state} theme={theme} />
-            {time}
+            <div className={countdownString}>{time}</div>
          </div>
         }
       </div>

@@ -1,3 +1,7 @@
+.pomodoroContainer
+  font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
+  height: 100%
+
 .timebar
   position fixed
   left 0
@@ -6,3 +10,24 @@
   height 100%
   z-index: -1
   
+  &:before
+    content ''  
+    display block
+    position absolute 
+    left 0 
+    top 0 
+    width: 100%
+    height 100%
+    transform translateY(-100%)
+    background-color #490A3D
+  
+.countdownString
+  font calc(8em \+ 10vw) Palatino, 'Palatino Linotype', 'Palatino LT STD', 'Book Antiqua', Georgia, serif
+  color: #fff
+  text-align: center
+  
+.durationSetup
+  color: #fff
+
+.controlButtons
+  margin: auto

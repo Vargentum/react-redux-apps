@@ -1,7 +1,4 @@
-import Countdown from './Countdown'
-import Pomodoro from './Pomodoro'
-import Timebar from './Timebar'
+export Controls from './Controls'
+export DurationSetup from './DurationSetup'
+export Pomodoro from './Pomodoro'
 
-// export Timebar
-// export Countdown
-export default Pomodoro

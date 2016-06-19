@@ -1,7 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 import {timebar} from 'styles/Pomodoro.styl'
-import classNames from 'classNames'
-
 
 class Timebar extends Component {
   static propTypes = {}
@@ -12,10 +10,10 @@ class Timebar extends Component {
   }
 
   render() {
-    const { theme, initCountdown, countdown} = this.props
+    const {theme, initCountdown, countdown} = this.props
     const diff = countdown / initCountdown * 100
     const attrs = {
-      style: { 
+      style: {
         transform: `translateY(${100 - diff}%)`,
         backgroundColor: Timebar.themeColors[theme]
       },

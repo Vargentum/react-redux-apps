@@ -1,5 +1,4 @@
 import moment from 'moment'
-import _ from 'lodash'
 
 // ------------------------------------
 // INITIAL STATE & helpers
@@ -11,7 +10,7 @@ export const initialState = {
     active: true,
     duration: moment.duration(25, 'm').asMilliseconds(),
     inProgress: false,
-    isInit: true,
+    isInit: true
   },
   rest: {
     active: false,
@@ -88,7 +87,7 @@ const ACTION_CREATORS = {
     ...state,
     [type]: {
       ...state[type],
-      duration      
+      duration
     }
   })
   // [THUNK]: () => (dispatch, getState) => {}
