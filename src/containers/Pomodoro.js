@@ -50,8 +50,8 @@ export class PomodoroContainer extends Component {
 
     return (
       <div>
-        <Pomodoro onEnd={this.handleWorkEnd} {...work} />
-        <Pomodoro onEnd={this.handleRestEnd} {...rest} />
+        <Pomodoro theme="work" onEnd={this.handleWorkEnd} {...work} />
+        <Pomodoro theme="rest" onEnd={this.handleRestEnd} {...rest} />
         <Controls {...this.generateControlsProps(this.props)} />
       </div>
     )

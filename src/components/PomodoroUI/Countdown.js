@@ -18,11 +18,7 @@ class Countdown extends Component {
       PT.array, 
       PT.object 
     ]).isRequired,
-    size: PT.number.isRequired,
-    theme: PT.shape({
-      dialColor: PT.string,
-      timeColor: PT.string
-    }),
+    theme: PT.string,
     onStart: PT.func,
     onUpdate: PT.func,
     onEnd: PT.func,
@@ -32,11 +28,6 @@ class Countdown extends Component {
 
   static defaultTimerConfig = {
     countdown: true
-  }
-
-  static defaultTheme = {
-    dialColor: '#fff',
-    timeColor: '#94b0c7'
   }
 
   static defaultProps = {
@@ -53,6 +44,7 @@ class Countdown extends Component {
   static defaultState = {
     dateValidError: false,
     countdown: null,
+    initCountdown: null,
     completed: false,
     started: false
   }
@@ -125,10 +117,12 @@ class Countdown extends Component {
   }
 
   startCountdown = () => {
-    this.timer.start(this.getTimeDiff())
+    const initCountdown = this.getTimeDiff()
+    this.timer.start(initCountdown)
     if (this.props.isPaused) this.timer.pause()
     this.setState({
-      started: true 
+      started: true,
+      initCountdown: initCountdown
     }, this.props.onStart());
   }
 
@@ -146,20 +140,15 @@ class Countdown extends Component {
   }
 
   render() {
-    const { countdown, started, completed } = this.state
-    const { formatter, size } = this.props
+    const { countdown, started, completed, initCountdown } = this.state
+    const { formatter, theme } = this.props
     const time = moment(countdown).format(formatter)
-    const theme = _.assign({}, Countdown.defaultTheme, this.props.theme)    
-    const textStyles = {
-      color: theme.timeColor,
-      fontSize: size / 20 + 10
-    }
 
     return (
       <div>
         { started && 
           <div className="va-Countdown">
-            <Timebar height={countdown} style={textStyles} />
+            <Timebar {...this.state} theme={theme} />
             {time}
          </div>
         }
