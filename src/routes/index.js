@@ -5,6 +5,7 @@ import HomeView from 'views/HomeView'
 import WikipediaView from 'views/WikipediaView'
 import TwitchView from 'views/TwitchView'
 import CalculatorView from 'views/CalculatorView'
+import PomodoroView from 'views/PomodoroView'
 
 // gardenize
 import QuestionsListView from '../views/GardenizeView/QuestionsListView'
@@ -23,5 +24,6 @@ export default (store) => (
              onEnter={resetScrollPosition} />
     </Route>
     <Route path='/calculator' component={CalculatorView} />
+    <Route path='/pomodoro' component={PomodoroView} />
   </Route>
 )

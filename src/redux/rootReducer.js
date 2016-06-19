@@ -7,6 +7,7 @@ import twitch from './modules/Twitch'
 import calculator from './modules/Calculator'
 import gardenizeQuestionsList from './modules/gardenize/QuestionsList'
 import gardenizeQuestionDetails from './modules/gardenize/QuestionDetails'
+import pomodoro from './modules/pomodoro'
 
 export default combineReducers({
   router,
@@ -16,5 +17,6 @@ export default combineReducers({
   twitch,
   gardenizeQuestionsList,
   gardenizeQuestionDetails,
-  calculator
+  calculator,
+  pomodoro
 })

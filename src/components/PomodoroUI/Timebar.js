@@ -9,9 +9,10 @@ class Timebar extends Component {
     
   render() {
     const { color, height } = this.props
+    /*style={{color, height}}*/
 
     return (
-      <div style={{color, height}} class="pomodoro-timer" />
+      <div className="pomodoro-timer">{height}</div>
     )
   }
 }

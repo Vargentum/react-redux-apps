@@ -26,6 +26,7 @@ class Countdown extends Component {
     onStart: PT.func,
     onUpdate: PT.func,
     onEnd: PT.func,
+    isPaused: PT.bool,
     formatter: PT.string // http://momentjs.com/docs/#/displaying/format/
   }
 
@@ -45,7 +46,8 @@ class Countdown extends Component {
     onEnd: () => {},
     formatter: 'mm:ss',
     frequency: 100, // updates 10 times per second
-    theme: {}
+    theme: {},
+    isPaused: false
   }
 
   static defaultState = {
@@ -67,13 +69,14 @@ class Countdown extends Component {
     }))
   }
 
-  componentWillReceiveProps({start, end}) {
+  componentWillReceiveProps({start, end, isPaused}) {
     this.validateDates([start, end])
+    this.checkForPause(isPaused)
   }
 
   componentWillUnmount() {
-    this.setState({...Countdown.defaultState}); 
-    delete this._timer
+    this.setState({...Countdown.defaultState})
+    this.destroyTimer()
   }
 
   validateDates(dates) {
@@ -86,8 +89,13 @@ class Countdown extends Component {
     }    
   }
 
+  checkForPause(nextIsPaused) {
+    nextIsPaused !== this.props.isPaused && this.timer.pause()
+  }
+
   startCountdown = () => {
-    this._timer.start(this.getTimeDiff())
+    this.timer.start(this.getTimeDiff())
+    this.checkForPause()
     this.setState({
       started: true 
     }, this.props.onStart());
@@ -95,8 +103,8 @@ class Countdown extends Component {
 
   updateCountdown = () => {
     this.setState({
-      countdown: this._timer.lap() 
-    }, this.props.onUpdate(this.state.countdown));
+      countdown: this.timer.lap() 
+    }, this.props.onUpdate(this.timer));
   }
 
   completeCountdown = () => {
@@ -119,7 +127,12 @@ class Countdown extends Component {
         frequency: this.props.frequency
       }
     )
-    this._timer = new Tock(config)
+    this.timer = new Tock(config)
+  }
+
+  destroyTimer() {
+    this.timer.stop()
+    delete this.timer
   }
 
   render() {
@@ -137,6 +150,7 @@ class Countdown extends Component {
         { started && 
           <div className="va-Countdown">
             <Timebar height={countdown} style={textStyles} />
+            {time}
          </div>
         }
       </div>

@@ -1,7 +1,7 @@
 import Countdown from './Countdown'
 import Pomodoro from './Pomodoro'
-import Timer from './Timer'
+import Timebar from './Timebar'
 
-export Countdown
-export Pomodoro
-export Timer
+// export Timebar
+// export Countdown
+export default Pomodoro

@@ -1,22 +1,13 @@
 import React, {PropTypes, Component} from 'react'
 import Countdown from './Countdown'
+import moment from 'moment'
 
-type Props = {
+/*TODO: add flow */
 
-};
-export class Pomodoro extends Component {
-  props: Props;
+const Pomodoro = ({active, inProgress, duration, onEnd}) =>
+  active 
+    ? <Countdown isPaused={!inProgress} size={200} formatter="mm:ss" start={0} end={duration} onEnd={onEnd} />
+    : <noscript/>
 
-  render () {
-    const {
-
-    } = this.props
-
-    return (
-      <Countdown />
-    )
-  }
-}
 
 export default Pomodoro
-
