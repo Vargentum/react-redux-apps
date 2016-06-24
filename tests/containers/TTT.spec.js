@@ -1,6 +1,4 @@
-const expect = chai.expect
 import _ from 'lodash'
-
 
 const PLAYERS = {
   X: true,
@@ -8,9 +6,10 @@ const PLAYERS = {
 }
 const {X, O} = PLAYERS
 
+const GRID_SIZE = 3
 
 
-const generateEmptyGrid = (size = 3) => _.times(size, () => _.times(size, () => null))
+const generateEmptyGrid = () => _.times(GRID_SIZE, () => _.times(GRID_SIZE, () => null))
 
 const makeATurn = (grid, x, y, val) => _.set(_.cloneDeep(grid), `${y}.${x}`, val)
 
@@ -31,8 +30,52 @@ const getEmptyCellsCoords = (grid) => {
 
 const generatePossibleMoves = (grid, value) => {
   const emptyIndexes = getEmptyCellsCoords(grid)
-  return _.map(emptyIndexes,({x,y}) => makeATurn(grid,x,y,value))
+  return _.map(emptyIndexes, ({x,y}) => {
+    return {newGrid: makeATurn(grid,x,y,value), movedInto: {x,y}}
+  })
 }
+
+const winBy = {
+  horisontal: (grid, x, y, value) => grid[y].every(cell => cell === value),
+  vertical:   (grid, x, y, value) => grid.every(row => row[x] === value),
+  diagonal:   (grid, x, y, value) => 
+    grid.every((row,i) => row[i] === value) || 
+    grid.every((row,i) => row[GRID_SIZE - 1 - i] === value)  
+}
+
+const isCoordAtCenter = (crd) => crd === (GRID_SIZE - 1) / 2
+const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_SIZE - 1
+const isCoordAtSide   = (crd) => !isCoordAtCenter(crd) && !isCoordAtCorner(crd)
+
+
+const isCellAt = {
+  // center: (x,y) => isCoordAtCenter(x) && isCoordAtCenter(y), 
+  corner: (x,y) => isCoordAtCorner(x) && isCoordAtCorner(y),
+  side:   (x,y) => isCoordAtSide(x) && isCoordAtSide(y)
+}
+
+const isWinning = {
+  side: (...args) => winBy.horisontal(...args) || winBy.vertical(...args),
+  corner: (...args) => winBy.horisontal(...args) || winBy.vertical(...args) || winBy.diagonal(...args)
+}
+
+
+const findWinningTurn = (grid, value) => {
+  const moves = generatePossibleMoves(grid, value) 
+  let winner = false
+  moves.forEach(move => {
+    const {newGrid, movedInto: {x,y}} = move
+    if (winner) return move
+    winner = _.cond([
+      [isCellAt.corner(x,y), () => isWinning.corner(grid,x,y,value)],
+      [isCellAt.side(x,y), () => isWinning.side(grid,x,y,value)]
+    ])
+  })
+}
+  
+
+// const turnIsDrawing = () =>
+// const getTurnResult = () =>
 
 
 describe('generateEmptyGrid', () => {
@@ -63,8 +106,7 @@ describe('makeATurn', () => {
 })
 
 describe(`generatePossibleMoves`, () => {
-  const gridSize = 3
-  const grid = generateEmptyGrid(gridSize)
+  const grid = generateEmptyGrid()
   const moves = generatePossibleMoves(grid, X)
   const cellsLength = _.flatten(grid).length
 
@@ -73,7 +115,17 @@ describe(`generatePossibleMoves`, () => {
     expect(moves).to.has.lengthOf(cellsLength)
   });
   it(`every returned list should contain an turn result`, () => {
-    expect(moves[0][0][0]).to.be.true
-    expect(moves[cellsLength - 1][gridSize-1][gridSize-1]).to.be.true
+    expect(moves[0].newGrid[0][0]).to.be.true
+    expect(moves[cellsLength - 1].newGrid[GRID_SIZE-1][GRID_SIZE-1]).to.be.true
   })
+});
+
+describe(`findWinningTurn`, () => {
+  const grid = [[X,X,null], [O,O,null], [null,null,null]]
+  console.log(findWinningTurn(grid, X))
+
+  it(`should return new grid and winning cell coords for X`, () => {
+    expect(findWinningTurn(grid, X)).to.be.ok;
+    expect(findWinningTurn(grid, O)).to.be.ok;
+  });
 });
