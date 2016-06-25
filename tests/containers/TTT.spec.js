@@ -7,7 +7,7 @@ import {
   isCellAt,
   isWinning,
   generatePossibleMoves, 
-  findWinningTurn
+  findWinningState
 } from 'containers/TTT'
 
 const {X, O} = PLAYERS
@@ -98,19 +98,29 @@ describe(`isWinning`, () => {
   });
 });
 
-describe(`findWinningTurn`, () => {
+describe(`findWinningState`, () => {
   const grid = [[X,X,null], [O,O,null], [null,null,null]]
   const winXmove = {
     grid: [[X,X,X], [O,O,null], [null,null,null]],
-    cell: {x: GRID_LAST_IDX, y: 0}
+    move: {x: GRID_LAST_IDX, y: 0}
   }
   const winOmove = {
     grid: [[X,X,null], [O,O,O], [null,null,null]],
-    cell: {x: GRID_LAST_IDX, y: 1}
+    move: {x: GRID_LAST_IDX, y: 1}
   }
 
   it(`should return new grid and winning cell coords for X`, () => {
-    expect(findWinningTurn(grid, X)).to.be.ok;
-    expect(findWinningTurn(grid, O)).to.be.ok;
+    expect(findWinningState(grid, X)).to.be.eql(winXmove);
+    expect(findWinningState(grid, O)).to.be.eql(winOmove);
   });
 });
+
+
+// describe(`minMax algorithm`, () => {
+//   const grid = [[null,X,null], [null,O,null], [null,null,null]],
+
+//   it(`should calculate the max score from giver graph of grids`, () => {
+//     expect().to;
+//   });
+// });
+

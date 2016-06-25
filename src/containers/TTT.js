@@ -60,23 +60,35 @@ export const isWinning = {
 }
 
 
-export const findWinningTurn = (grid, value) => {
+export const findWinningState = (grid, value) => {
   const moves = generatePossibleMoves(grid, value) 
   let isWin = null
   let win = null
   moves.forEach(move => {
+    if (win) return
     const {grid, move: {x,y}} = move
-    if (isWin) {
-      win = {grid, move: {x,y}}
-      return
-    }
-    else if (isCellAt.corner(x,y)) {
-      isWin = isWinning.corner(grid,x,y,value)
-    }
-    else if (isCellAt.side(x,y)) {
-      isWin = isWinning.side(grid,x,y,value)
+    const winningCondition = 
+      (isCellAt.corner(x,y) && isWinning.corner(grid,x,y,value))
+      ||
+      (isCellAt.side(x,y) && isWinning.side(grid,x,y,value))
+    if (winningCondition) {
+      win = move
     }
   })
   return win
 }
-  
+
+//Player move
+const minMaxAlgo = (grid, player, opponent) => {
+  //step 1
+
+  // const moves = generate
+}
+
+const calculateMaxScore = (moves) => {
+  let score = 0
+  const mlt = 9
+
+  _.grids.map()
+}
+
