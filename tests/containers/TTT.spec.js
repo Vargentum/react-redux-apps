@@ -1,90 +1,16 @@
-import _ from 'lodash'
+import {
+  PLAYERS,
+  GRID_SIZE, 
+  GRID_LAST_IDX, 
+  generateEmptyGrid, 
+  makeATurn, 
+  isCellAt,
+  isWinning,
+  generatePossibleMoves, 
+  findWinningTurn
+} from 'containers/TTT'
 
-const PLAYERS = {
-  X: true,
-  O: false
-}
 const {X, O} = PLAYERS
-
-const GRID_SIZE = 3
-const GRID_LAST_IDX = GRID_SIZE - 1
-
-
-const generateEmptyGrid = () => _.times(GRID_SIZE, () => _.times(GRID_SIZE, () => null))
-
-const makeATurn = (grid, x, y, val) => _.set(_.cloneDeep(grid), `${y}.${x}`, val)
-
-const isCellEmpty = cell => cell === null
-
-const mapGridCells = (grid, fn) => 
-  grid.map((row, y) => 
-    row.map((cell, x) => fn(cell, x, y)))
-
-const getEmptyCellsCoords = (grid) => {
-  const coords = []
-  mapGridCells(grid, (cell,x,y) => {
-    if (!isCellEmpty(cell)) return 
-    else coords.push({x,y})
-  })
-  return coords
-}
-
-const generatePossibleMoves = (grid, value) => {
-  const emptyIndexes = getEmptyCellsCoords(grid)
-  return _.map(emptyIndexes, ({x,y}) => {
-    return {grid: makeATurn(grid,x,y,value), move: {x,y}}
-  })
-}
-
-const winBy = {
-  horisontal: (grid, x, y, value) => grid[y].every(cell => cell === value),
-  vertical:   (grid, x, y, value) => grid.every(row => row[x] === value),
-  diagonal:   (grid, x, y, value) => 
-    grid.every((row,i) => row[i] === value) || 
-    grid.every((row,i) => row[GRID_LAST_IDX - i] === value)  
-}
-
-const isCoordAtCenter = (crd) => crd === (GRID_LAST_IDX) / 2
-const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_LAST_IDX
-
-const isCellAt = {
-  // center: (x,y) => isCoordAtCenter(x) && isCoordAtCenter(y), 
-  corner: (x,y) => isCoordAtCorner(x) && isCoordAtCorner(y),
-  side:   (x,y) => 
-    (isCoordAtCorner(x) && isCoordAtCenter(y)) || 
-    (isCoordAtCorner(y) && isCoordAtCenter(x))
-}
-
-const isWinning = {
-  side: (...args) => winBy.horisontal(...args) || winBy.vertical(...args),
-  corner: (...args) =>  winBy.horisontal(...args) || winBy.vertical(...args) || winBy.diagonal(...args)
-}
-
-
-const findWinningTurn = (grid, value) => {
-  const moves = generatePossibleMoves(grid, value) 
-  let isWin = null
-  let win = null
-  moves.forEach(move => {
-    const {grid, move: {x,y}} = move
-    if (isWin) {
-      win = {grid, move: {x,y}}
-      return
-    }
-    else if (isCellAt.corner(x,y)) {
-      isWin = isWinning.corner(grid,x,y,value)
-    }
-    else if (isCellAt.side(x,y)) {
-      isWin = isWinning.side(grid,x,y,value)
-    }
-  })
-  return win
-}
-  
-
-// const turnIsDrawing = () =>
-// const getTurnResult = () =>
-
 
 describe('generateEmptyGrid', () => {
 
