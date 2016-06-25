@@ -7,6 +7,7 @@ const PLAYERS = {
 const {X, O} = PLAYERS
 
 const GRID_SIZE = 3
+const GRID_LAST_IDX = GRID_SIZE - 1
 
 
 const generateEmptyGrid = () => _.times(GRID_SIZE, () => _.times(GRID_SIZE, () => null))
@@ -40,18 +41,18 @@ const winBy = {
   vertical:   (grid, x, y, value) => grid.every(row => row[x] === value),
   diagonal:   (grid, x, y, value) => 
     grid.every((row,i) => row[i] === value) || 
-    grid.every((row,i) => row[GRID_SIZE - 1 - i] === value)  
+    grid.every((row,i) => row[GRID_LAST_IDX - i] === value)  
 }
 
-const isCoordAtCenter = (crd) => crd === (GRID_SIZE - 1) / 2
-const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_SIZE - 1
-const isCoordAtSide   = (crd) => !isCoordAtCenter(crd) && !isCoordAtCorner(crd)
-
+const isCoordAtCenter = (crd) => crd === (GRID_LAST_IDX) / 2
+const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_LAST_IDX
 
 const isCellAt = {
   // center: (x,y) => isCoordAtCenter(x) && isCoordAtCenter(y), 
   corner: (x,y) => isCoordAtCorner(x) && isCoordAtCorner(y),
-  side:   (x,y) => isCoordAtSide(x) && isCoordAtSide(y)
+  side:   (x,y) => 
+    (isCoordAtCorner(x) && isCoordAtCenter(y)) || 
+    (isCoordAtCorner(y) && isCoordAtCenter(x))
 }
 
 const isWinning = {
@@ -62,15 +63,18 @@ const isWinning = {
 
 const findWinningTurn = (grid, value) => {
   const moves = generatePossibleMoves(grid, value) 
-  let winner = false
+  let winner = null
   moves.forEach(move => {
     const {newGrid, movedInto: {x,y}} = move
-    if (winner) return move
-    winner = _.cond([
-      [isCellAt.corner(x,y), () => isWinning.corner(grid,x,y,value)],
-      [isCellAt.side(x,y), () => isWinning.side(grid,x,y,value)]
-    ])
+    if (winner) return
+    else if (isCellAt.corner(x,y)) {
+      winner = isWinning.corner(newGrid,x,y,value)
+    }
+    else if (isCellAt.side(x,y)) {
+      winner = isWinning.side(newGrid,x,y,value)
+    }
   })
+  return winner
 }
   
 
@@ -120,9 +124,52 @@ describe(`generatePossibleMoves`, () => {
   })
 });
 
+describe(`isCellAt`, () => {
+  const cell1 = {x:0,y:0}
+  const cell2 = {x:0,y:1}
+  it(`should verify that cell is at Corner of the grid`, () => {
+    expect(isCellAt.corner(cell1.x, cell1.y)).to.be.true
+  });
+  it(`should verify that cell is at Side of the grid`, () => {
+    expect(isCellAt.side(cell2.x, cell2.y)).to.be.true
+  });
+});
+
+describe(`isWinning`, () => {
+  const winH = {
+    newGrid: [[X,X,X], [O,O,null], [null,null,null]],
+    x: 0,
+    y: 0,
+    value: X
+  }
+  const winV = {
+    newGrid: [[X,X,null], [X,O,null], [X,null,null]],
+    x: 0,
+    y: GRID_LAST_IDX,
+    value: X
+  }
+  const winD = {
+    newGrid: [[X,X,null], [O,X,null], [O,null,X]],
+    x: GRID_LAST_IDX,
+    y: GRID_LAST_IDX,
+    value: X
+  }
+
+  it(`should verify all types of wins for Corner cell`, () => {
+    [winH, winV, winD].forEach(
+      ({newGrid,x,y,value}) => expect(isWinning.corner(newGrid,x,y,value)).to.be.true
+    )
+  });
+
+  it(`should verify vertical and horisontal wins for Side cell`, () => {
+    [winH, winV].forEach(
+      ({newGrid,x,y,value}) => expect(isWinning.side(newGrid,x,y,value)).to.be.true
+    )
+  });
+});
+
 describe(`findWinningTurn`, () => {
   const grid = [[X,X,null], [O,O,null], [null,null,null]]
-  console.log(findWinningTurn(grid, X))
 
   it(`should return new grid and winning cell coords for X`, () => {
     expect(findWinningTurn(grid, X)).to.be.ok;
