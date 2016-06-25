@@ -32,7 +32,7 @@ const getEmptyCellsCoords = (grid) => {
 const generatePossibleMoves = (grid, value) => {
   const emptyIndexes = getEmptyCellsCoords(grid)
   return _.map(emptyIndexes, ({x,y}) => {
-    return {newGrid: makeATurn(grid,x,y,value), movedInto: {x,y}}
+    return {grid: makeATurn(grid,x,y,value), move: {x,y}}
   })
 }
 
@@ -57,24 +57,28 @@ const isCellAt = {
 
 const isWinning = {
   side: (...args) => winBy.horisontal(...args) || winBy.vertical(...args),
-  corner: (...args) => winBy.horisontal(...args) || winBy.vertical(...args) || winBy.diagonal(...args)
+  corner: (...args) =>  winBy.horisontal(...args) || winBy.vertical(...args) || winBy.diagonal(...args)
 }
 
 
 const findWinningTurn = (grid, value) => {
   const moves = generatePossibleMoves(grid, value) 
-  let winner = null
+  let isWin = null
+  let win = null
   moves.forEach(move => {
-    const {newGrid, movedInto: {x,y}} = move
-    if (winner) return
+    const {grid, move: {x,y}} = move
+    if (isWin) {
+      win = {grid, move: {x,y}}
+      return
+    }
     else if (isCellAt.corner(x,y)) {
-      winner = isWinning.corner(newGrid,x,y,value)
+      isWin = isWinning.corner(grid,x,y,value)
     }
     else if (isCellAt.side(x,y)) {
-      winner = isWinning.side(newGrid,x,y,value)
+      isWin = isWinning.side(grid,x,y,value)
     }
   })
-  return winner
+  return win
 }
   
 
@@ -119,8 +123,8 @@ describe(`generatePossibleMoves`, () => {
     expect(moves).to.has.lengthOf(cellsLength)
   });
   it(`every returned list should contain an turn result`, () => {
-    expect(moves[0].newGrid[0][0]).to.be.true
-    expect(moves[cellsLength - 1].newGrid[GRID_SIZE-1][GRID_SIZE-1]).to.be.true
+    expect(moves[0].grid[0][0]).to.be.true
+    expect(moves[cellsLength - 1].grid[GRID_SIZE-1][GRID_SIZE-1]).to.be.true
   })
 });
 
@@ -137,19 +141,19 @@ describe(`isCellAt`, () => {
 
 describe(`isWinning`, () => {
   const winH = {
-    newGrid: [[X,X,X], [O,O,null], [null,null,null]],
+    grid: [[X,X,X], [O,O,null], [null,null,null]],
     x: 0,
     y: 0,
     value: X
   }
   const winV = {
-    newGrid: [[X,X,null], [X,O,null], [X,null,null]],
+    grid: [[X,X,null], [X,O,null], [X,null,null]],
     x: 0,
     y: GRID_LAST_IDX,
     value: X
   }
   const winD = {
-    newGrid: [[X,X,null], [O,X,null], [O,null,X]],
+    grid: [[X,X,null], [O,X,null], [O,null,X]],
     x: GRID_LAST_IDX,
     y: GRID_LAST_IDX,
     value: X
@@ -157,19 +161,27 @@ describe(`isWinning`, () => {
 
   it(`should verify all types of wins for Corner cell`, () => {
     [winH, winV, winD].forEach(
-      ({newGrid,x,y,value}) => expect(isWinning.corner(newGrid,x,y,value)).to.be.true
+      ({grid,x,y,value}) => expect(isWinning.corner(grid,x,y,value)).to.be.true
     )
   });
 
   it(`should verify vertical and horisontal wins for Side cell`, () => {
     [winH, winV].forEach(
-      ({newGrid,x,y,value}) => expect(isWinning.side(newGrid,x,y,value)).to.be.true
+      ({grid,x,y,value}) => expect(isWinning.side(grid,x,y,value)).to.be.true
     )
   });
 });
 
 describe(`findWinningTurn`, () => {
   const grid = [[X,X,null], [O,O,null], [null,null,null]]
+  const winXmove = {
+    grid: [[X,X,X], [O,O,null], [null,null,null]],
+    cell: {x: GRID_LAST_IDX, y: 0}
+  }
+  const winOmove = {
+    grid: [[X,X,null], [O,O,O], [null,null,null]],
+    cell: {x: GRID_LAST_IDX, y: 1}
+  }
 
   it(`should return new grid and winning cell coords for X`, () => {
     expect(findWinningTurn(grid, X)).to.be.ok;
