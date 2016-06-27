@@ -137,12 +137,14 @@ describe(`findBestMove`, () => {
       move: {x: GRID_LAST_IDX, y: 0}
     }
   }
+  const moveX1 = findBestMove(case2.actual, X)
+  const moveO1 = findBestMove(moveX1.grid, O)
+  const moveX2 = findBestMove(moveO1.grid, X)
 
   it(`should find winning move`, () => {
-    // expect(findBestMove(case1.actual, X)).to.eql(case1.expected);
-
-    console.log(findBestMove(case2.actual, X).grid)
-    // console.log(findBestMove(case2.actual, X).grid)
+    expect(findBestMove(case1.actual, X)).to.eql(case1.expected);
+    console.log(moveO1.grid)    
+    console.log(moveX2.grid)    
   });
 });
 

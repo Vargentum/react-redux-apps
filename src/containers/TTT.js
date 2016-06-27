@@ -79,30 +79,29 @@ export const findWinningMove = (grid, value) => {
   return win
 }
 
-export const minMax = (player, origPlayer, scores, isWin) => (move, idx) => {
+export const minMax = (player, origPlayer, scores, isWin, origIdx, origAry) => (move, crtIdx, crtAry) => {
   const moves = generatePossibleMoves(move.grid, player)
   const opponent = !player
+  const [idx, ary] = [origIdx || crtIdx, origAry || crtAry]
+  if (!origIdx) {
+    debugger
+  }
   if (!moves.length || isWin) {
-    console.log('aborted')
     return
   }
   else if (isWinningMove(move, player)) {
-    isWin = true
     if (player === origPlayer) {
-      scores.push({value: 1, move})
+      scores[idx] = {value: 1, move: ary[idx]}
     } else {
-      scores.push({value: -1, move})
+      scores[idx] = {value: -1, move: ary[idx]}
     }
   } 
-  moves.forEach(minMax(opponent, origPlayer, scores, isWin))
+  moves.forEach(minMax(opponent, origPlayer, scores, isWin, idx, ary))
 }
 
 export const findBestMove = (grid, player) => {
   const scores = []
-  const moveIndexes = []
   const moves = generatePossibleMoves(grid, player)
   moves.forEach(minMax(player, player, scores, false))
-  console.log(scores.map(x=>toReadableGrid(x.move.grid)).join(''))
-  console.log(scores.length)
   return scores.sort((a,b) => a.value - b.value)[0].move
 }
