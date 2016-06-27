@@ -1,4 +1,3 @@
-/* @flow */
 import React from 'react'
 import moment from 'moment'
 import {Row, Col, Input} from 'react-bootstrap'
