@@ -7,7 +7,7 @@ import {
   isCellAt,
   isWinning,
   generatePossibleMoves, 
-  findWinningState
+  findWinningMove
 } from 'containers/TTT'
 
 const {X, O} = PLAYERS
@@ -98,7 +98,7 @@ describe(`isWinning`, () => {
   });
 });
 
-describe(`findWinningState`, () => {
+describe(`findWinningMove`, () => {
   const grid = [[X,X,null], [O,O,null], [null,null,null]]
   const winXmove = {
     grid: [[X,X,X], [O,O,null], [null,null,null]],
@@ -110,8 +110,8 @@ describe(`findWinningState`, () => {
   }
 
   it(`should return new grid and winning cell coords for X`, () => {
-    expect(findWinningState(grid, X)).to.be.eql(winXmove);
-    expect(findWinningState(grid, O)).to.be.eql(winOmove);
+    expect(findWinningMove(grid, X)).to.be.eql(winXmove);
+    expect(findWinningMove(grid, O)).to.be.eql(winOmove);
   });
 });
 

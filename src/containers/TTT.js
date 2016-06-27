@@ -59,19 +59,17 @@ export const isWinning = {
   corner: (...args) =>  winBy.horisontal(...args) || winBy.vertical(...args) || winBy.diagonal(...args)
 }
 
+export const isWinningMove = ({grid, move: {x,y}}, value) => 
+  (isCellAt.corner(x,y) && isWinning.corner(grid,x,y,value))
+  ||
+  (isCellAt.side(x,y) && isWinning.side(grid,x,y,value))
 
-export const findWinningState = (grid, value) => {
+export const findWinningMove = (grid, value) => {
   const moves = generatePossibleMoves(grid, value) 
-  let isWin = null
   let win = null
   moves.forEach(move => {
     if (win) return
-    const {grid, move: {x,y}} = move
-    const winningCondition = 
-      (isCellAt.corner(x,y) && isWinning.corner(grid,x,y,value))
-      ||
-      (isCellAt.side(x,y) && isWinning.side(grid,x,y,value))
-    if (winningCondition) {
+    if (isWinningMove(move, value)) {
       win = move
     }
   })
