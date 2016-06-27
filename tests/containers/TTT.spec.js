@@ -7,7 +7,8 @@ import {
   isCellAt,
   isWinning,
   generatePossibleMoves, 
-  findWinningMove
+  findWinningMove,
+  findBestMove
 } from 'containers/TTT'
 
 const {X, O} = PLAYERS
@@ -51,6 +52,11 @@ describe(`generatePossibleMoves`, () => {
   it(`every returned list should contain an turn result`, () => {
     expect(moves[0].grid[0][0]).to.be.true
     expect(moves[cellsLength - 1].grid[GRID_SIZE-1][GRID_SIZE-1]).to.be.true
+  })
+  it(`should return an empty array if no moves available`, () => {
+    const drawGrid = [[X,O,O], [O,X,X],[X,X,O]]
+    const moves = generatePossibleMoves(drawGrid)
+    expect(moves).to.be.empty
   })
 });
 
@@ -116,11 +122,27 @@ describe(`findWinningMove`, () => {
 });
 
 
-// describe(`minMax algorithm`, () => {
-//   const grid = [[null,X,null], [null,O,null], [null,null,null]],
+describe(`findBestMove`, () => {
+  const case1 = {
+    actual: [[X,X,null], [O,O,null], [null,null,null]],
+    expected: {
+      grid: [[X,X,X], [O,O,null], [null,null,null]],
+      move: {x: GRID_LAST_IDX, y: 0}
+    }
+  }
+  const case2 = {
+    actual: [[null,O,null], [null,X,null], [null,null,null]],
+    expected: {
+      grid: [[X,X,X], [O,O,null], [null,null,null]],
+      move: {x: GRID_LAST_IDX, y: 0}
+    }
+  }
 
-//   it(`should calculate the max score from giver graph of grids`, () => {
-//     expect().to;
-//   });
-// });
+  it(`should find winning move`, () => {
+    // expect(findBestMove(case1.actual, X)).to.eql(case1.expected);
+
+    console.log(findBestMove(case2.actual, X).grid)
+    // console.log(findBestMove(case2.actual, X).grid)
+  });
+});
 

@@ -22,7 +22,10 @@ const getEmptyCellsCoords = (grid) => {
   return coords
 }
 
-
+const toReadableGrid = (grid) => {
+  const readable = mapGridCells(grid, (cell) => cell ? 'X' : 'O')
+  return readable.join('\n') + '\n ------ \n'
+}
 
 export const generateEmptyGrid = () => _.times(GRID_SIZE, () => _.times(GRID_SIZE, () => null))
 
@@ -76,17 +79,30 @@ export const findWinningMove = (grid, value) => {
   return win
 }
 
-//Player move
-const minMaxAlgo = (grid, player, opponent) => {
-  //step 1
-
-  // const moves = generate
+export const minMax = (player, origPlayer, scores, isWin) => (move, idx) => {
+  const moves = generatePossibleMoves(move.grid, player)
+  const opponent = !player
+  if (!moves.length || isWin) {
+    console.log('aborted')
+    return
+  }
+  else if (isWinningMove(move, player)) {
+    isWin = true
+    if (player === origPlayer) {
+      scores.push({value: 1, move})
+    } else {
+      scores.push({value: -1, move})
+    }
+  } 
+  moves.forEach(minMax(opponent, origPlayer, scores, isWin))
 }
 
-const calculateMaxScore = (moves) => {
-  let score = 0
-  const mlt = 9
-
-  _.grids.map()
+export const findBestMove = (grid, player) => {
+  const scores = []
+  const moveIndexes = []
+  const moves = generatePossibleMoves(grid, player)
+  moves.forEach(minMax(player, player, scores, false))
+  console.log(scores.map(x=>toReadableGrid(x.move.grid)).join(''))
+  console.log(scores.length)
+  return scores.sort((a,b) => a.value - b.value)[0].move
 }
-
