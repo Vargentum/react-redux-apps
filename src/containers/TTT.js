@@ -3,7 +3,7 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import {doPlayerTurn, chooseSymbol} from '../redux/modules/ttt/ttt'
-import {toReadableGrid} from '../redux/modules/ttt/utils'
+import {toReadableGrid, SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
 
 type Props = {
   doPlayerTurn: Function, 
@@ -14,13 +14,21 @@ type Props = {
 export class TTT extends Component {
   props: Props;
 
+  componentWillMount() {
+    this.props.chooseSymbol(SYMBOLS.X) //Temporary
+  }
+  doRandomTurn = ({grid, symbols: {player}, doPlayerTurn}) => () => {
+    const randomMove = createRandomMove(grid, player).move
+    doPlayerTurn(randomMove)
+  }
+
   render() {
     const {grid, doPlayerTurn, chooseSymbol} = this.props
 
     return (
       <div>
         {toReadableGrid(grid)}
-        <button onClick={() => doPlayerTurn({x:1,y:1})}>Turn</button>
+        <button onClick={this.doRandomTurn(this.props)}>Turn</button>
       </div>
     )
   }

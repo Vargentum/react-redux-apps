@@ -57,28 +57,34 @@ const winBy = {
 const isCoordAtCenter = (crd) => crd === (GRID_LAST_IDX) / 2
 const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_LAST_IDX
 
+export const createRandomMove = (grid, value) => {
+  const moves = generatePossibleMoves(grid, value)
+  const idx = _.random(0, moves.length - 1)
+  return moves[idx]
+}
+
 export const isGameOver = (grid) => {
       
 }
 
 
-export const minMax = (game) => {
-  if (isGameOver) return //score from X perspective
-  let moves = []
-  let scores = []
-  const moves = generatePossibleMoves(game)
-  const winner = isGameOver(game)
+// export const minMax = (game) => {
+//   if (isGameOver) return //score from X perspective
+//   let moves = []
+//   let scores = []
+//   const moves = generatePossibleMoves(game)
+//   const winner = isGameOver(game)
 
-  moves.forEach(move => {
+//   moves.forEach(move => {
     
 
 
-  })
+//   })
 
-  if (winner && winner === player) {
+//   if (winner && winner === player) {
 
-  }
-}
+//   }
+// }
 
 
 /*export const isCellAt = {

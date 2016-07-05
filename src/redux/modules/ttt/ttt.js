@@ -25,7 +25,7 @@ const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
   }
  }
 
-export const choseSymbol = (symbol: boolean) => ({
+export const chooseSymbol = (symbol: boolean) => ({
   type: CHOOSE_SYMBOL,
   payload: {symbol}
 })
@@ -39,7 +39,7 @@ const ACTION_CREATORS = {
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.player)
   }),
-  [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({
+  [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ //TODO: make DRY
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent)
   }),
