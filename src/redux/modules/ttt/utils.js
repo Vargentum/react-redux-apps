@@ -1,11 +1,13 @@
 import _ from 'lodash'
 
-export const PLAYERS = {
+export const SYMBOLS = {
   X: true,
   O: false
 }
 export const GRID_SIZE = 3
 export const GRID_LAST_IDX = GRID_SIZE - 1
+
+
 
 const isCellEmpty = cell => cell === null
 
@@ -22,9 +24,15 @@ const getEmptyCellsCoords = (grid) => {
   return coords
 }
 
-const toReadableGrid = (grid) => {
-  const readable = mapGridCells(grid, (cell) => cell ? 'X' : 'O')
-  return readable.join('\n') + '\n ------ \n'
+export const toReadableGrid = (grid) => {
+  const readable = mapGridCells(grid, (cell) => {
+    switch (cell) {
+      case true: return 'X'
+      case false: return 'O'
+      case null: return '-'
+    }
+  })
+  return readable.join('\n')
 }
 
 export const generateEmptyGrid = () => _.times(GRID_SIZE, () => _.times(GRID_SIZE, () => null))
@@ -49,7 +57,31 @@ const winBy = {
 const isCoordAtCenter = (crd) => crd === (GRID_LAST_IDX) / 2
 const isCoordAtCorner = (crd) => crd === 0 || crd === GRID_LAST_IDX
 
-export const isCellAt = {
+export const isGameOver = (grid) => {
+      
+}
+
+
+export const minMax = (game) => {
+  if (isGameOver) return //score from X perspective
+  let moves = []
+  let scores = []
+  const moves = generatePossibleMoves(game)
+  const winner = isGameOver(game)
+
+  moves.forEach(move => {
+    
+
+
+  })
+
+  if (winner && winner === player) {
+
+  }
+}
+
+
+/*export const isCellAt = {
   // center: (x,y) => isCoordAtCenter(x) && isCoordAtCenter(y),
   corner: (x,y) => isCoordAtCorner(x) && isCoordAtCorner(y),
   side:   (x,y) =>
@@ -83,14 +115,14 @@ export const minMax = (player, origPlayer, scores, isWin, origIdx, origAry) => (
   const moves = generatePossibleMoves(move.grid, player)
   const opponent = !player
   const [idx, ary] = [origIdx || crtIdx, origAry || crtAry]
-  if (!origIdx) {
-    debugger
-  }
   if (!moves.length || isWin) {
     return
   }
   else if (isWinningMove(move, player)) {
+    debugger
+    isWin = true
     if (player === origPlayer) {
+      // console.log(move.grid, ary[idx].grid, '\n')
       scores[idx] = {value: 1, move: ary[idx]}
     } else {
       scores[idx] = {value: -1, move: ary[idx]}
@@ -103,5 +135,7 @@ export const findBestMove = (grid, player) => {
   const scores = []
   const moves = generatePossibleMoves(grid, player)
   moves.forEach(minMax(player, player, scores, false))
+  scores.forEach(score => console.log(score.value))
   return scores.sort((a,b) => a.value - b.value)[0].move
 }
+*/

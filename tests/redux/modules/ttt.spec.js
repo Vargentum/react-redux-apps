@@ -1,5 +1,5 @@
 import {
-  PLAYERS,
+  SYMBOLS,
   GRID_SIZE, 
   GRID_LAST_IDX, 
   generateEmptyGrid, 
@@ -11,7 +11,7 @@ import {
   findBestMove
 } from 'redux/modules/ttt/utils'
 
-const {X, O} = PLAYERS
+const {X, O} = SYMBOLS
 
 describe('generateEmptyGrid', () => {
 
@@ -59,7 +59,14 @@ describe(`generatePossibleMoves`, () => {
     expect(moves).to.be.empty
   })
 });
+describe(`gameOver`, () => {
+  it(`should return `, () => {
+    expect().to;
+  });
+});
 
+
+/*
 describe(`isCellAt`, () => {
   const cell1 = {x:0,y:0}
   const cell2 = {x:0,y:1}
@@ -131,20 +138,24 @@ describe(`findBestMove`, () => {
     }
   }
   const case2 = {
-    actual: [[null,O,null], [null,X,null], [null,null,null]],
+    actual: [[O,O,null], [null,X,null], [null,null,null]],
     expected: {
-      grid: [[X,X,X], [O,O,null], [null,null,null]],
+      grid: [[O,O,X], [null,X,null], [null,null,null]],
       move: {x: GRID_LAST_IDX, y: 0}
     }
   }
-  const moveX1 = findBestMove(case2.actual, X)
-  const moveO1 = findBestMove(moveX1.grid, O)
-  const moveX2 = findBestMove(moveO1.grid, X)
 
-  it(`should find winning move`, () => {
-    expect(findBestMove(case1.actual, X)).to.eql(case1.expected);
-    console.log(moveO1.grid)    
-    console.log(moveX2.grid)    
+  // it(`should find winning move`, () => {
+    // expect(findBestMove(case1.actual, X)).to.eql(case1.expected);
+  // });
+
+  it(`should avoid losing moves`, () => {
+    expect(findBestMove(case2.actual, X)).to.eql(case2.expected);
+    
+    // const a = findBestMove(case2.actual, X).grid
+    // const a1 = findBestMove(a, O).grid
+    // console.log(a, a1)
   });
 });
 
+*/
