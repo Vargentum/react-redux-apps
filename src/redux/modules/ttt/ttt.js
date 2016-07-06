@@ -7,7 +7,7 @@ import * as utils from './utils'
 // ------------------------------------
 export const PLAYER_TURN = 'ttt/player_makes_a_turn'
 export const OPPONENT_TURN = 'ttt/opponent_makes_a_turn'
-const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
+export const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
 const RESET_GAME = 'ttt/reset_game'
 
 export const GAME_STATUSES = {

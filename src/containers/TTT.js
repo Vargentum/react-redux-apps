@@ -57,8 +57,9 @@ export class TTT extends Component {
   props: Props;
 
   componentWillMount() {
-    this.props.chooseSymbol(SYMBOLS.X) //Temporary
+    // this.props.chooseSymbol(SYMBOLS.X) //Temporary
   }
+
   doRandomTurn = ({grid, symbols: {player}, doPlayerTurn}) => () => {
     const randomMove = createRandomMove(grid, player).move
     doPlayerTurn(randomMove)

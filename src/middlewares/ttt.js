@@ -1,12 +1,13 @@
-import {PLAYER_TURN, doOpponentTurn} from 'redux/modules/ttt/ttt'
-import {createRandomMove} from 'redux/modules/ttt/utils'
+import {PLAYER_TURN, CHOOSE_SYMBOL, doOpponentTurn} from 'redux/modules/ttt/ttt'
+import {SYMBOLS, createRandomMove} from 'redux/modules/ttt/utils'
 
 
 export const aiAutoTurn = ({dispatch, getState}) => (next) => (action) => {
-  const {ttt: {grid, symbols: {opponent}}} = getState()
+  const {ttt: {grid, symbols: {opponent, player}}} = getState()
   let randomMove
   const result = next(action)
-  if (action.type === PLAYER_TURN) {
+  const shouldPlayFirst = action.type === CHOOSE_SYMBOL && action.payload.symbol === SYMBOLS.O
+  if (action.type === PLAYER_TURN || shouldPlayFirst) {
     randomMove = createRandomMove(grid, opponent).move
     dispatch(doOpponentTurn(randomMove))
   } 
