@@ -8,27 +8,35 @@ import * as utils from './utils'
 export const PLAYER_TURN = 'ttt/player_makes_a_turn'
 export const OPPONENT_TURN = 'ttt/opponent_makes_a_turn'
 const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
+const RESET_GAME = 'ttt/reset_game'
+
+export const GAME_STATUSES = {
+  NOT_STARTED: 1,
+  IN_PROGRESS: 2,
+  FINISHED: 3
+}
 
 // ------------------------------------
 // Actions
 // ------------------------------------
- export const doPlayerTurn = (turn: {x:number, y:number}) => {
-  return {
-    type: PLAYER_TURN,
-    payload: {turn}
-  }
- }
- export const doOpponentTurn = (turn: {x:number, y:number}) => {
-  return {
-    type: OPPONENT_TURN,
-    payload: {turn}
-  }
- }
-
+ export const doPlayerTurn = (turn: {x:number, y:number}) => ({
+  type: PLAYER_TURN,
+  payload: {turn}
+})
+ export const doOpponentTurn = (turn: {x:number, y:number}) => ({
+  type: OPPONENT_TURN,
+  payload: {turn}
+})
 export const chooseSymbol = (symbol: boolean) => ({
   type: CHOOSE_SYMBOL,
   payload: {symbol}
 })
+export const resetGame = () => ({
+  type: RESET_GAME,
+  payload: {}
+})
+
+
   
 
 // ------------------------------------
@@ -48,8 +56,10 @@ const ACTION_CREATORS = {
     symbols: {
       player: symbol,
       opponent: !symbol // TODO: make more clearly ?
-    }
-  })
+    },
+    gameStatus: GAME_STATUSES.IN_PROGRESS
+  }),
+  [RESET_GAME]: () => initialState
 }
 
 // ------------------------------------
@@ -57,6 +67,7 @@ const ACTION_CREATORS = {
 // ------------------------------------
 export const initialState = {
   grid: utils.generateEmptyGrid(),
+  gameStatus: GAME_STATUSES.NOT_STARTED,
   symbols: {
     player: null,
     opponent: null
