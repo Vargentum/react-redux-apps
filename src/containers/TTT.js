@@ -1,12 +1,37 @@
 /*@flow*/
-
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import {doPlayerTurn, chooseSymbol} from '../redux/modules/ttt/ttt'
 import {toReadableGrid, SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
+import classNames from 'classnames'
+import _ from 'lodash'
+import {grid as gridCls} from 'styles/TTT.styl'
+
+const Grid = ({data}) =>
+  //data: Array
+  <table className={gridCls}>
+    <tbody>
+    {data.map((row: Array) =>
+      <tr key={_.uniqueId('row-')}>
+        {row.map((cell: ?boolean) =>
+          <td key={_.uniqueId('cell-')}>
+            {(() => {
+              switch (cell) {
+                case true: return 'X'
+                case false: return 'O'
+              }
+            })()}
+          </td>
+        )}
+      </tr>
+    )}
+    </tbody>
+  </table>
+
+
 
 type Props = {
-  doPlayerTurn: Function, 
+  doPlayerTurn: Function,
   chooseSymbol: Function,
   grid: Array
 }
@@ -25,9 +50,10 @@ export class TTT extends Component {
   render() {
     const {grid, doPlayerTurn, chooseSymbol} = this.props
 
+    console.log(grid)
     return (
       <div>
-        {toReadableGrid(grid)}
+        <Grid data={grid}/>
         <button onClick={this.doRandomTurn(this.props)}>Turn</button>
       </div>
     )
