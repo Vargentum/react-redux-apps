@@ -2,7 +2,7 @@
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import {doPlayerTurn, chooseSymbol, resetGame, GAME_STATUSES} from '../redux/modules/ttt/ttt'
-import {toReadableGrid, SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
+import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
 import classNames from 'classnames'
 import _ from 'lodash'
 import {grid as gridCls} from 'styles/TTT.styl'
