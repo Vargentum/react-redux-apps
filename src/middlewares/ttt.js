@@ -1,4 +1,4 @@
-import {PLAYER_TURN, CHOOSE_SYMBOL, doOpponentTurn} from 'redux/modules/ttt/ttt'
+import {PLAYER_TURN, OPPONENT_TURN, CHOOSE_SYMBOL, doOpponentTurn, checkGameStatus} from 'redux/modules/ttt/ttt'
 import {SYMBOLS, createRandomMove} from 'redux/modules/ttt/utils'
 
 

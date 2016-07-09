@@ -8,12 +8,17 @@ import * as utils from './utils'
 export const PLAYER_TURN = 'ttt/player_makes_a_turn'
 export const OPPONENT_TURN = 'ttt/opponent_makes_a_turn'
 export const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
+export const CHECK_GAME_STATUS = 'ttt/check_game_status'
 const RESET_GAME = 'ttt/reset_game'
 
 export const GAME_STATUSES = {
   NOT_STARTED: 1,
   IN_PROGRESS: 2,
   FINISHED: 3
+}
+export const GAME_ENDINGS = {
+  WIN: 1,
+  DRAW: 2
 }
 
 // ------------------------------------
@@ -35,9 +40,12 @@ export const resetGame = () => ({
   type: RESET_GAME,
   payload: {}
 })
+export const checkGameStatus = () => ({
+  type: CHECK_GAME_STATUS
+})
 
 
-  
+
 
 // ------------------------------------
 // Action Creators
@@ -45,11 +53,13 @@ export const resetGame = () => ({
 const ACTION_CREATORS = {
   [PLAYER_TURN]: (state, {payload: {turn: {x,y}}}) => ({
     ...state,
-    grid: utils.makeATurn(state.grid, x, y, state.symbols.player)
+    grid: utils.makeATurn(state.grid, x, y, state.symbols.player),
+    activePlayer: state.symbols.opponent
   }),
   [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ //TODO: make DRY
     ...state,
-    grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent)
+    grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent),
+    activePlayer: state.symbols.player
   }),
   [CHOOSE_SYMBOL]: (state, {payload: {symbol}}) => ({
     ...state,
@@ -57,8 +67,27 @@ const ACTION_CREATORS = {
       player: symbol,
       opponent: !symbol // TODO: make more clearly ?
     },
+    activePlayer: symbol,
     gameStatus: GAME_STATUSES.IN_PROGRESS
   }),
+  [CHECK_GAME_STATUS]: (state) => {
+    const newState = _.cloneDeep(state)
+    const moves = utils.generatePossibleMoves(newState.grid, newState.activePlayer)
+    const winRow = utils.findWinRow(newState.grid, newState.activePlayer)
+    console.log(newState.grid, winRow)
+
+    if (winRow) {
+      newState.grid = utils.highlightWinRow(newState.grid, winRow)
+      newState.gameEnding = GAME_ENDINGS.WIN
+      newState.gameStatus = GAME_STATUSES.FINISHED
+    }
+    else if (!moves.length) {
+      newState.gameEnding = GAME_STATUSES.DRAW
+      newState.gameStatus = GAME_STATUSES.FINISHED
+    }
+    console.log(_.isEqual(state, newState))
+    return newState
+  },
   [RESET_GAME]: () => initialState
 }
 
@@ -68,6 +97,8 @@ const ACTION_CREATORS = {
 export const initialState = {
   grid: utils.generateEmptyGrid(),
   gameStatus: GAME_STATUSES.NOT_STARTED,
+  gameEnding: null,
+  activePlayer: null,
   symbols: {
     player: null,
     opponent: null

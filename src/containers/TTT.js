@@ -1,28 +1,31 @@
 /*@flow*/
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import {doPlayerTurn, chooseSymbol, resetGame, GAME_STATUSES} from '../redux/modules/ttt/ttt'
+import {doPlayerTurn, chooseSymbol, resetGame, checkGameStatus, GAME_STATUSES, GAME_ENDINGS} from '../redux/modules/ttt/ttt'
 import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
 import classNames from 'classnames'
 import _ from 'lodash'
 import {grid as gridCls} from 'styles/TTT.styl'
 
 const {NOT_STARTED, IN_PROGRESS, FINISHED} = GAME_STATUSES
+const {WIN, DRAW} = GAME_ENDINGS
 
-const Grid = ({data}) =>
+const Grid = ({data, onCellClick}) =>
   //data: Array
   <table className={gridCls}>
     <tbody>
     {data.map((row: Array) =>
       <tr key={_.uniqueId('row-')}>
-        {row.map((cell: ?boolean) =>
-          <td key={_.uniqueId('cell-')}>
-            {(() => {
-              switch (cell) {
-                case true: return 'X'
-                case false: return 'O'
-              }
-            })()}
+        {row.map((Cell: ?boolean) =>
+          <td key={_.uniqueId('cell-')}
+              onClick={() => {
+                if (!Cell.isEmpty()) return false
+                onCellClick(Cell.coords)
+              }}
+              style={{
+                color: Cell.isWinning ? 'red' : 'dark'
+              }}> 
+            {_.findKey(SYMBOLS, (val) => val === Cell.value)}
           </td>
         )}
       </tr>
@@ -49,8 +52,11 @@ const ChosePlayerTeam = ({symbols, onChoise, disabled}) =>
 type Props = {
   doPlayerTurn: Function,
   chooseSymbol: Function,
+  resetGame: Function,
+  checkGameStatus: Function,
   grid: Array,
-  gameStatus: Number
+  gameStatus: Number,
+  gameEnding: Number,
 }
 
 export class TTT extends Component {
@@ -60,9 +66,20 @@ export class TTT extends Component {
     // this.props.chooseSymbol(SYMBOLS.X) //Temporary
   }
 
-  doRandomTurn = ({grid, symbols: {player}, doPlayerTurn}) => () => {
-    const randomMove = createRandomMove(grid, player).move
-    doPlayerTurn(randomMove)
+  componentDidUpdate () {
+    this.provideGameUpdate(this.props)
+  }
+
+  shouldComponentUpdate (nextProps) { //Prevent infinite loops
+    return !_.isEqual(this.props, nextProps)
+  }
+
+  provideGameUpdate({gameStatus, checkGameStatus, resetGame}) {
+    if (gameStatus === IN_PROGRESS) {
+      checkGameStatus()
+    } else if (gameStatus === FINISHED) {
+      console.log('game is ended')
+    }
   }
 
   render() {
@@ -70,8 +87,8 @@ export class TTT extends Component {
            doPlayerTurn, chooseSymbol, resetGame} = this.props
     return (
       <div>
-        <Grid data={grid}/>
-        <button onClick={this.doRandomTurn(this.props)}>Turn</button>
+        <Grid data={grid} onCellClick={doPlayerTurn}/>
+        <button onClick={() => this.provideGameUpdate(this.props)}>Update</button>
         <button onClick={resetGame}>Reset</button>
         <ChosePlayerTeam 
           disabled={gameStatus !== NOT_STARTED} 
@@ -83,11 +100,10 @@ export class TTT extends Component {
 }
 
 const mapStateToProps = ({ttt}) => {
-  const {grid, symbols, gameStatus} = ttt
-  return {grid, symbols, gameStatus}
+  return {...ttt}
 }
 const mapDispatchToProps = {
-  doPlayerTurn, chooseSymbol, resetGame
+  doPlayerTurn, chooseSymbol, resetGame, checkGameStatus
 }
 
 export default connect(

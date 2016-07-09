@@ -18,6 +18,7 @@ export class Cell {
   constructor(x,y,value = null) {
     this.coords = {x, y}
     this.value = value
+    this.isWinning = false
   }
   isEmpty() {
     return this.value === null
@@ -45,7 +46,6 @@ const mapGridCells = (grid, fn) => _.flatten(
     row.map((Cell, x) => fn(Cell)))
 )
 
-
 const getEmptyCells = (grid) => 
   mapGridCells(grid, _.identity).filter((Cell) => Cell.isEmpty())
 
@@ -60,7 +60,7 @@ export const generateDefinedGrid = ([r1,r2,r3]) => ([
 ])
 
 export const makeATurn = (grid, x, y, value) => 
-  _.set(_.cloneDeep(grid), `${y}.${x}`, new Cell(x, y, value))
+  _.set(_.cloneDeep(grid), `${x}.${y}`, new Cell(x, y, value))
 
 export const generatePossibleMoves = (grid, value) => {
   return _.map(getEmptyCells(grid), (Cell) => {
@@ -89,6 +89,14 @@ export const findWinRow = (grid, value) => {
   return _.reduce([secX,secY,secD], reduceSecToWin, undefined)
 }
 
+export const highlightWinRow = (grid, winRow) => {
+  const newGrid = _.cloneDeep(grid)
+  winRow.forEach((Cell) => {
+    const gridCell = newGrid[Cell.coords.x][Cell.coords.y]
+    gridCell.isWinning = true
+  })
+  return newGrid
+}
 
 
 /*turn => gameOver()? 
