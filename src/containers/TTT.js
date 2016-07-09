@@ -1,17 +1,18 @@
 /*@flow*/
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import {doPlayerTurn, doOpponentTurn, chooseSymbol, resetGame, checkGameStatus, GAME_STATUSES, GAME_ENDINGS} from '../redux/modules/ttt/ttt'
-import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
-import classNames from 'classnames'
 import _ from 'lodash'
+import classNames from 'classnames'
+
+import * as actions from '../redux/modules/ttt/ttt'
+import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
 import {grid as gridCls} from 'styles/TTT.styl'
 
-const {INITIAL, IN_PROGRESS, FINISHED} = GAME_STATUSES
-const {WIN, DRAW} = GAME_ENDINGS
+const {INITIAL, IN_PROGRESS, FINISHED} = actions.GAME_STATUSES
+const {WIN, DRAW} = actions.GAME_ENDINGS
 
 const Grid = ({data, onCellClick, gameStatus}) =>
-  //data: Array
+  //data: Array, onCellClick: Function, gameStatus: Number
   <table className={gridCls}>
     <tbody>
     {data.map((row: Array) =>
@@ -51,6 +52,7 @@ const ChosePlayerTeam = ({symbols, onInputChange, disabled}) =>
 
 type Props = {
   doPlayerTurn: Function,
+  doOpponentTurn: Function,
   chooseSymbol: Function,
   resetGame: Function,
   checkGameStatus: Function,
@@ -122,9 +124,7 @@ export class TTT extends Component {
 const mapStateToProps = ({ttt}) => {
   return {...ttt}
 }
-const mapDispatchToProps = {
-  doPlayerTurn, chooseSymbol, resetGame, checkGameStatus, doOpponentTurn
-}
+const mapDispatchToProps = {...actions}
 
 export default connect(
   mapStateToProps,
