@@ -82,8 +82,8 @@ describe(`findWinRow`, () => {
       expected: [new Cell(0,0,X), new Cell(1,0,X), new Cell(2,0,X)]
     },
     y: {
-      grid: generateDefinedGrid([[X,null,null], [X,O,O], [X,null,null]]),
-      expected: [new Cell(0,0,X), new Cell(0,1,X), new Cell(0,2,X)]
+      grid: generateDefinedGrid([[O,null,null], [O,X,X], [O,null,null]]),
+      expected: [new Cell(0,0,O), new Cell(0,1,O), new Cell(0,2,O)]
     },
     d: {
       grid: generateDefinedGrid([[X,null,null], [O,X,O], [null,null,X]]),
@@ -103,7 +103,7 @@ describe(`findWinRow`, () => {
     expect(actual).to.eql(winGrids.x.expected)
   });
   it(`should return Vertical (Y) wining row`, () => {
-    const actual = findWinRow(winGrids.y.grid, X)
+    const actual = findWinRow(winGrids.y.grid, O)
     expect(actual).to.eql(winGrids.y.expected)
   });
   it(`should return Diagonal (D) wining row`, () => {

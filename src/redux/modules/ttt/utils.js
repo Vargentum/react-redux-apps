@@ -85,7 +85,6 @@ export const findWinRow = (grid, value) => {
 
   const findWinInSec = (sec) => _.find(sec, (group) => group.length === GRID_SIZE)
   const reduceSecToWin = (p,sec) => findWinInSec(sec) || p
-
   return _.reduce([secX,secY,secD], reduceSecToWin, undefined)
 }
 

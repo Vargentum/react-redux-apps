@@ -1,7 +1,7 @@
 /*@flow*/
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
-import {doPlayerTurn, chooseSymbol, resetGame, checkGameStatus, GAME_STATUSES, GAME_ENDINGS} from '../redux/modules/ttt/ttt'
+import {doPlayerTurn, doOpponentTurn, chooseSymbol, resetGame, checkGameStatus, GAME_STATUSES, GAME_ENDINGS} from '../redux/modules/ttt/ttt'
 import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
 import classNames from 'classnames'
 import _ from 'lodash'
@@ -68,10 +68,19 @@ export class TTT extends Component {
 
   componentDidUpdate () {
     this.provideGameUpdate(this.props)
+    this.autoAiTurn(this.props)
   }
 
   shouldComponentUpdate (nextProps) { //Prevent infinite loops
     return !_.isEqual(this.props, nextProps)
+  }
+
+  autoAiTurn({grid, gameStatus, doOpponentTurn, nextPlayer, symbols: {opponent}}) {
+    const shouldPlay = gameStatus === IN_PROGRESS && nextPlayer === opponent
+    if (shouldPlay) {
+      const randomMove = createRandomMove(grid, opponent).move
+      doOpponentTurn(randomMove)
+    } 
   }
 
   provideGameUpdate({gameStatus, checkGameStatus, resetGame}) {
@@ -103,7 +112,7 @@ const mapStateToProps = ({ttt}) => {
   return {...ttt}
 }
 const mapDispatchToProps = {
-  doPlayerTurn, chooseSymbol, resetGame, checkGameStatus
+  doPlayerTurn, chooseSymbol, resetGame, checkGameStatus, doOpponentTurn
 }
 
 export default connect(

@@ -54,12 +54,12 @@ const ACTION_CREATORS = {
   [PLAYER_TURN]: (state, {payload: {turn: {x,y}}}) => ({
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.player),
-    activePlayer: state.symbols.opponent
+    nextPlayer: state.symbols.opponent
   }),
   [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ //TODO: make DRY
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent),
-    activePlayer: state.symbols.player
+    nextPlayer: state.symbols.player
   }),
   [CHOOSE_SYMBOL]: (state, {payload: {symbol}}) => ({
     ...state,
@@ -67,13 +67,13 @@ const ACTION_CREATORS = {
       player: symbol,
       opponent: !symbol // TODO: make more clearly ?
     },
-    activePlayer: symbol,
+    nextPlayer: utils.SYMBOLS.X,
     gameStatus: GAME_STATUSES.IN_PROGRESS
   }),
   [CHECK_GAME_STATUS]: (state) => {
     const newState = _.cloneDeep(state)
-    const moves = utils.generatePossibleMoves(newState.grid, newState.activePlayer)
-    const winRow = utils.findWinRow(newState.grid, newState.activePlayer)
+    const moves = utils.generatePossibleMoves(newState.grid, newState.nextPlayer)
+    const winRow = utils.findWinRow(newState.grid, !newState.nextPlayer) //TODO: create mechanism of getting prevPlayer
     console.log(newState.grid, winRow)
 
     if (winRow) {
@@ -85,7 +85,6 @@ const ACTION_CREATORS = {
       newState.gameEnding = GAME_STATUSES.DRAW
       newState.gameStatus = GAME_STATUSES.FINISHED
     }
-    console.log(_.isEqual(state, newState))
     return newState
   },
   [RESET_GAME]: () => initialState
@@ -98,7 +97,7 @@ export const initialState = {
   grid: utils.generateEmptyGrid(),
   gameStatus: GAME_STATUSES.NOT_STARTED,
   gameEnding: null,
-  activePlayer: null,
+  nextPlayer: null,
   symbols: {
     player: null,
     opponent: null
