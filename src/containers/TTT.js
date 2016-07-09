@@ -7,10 +7,10 @@ import classNames from 'classnames'
 import _ from 'lodash'
 import {grid as gridCls} from 'styles/TTT.styl'
 
-const {NOT_STARTED, IN_PROGRESS, FINISHED} = GAME_STATUSES
+const {INITIAL, IN_PROGRESS, FINISHED} = GAME_STATUSES
 const {WIN, DRAW} = GAME_ENDINGS
 
-const Grid = ({data, onCellClick}) =>
+const Grid = ({data, onCellClick, gameStatus}) =>
   //data: Array
   <table className={gridCls}>
     <tbody>
@@ -19,7 +19,7 @@ const Grid = ({data, onCellClick}) =>
         {row.map((Cell: ?boolean) =>
           <td key={_.uniqueId('cell-')}
               onClick={() => {
-                if (!Cell.isEmpty()) return false
+                if (!Cell.isEmpty() || gameStatus === FINISHED) return false
                 onCellClick(Cell.coords)
               }}
               style={{
@@ -34,15 +34,15 @@ const Grid = ({data, onCellClick}) =>
   </table>
 
 
-const ChosePlayerTeam = ({symbols, onChoise, disabled}) =>
-  // symbols: Array, onChoise: Function, disabled: boolean
+const ChosePlayerTeam = ({symbols, onInputChange, disabled}) =>
+  // symbols: Array, onInputClick: Function, disabled: boolean
   <div className="f-box f-gap--M">
     {_.map(SYMBOLS, (v, k) =>
       <label key={v} className="f-box f-gap--S">
         <input type="checkbox"
           disabled={disabled}
           checked={symbols.player === v}
-          onChange={_.partial(onChoise, v)} />
+          onChange={_.partial(onInputChange, v)} />
         {k}
       </label>
     )}
@@ -67,8 +67,12 @@ export class TTT extends Component {
   }
 
   componentDidUpdate () {
-    this.provideGameUpdate(this.props)
-    this.autoAiTurn(this.props)
+    new Promise((resolve, reject) => {
+      this.provideGameUpdate(this.props)
+      resolve()
+    }).then(() => {
+      this.autoAiTurn(this.props)
+    });
   }
 
   shouldComponentUpdate (nextProps) { //Prevent infinite loops
@@ -83,12 +87,17 @@ export class TTT extends Component {
     } 
   }
 
-  provideGameUpdate({gameStatus, checkGameStatus, resetGame}) {
+  provideGameUpdate({gameStatus, checkGameStatus}) {
     if (gameStatus === IN_PROGRESS) {
       checkGameStatus()
     } else if (gameStatus === FINISHED) {
-      console.log('game is ended')
+      this.finishGame(this.props)
     }
+  }
+
+  finishGame({updateScore, resetGame}) {
+    // updateScore()
+    _.delay(resetGame, 3000)
   }
 
   render() {
@@ -96,13 +105,15 @@ export class TTT extends Component {
            doPlayerTurn, chooseSymbol, resetGame} = this.props
     return (
       <div>
-        <Grid data={grid} onCellClick={doPlayerTurn}/>
-        <button onClick={() => this.provideGameUpdate(this.props)}>Update</button>
+        <Grid 
+          data={grid} 
+          onCellClick={doPlayerTurn}
+          gameStatus={gameStatus} />
         <button onClick={resetGame}>Reset</button>
         <ChosePlayerTeam 
-          disabled={gameStatus !== NOT_STARTED} 
+          disabled={gameStatus === IN_PROGRESS} 
           symbols={symbols} 
-          onChoise={chooseSymbol} />
+          onInputChange={chooseSymbol} />
       </div>
     )
   }

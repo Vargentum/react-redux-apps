@@ -12,7 +12,7 @@ export const CHECK_GAME_STATUS = 'ttt/check_game_status'
 const RESET_GAME = 'ttt/reset_game'
 
 export const GAME_STATUSES = {
-  NOT_STARTED: 1,
+  INITIAL: 1,
   IN_PROGRESS: 2,
   FINISHED: 3
 }
@@ -46,7 +46,6 @@ export const checkGameStatus = () => ({
 
 
 
-
 // ------------------------------------
 // Action Creators
 // ------------------------------------
@@ -54,12 +53,14 @@ const ACTION_CREATORS = {
   [PLAYER_TURN]: (state, {payload: {turn: {x,y}}}) => ({
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.player),
-    nextPlayer: state.symbols.opponent
+    nextPlayer: state.symbols.opponent,
+    gameStatus: GAME_STATUSES.IN_PROGRESS
   }),
   [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ //TODO: make DRY
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent),
-    nextPlayer: state.symbols.player
+    nextPlayer: state.symbols.player,
+    gameStatus: GAME_STATUSES.IN_PROGRESS
   }),
   [CHOOSE_SYMBOL]: (state, {payload: {symbol}}) => ({
     ...state,
@@ -67,14 +68,13 @@ const ACTION_CREATORS = {
       player: symbol,
       opponent: !symbol // TODO: make more clearly ?
     },
-    nextPlayer: utils.SYMBOLS.X,
-    gameStatus: GAME_STATUSES.IN_PROGRESS
+    nextPlayer: utils.SYMBOLS.X
   }),
   [CHECK_GAME_STATUS]: (state) => {
     const newState = _.cloneDeep(state)
     const moves = utils.generatePossibleMoves(newState.grid, newState.nextPlayer)
-    const winRow = utils.findWinRow(newState.grid, !newState.nextPlayer) //TODO: create mechanism of getting prevPlayer
-    console.log(newState.grid, winRow)
+    const prevPlayer = !newState.nextPlayer //TODO: create mechanism of getting prevPlayer
+    const winRow = utils.findWinRow(newState.grid, prevPlayer) 
 
     if (winRow) {
       newState.grid = utils.highlightWinRow(newState.grid, winRow)
@@ -87,7 +87,10 @@ const ACTION_CREATORS = {
     }
     return newState
   },
-  [RESET_GAME]: () => initialState
+  [RESET_GAME]: (state) => ({
+    ...initialState,
+    symbols: state.symbols
+  })
 }
 
 // ------------------------------------
@@ -95,7 +98,7 @@ const ACTION_CREATORS = {
 // ------------------------------------
 export const initialState = {
   grid: utils.generateEmptyGrid(),
-  gameStatus: GAME_STATUSES.NOT_STARTED,
+  gameStatus: GAME_STATUSES.INITIAL,
   gameEnding: null,
   nextPlayer: null,
   symbols: {
