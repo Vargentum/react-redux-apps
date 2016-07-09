@@ -4,12 +4,10 @@ import {
   GRID_LAST_IDX, 
   Cell,
   generateEmptyGrid, 
-  makeATurn, 
-  isCellAt,
-  isWinning,
-  isWinningMove,
-  generatePossibleMoves, 
-  getWinningCells
+  makeATurn,
+  generateDefinedGrid,
+  generatePossibleMoves,
+  findWinRow
 } from 'redux/modules/ttt/utils'
 
 const {X, O} = SYMBOLS
@@ -65,83 +63,59 @@ describe(`generatePossibleMoves`, () => {
   })
 });
 
-describe(`isCellAt`, () => {
-  const cell1 = {x:0,y:0}
-  const cell2 = {x:0,y:1}
-  it(`should verify that cell is at Corner of the grid`, () => {
-    expect(isCellAt.corner(cell1.x, cell1.y)).to.be.true
-  });
-  it(`should verify that cell is at Side of the grid`, () => {
-    expect(isCellAt.side(cell2.x, cell2.y)).to.be.true
-  });
-});
+// describe(`isCellAt`, () => {
+//   const cell1 = {x:0,y:0}
+//   const cell2 = {x:0,y:1}
+//   it(`should verify that cell is at Corner of the grid`, () => {
+//     expect(isCellAt.corner(cell1.x, cell1.y)).to.be.true
+//   });
+//   it(`should verify that cell is at Side of the grid`, () => {
+//     expect(isCellAt.side(cell2.x, cell2.y)).to.be.true
+//   });
+//});
 
-describe(`isWinning`, () => {
-  const winH = {
-    grid: [[X,X,X], [O,O,null], [null,null,null]],
-    x: 0,
-    y: 0,
-    value: X
-  }
-  const winV = {
-    grid: [[X,X,null], [X,O,null], [X,null,null]],
-    x: 0,
-    y: GRID_LAST_IDX,
-    value: X
-  }
-  const winD = {
-    grid: [[X,X,null], [O,X,null], [O,null,X]],
-    x: GRID_LAST_IDX,
-    y: GRID_LAST_IDX,
-    value: X
-  }
 
-  it(`should verify all types of wins for Corner cell`, () => {
-    [winH, winV, winD].forEach(
-      ({grid,x,y,value}) => expect(isWinning.corner(grid,x,y,value)).to.be.true
-    )
-  });
-
-  it(`should verify vertical and horisontal wins for Side cell`, () => {
-    [winH, winV].forEach(
-      ({grid,x,y,value}) => expect(isWinning.side(grid,x,y,value)).to.be.true
-    )
-  });
-});
-
-describe(`isWinningMove`, () => {
-  it(`should check if this move is winning`, () => {
-    expect().to;
-  });
-});
-
-describe(`getWinningCells`, () => {
-  const win = {
-    game: {
-      grid: [[X,X,X], [O,O,null], [null,null,null]],
-      move: {x: 0, y:0},
+describe(`findWinRow`, () => {
+  const winGrids = {
+    x: {
+      grid: generateDefinedGrid([[X,X,X], [O,O,null], [null,null,null]]),
+      expected: [new Cell(0,0,X), new Cell(1,0,X), new Cell(2,0,X)]
     },
-    value: X
+    y: {
+      grid: generateDefinedGrid([[X,null,null], [X,O,O], [X,null,null]]),
+      expected: [new Cell(0,0,X), new Cell(0,1,X), new Cell(0,2,X)]
+    },
+    d: {
+      grid: generateDefinedGrid([[X,null,null], [O,X,O], [null,null,X]]),
+      expected: [new Cell(0,0,X), new Cell(1,1,X), new Cell(2,2,X)]
+    },
+    dIncorrect: generateDefinedGrid([[X,null,null], [O,X,O], [X,null,null]])
   }
-  const expected = getWinningCells(win.game, win.value)
 
-  it(`should return array of objects`, () => {
-    expect(expected).to.be.an('array')
+  it(`should return winned row in proper format`, () => {
+    const actual = findWinRow(winGrids.x.grid, X)
+    expect(actual).to.be.an('array')
+    expect(actual).to.has.length(GRID_SIZE)
   });
-  it(`result should has proper length`, () => {
-    expect(expected).to.have.length(GRID_SIZE)
+
+  it(`should return Horisontal (X) wining row`, () => {
+    const actual = findWinRow(winGrids.x.grid, X)
+    expect(actual).to.eql(winGrids.x.expected)
   });
-  it(`should return coordinates of winning cells `, () => {
-    console.log(expected)
-    expect(expected).to.eql([
-      {x: 0, y: 0},
-      {x: 1, y: 0},
-      {x: 2, y: 0}
-    ])
+  it(`should return Vertical (Y) wining row`, () => {
+    const actual = findWinRow(winGrids.y.grid, X)
+    expect(actual).to.eql(winGrids.y.expected)
   });
+  it(`should return Diagonal (D) wining row`, () => {
+    const actual = findWinRow(winGrids.d.grid, X)
+    expect(actual).to.eql(winGrids.d.expected)
+  });
+  it(`shouldn't treat cells in different diagonals as a win`, () => {
+    const actual = findWinRow(winGrids.dIncorrect, X)
+    expect(actual).to.be.undefined
+  });
+
 });
-
-
 
 
 
