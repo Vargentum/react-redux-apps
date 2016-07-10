@@ -7,14 +7,7 @@ export const SYMBOLS = {
 export const GRID_SIZE = 3
 export const GRID_LAST_IDX = GRID_SIZE - 1
 
-
 export class Cell {
-  statuses = {
-    side: 0,
-    corner: 1,
-    center: 2
-  }
-
   constructor(x,y,value = null) {
     this.coords = {x, y}
     this.value = value
@@ -23,23 +16,7 @@ export class Cell {
   isEmpty() {
     return this.value === null
   }
-  status() {
-    const atCenter = (c) => c === (GRID_LAST_IDX) / 2
-    const atCorner = (c) => c === 0 || c === GRID_LAST_IDX
-
-    if (_.every(this.coords, atCenter)) {
-      return Cell.statuses.center
-    }
-    else if (_.every(this.coords, atSide)) {
-      return Cell.statuses.side
-    }
-    else if (_.some(this.coords, atCenter)) {
-      return Cell.statuses.corner
-    }
-  }
 }
-
-
 
 const mapGridCells = (grid, fn) => _.flatten(
   grid.map((row, y) =>
@@ -98,39 +75,11 @@ export const highlightWinRow = (grid, winRow) => {
 }
 
 
-/*turn => gameOver()? 
-  -> win => highlightWinnedMoves => updateScore => resetGame
-  -> draw => updateScore => resetGame
-*/
-
 
 /*
-finishGame => updateScore => resetGame
 
-turn => isWinningTurn() ?
-  -> higlightWinningCells => finishGame
-  -> isADraw() ?
-    -> finishGame
-    -> ready for next turn
+WORKS UNDER AI
 
-*/
-
-/*
-winningMove => get
-  - row with it
-  - `col` with it
-  - 2 diagonals with it
-
-*/
-
-
-
-
-
-
-
-
-/*
 export const findWinningMove = (grid, value) => {
   const moves = generatePossibleMoves(grid, value)
   let win = null

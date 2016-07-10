@@ -63,18 +63,6 @@ describe(`generatePossibleMoves`, () => {
   })
 });
 
-// describe(`isCellAt`, () => {
-//   const cell1 = {x:0,y:0}
-//   const cell2 = {x:0,y:1}
-//   it(`should verify that cell is at Corner of the grid`, () => {
-//     expect(isCellAt.corner(cell1.x, cell1.y)).to.be.true
-//   });
-//   it(`should verify that cell is at Side of the grid`, () => {
-//     expect(isCellAt.side(cell2.x, cell2.y)).to.be.true
-//   });
-//});
-
-
 describe(`findWinRow`, () => {
   const winGrids = {
     x: {
@@ -116,12 +104,6 @@ describe(`findWinRow`, () => {
   });
 
 });
-
-
-
-
-
-
 
 
 
