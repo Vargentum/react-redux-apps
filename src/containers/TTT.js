@@ -102,9 +102,9 @@ export class TTT extends Component {
   shouldComponentUpdate (nextProps) { //Prevent infinite loops
     const isEqualProps = _.isEqual(this.props, nextProps)
     const scoreUpdateLoop = this.props.scoreUpdated && this.props.scoreUpdated === nextProps.scoreUpdated
-    console.log(this.props.scoreUpdated, nextProps.scoreUpdated)
+    const infiniteUpdate = isEqualProps || scoreUpdateLoop
 
-    return !isEqualProps || !scoreUpdateLoop
+    return !infiniteUpdate
   }
 
   onPlayerTurn({prevPlayer, nextPlayer, symbols: {player}}) {

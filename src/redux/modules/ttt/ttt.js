@@ -94,6 +94,7 @@ const ACTION_CREATORS = {
   },
   [RESET_GAME]: (state) => ({
     ...initialState,
+    scoreTable: state.scoreTable,
     symbols: state.symbols
   }),
   [UPDATE_SCORE]: (state) => {
@@ -110,7 +111,6 @@ const ACTION_CREATORS = {
     const tableUpdater = (entry, participant) => 
       _.mapValues(entry, (score, type) => 
         scoreUpdater[participant](score, isPlayer[type])
-      
     )
 
     return {
