@@ -11,6 +11,37 @@ import {grid as gridCls} from 'styles/TTT.styl'
 const {INITIAL, IN_PROGRESS, FINISHED} = actions.GAME_STATUSES
 const {WIN, DRAW} = actions.GAME_ENDINGS
 
+
+const Score = ({data}) => {
+  const getTotal = (key) => _.sum(_.map(data, key))
+  const totalRow = _.keys(_.first(data), (key) =>
+    <tr>
+      <td key={key}>{getTotal(key)}</td>
+    </tr>
+  )
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <th></th>
+          <th>Win</th>
+          <th>Lose</th>
+          <th>Draw</th>
+        </tr>
+        {_.map(data, ({win,lose,draw},player) =>
+          <tr key={player}>
+            <td>{player}</td>
+            <td>{win}</td>
+            <td>{lose}</td>
+            <td>{draw}</td>
+          </tr>
+        )}
+        {totalRow}
+      </tbody>
+    </table>
+  )
+}
+
 const Grid = ({data, onCellClick, gameStatus}) =>
   //data: Array, onCellClick: Function, gameStatus: Number
   <table className={gridCls}>
@@ -25,7 +56,7 @@ const Grid = ({data, onCellClick, gameStatus}) =>
               }}
               style={{
                 color: Cell.isWinning ? 'red' : 'dark'
-              }}> 
+              }}>
             {_.findKey(SYMBOLS, (val) => val === Cell.value)}
           </td>
         )}
@@ -55,7 +86,7 @@ type Props = {
   doOpponentTurn: Function,
   chooseSymbol: Function,
   resetGame: Function,
-  checkGameStatus: Function,
+  updateGameStatus: Function,
   grid: Array,
   gameStatus: Number,
   gameEnding: Number,
@@ -64,11 +95,21 @@ type Props = {
 export class TTT extends Component {
   props: Props;
 
-  componentWillMount() {
-    // this.props.chooseSymbol(SYMBOLS.X) //Temporary
+  componentDidUpdate () {
+    this.onPlayerTurn(this.props)
   }
 
-  componentDidUpdate () {
+  shouldComponentUpdate (nextProps) { //Prevent infinite loops
+    const isEqualProps = _.isEqual(this.props, nextProps)
+    const scoreUpdateLoop = this.props.scoreUpdated && this.props.scoreUpdated === nextProps.scoreUpdated
+    console.log(this.props.scoreUpdated, nextProps.scoreUpdated)
+
+    return !isEqualProps || !scoreUpdateLoop
+  }
+
+  onPlayerTurn({prevPlayer, nextPlayer, symbols: {player}}) {
+    const isPlayerTurned = prevPlayer === player && prevPlayer !== nextPlayer
+    if (!isPlayerTurned) return
     new Promise((resolve, reject) => {
       this.provideGameUpdate(this.props)
       resolve()
@@ -77,45 +118,42 @@ export class TTT extends Component {
     });
   }
 
-  shouldComponentUpdate (nextProps) { //Prevent infinite loops
-    return !_.isEqual(this.props, nextProps)
-  }
-
   autoAiTurn({grid, gameStatus, doOpponentTurn, nextPlayer, symbols: {opponent}}) {
     const shouldPlay = gameStatus === IN_PROGRESS && nextPlayer === opponent
     if (shouldPlay) {
       const randomMove = createRandomMove(grid, opponent).move
       doOpponentTurn(randomMove)
-    } 
-  }
-
-  provideGameUpdate({gameStatus, checkGameStatus}) {
-    if (gameStatus === IN_PROGRESS) {
-      checkGameStatus()
-    } else if (gameStatus === FINISHED) {
-      this.finishGame(this.props)
     }
   }
 
-  finishGame({updateScore, resetGame}) {
-    // updateScore()
+  provideGameUpdate({gameStatus, updateGameStatus}) {
+    switch (gameStatus) {
+      case INITIAL: return
+      case IN_PROGRESS: updateGameStatus(); break
+      case FINISHED: this.finishGame(this.props); break;
+    }
+  }
+
+  finishGame({updateGameScore, resetGame}) {
+    updateGameScore()
     _.delay(resetGame, 3000)
   }
 
   render() {
-    const {grid, symbols, gameStatus, 
+    const {grid, symbols, gameStatus, scoreTable,
            doPlayerTurn, chooseSymbol, resetGame} = this.props
     return (
       <div>
-        <Grid 
-          data={grid} 
+        <Grid
+          data={grid}
           onCellClick={doPlayerTurn}
           gameStatus={gameStatus} />
         <button onClick={resetGame}>Reset</button>
-        <ChosePlayerTeam 
-          disabled={gameStatus === IN_PROGRESS} 
-          symbols={symbols} 
+        <ChosePlayerTeam
+          disabled={gameStatus === IN_PROGRESS}
+          symbols={symbols}
           onInputChange={chooseSymbol} />
+        <Score data={scoreTable} />
       </div>
     )
   }

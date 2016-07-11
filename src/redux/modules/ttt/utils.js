@@ -75,6 +75,18 @@ export const highlightWinRow = (grid, winRow) => {
 }
 
 
+export class ScoreTable {
+  static entry = {
+    win: 0,
+    lose: 0,
+    draw: 0
+  }
+  constructor(args) {
+    this.player = _.clone(ScoreTable.entry)
+    this.opponent = _.clone(ScoreTable.entry)
+  }
+}
+
 
 /*
 
