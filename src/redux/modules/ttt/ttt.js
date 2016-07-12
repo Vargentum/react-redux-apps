@@ -13,13 +13,13 @@ const RESET_GAME = 'ttt/reset_game'
 const UPDATE_SCORE = 'ttt/calculate_score'
 
 export const GAME_STATUSES = {
-  INITIAL: 1,
-  IN_PROGRESS: 2,
-  FINISHED: 3
+  INITIAL: 'initial',
+  IN_PROGRESS: 'in progress',
+  FINISHED: 'finished'
 }
 export const GAME_ENDINGS = {
-  WIN: 1,
-  DRAW: 2
+  WIN: 'win',
+  DRAW: 'draw'
 }
 
 // ------------------------------------
