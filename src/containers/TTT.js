@@ -95,48 +95,48 @@ type Props = {
 export class TTT extends Component {
   props: Props;
 
-  componentDidUpdate () {
-    this.onPlayerTurn(this.props)
+  autoAiTurn = () => {
+    const {grid, gameStatus, doOpponentTurn, symbols: {opponent}} = this.props
+    if (gameStatus === FINISHED) return false
+    // !Cell.isEmpty() || 
+    const randomMove = createRandomMove(grid, opponent).move
+    doOpponentTurn(randomMove)
   }
 
-  shouldComponentUpdate (nextProps) { //Prevent infinite loops
-    const isEqualProps = _.isEqual(this.props, nextProps)
-    const scoreUpdateLoop = this.props.scoreUpdated && this.props.scoreUpdated === nextProps.scoreUpdated
-    const infiniteUpdate = isEqualProps || scoreUpdateLoop
-
-    return !infiniteUpdate
-  }
-
-  onPlayerTurn({prevPlayer, nextPlayer, symbols: {player}}) {
-    const isPlayerTurned = prevPlayer === player && prevPlayer !== nextPlayer
-    if (!isPlayerTurned) return
-    new Promise((resolve, reject) => {
-      this.provideGameUpdate(this.props)
-      resolve()
-    }).then(() => {
-      this.autoAiTurn(this.props)
-    });
-  }
-
-  autoAiTurn({grid, gameStatus, doOpponentTurn, nextPlayer, symbols: {opponent}}) {
-    const shouldPlay = gameStatus === IN_PROGRESS && nextPlayer === opponent
-    if (shouldPlay) {
-      const randomMove = createRandomMove(grid, opponent).move
-      doOpponentTurn(randomMove)
-    }
-  }
-
-  provideGameUpdate({gameStatus, updateGameStatus}) {
+  provideGameUpdate = () => {
+    const {gameStatus, updateGameStatus} = this.props
     switch (gameStatus) {
       case INITIAL: return
       case IN_PROGRESS: updateGameStatus(); break
-      case FINISHED: this.finishGame(this.props); break;
+      case FINISHED: this.finishGame(); break
     }
   }
 
-  finishGame({updateGameScore, resetGame}) {
+  finishGame = () => {
+    const {updateGameScore, resetGame} = this.props
     updateGameScore()
     _.delay(resetGame, 3000)
+  }
+
+  handlePlayerTurn = (coords) => {
+    new Promise((resolve, reject) => {
+      this.props.doPlayerTurn(coords)
+      resolve()
+    })
+    .then(this.provideGameUpdate)
+    .then(this.autoAiTurn)
+    .then(this.provideGameUpdate)
+  }
+
+  handleChooseSybmol = () => {
+    const {choseSymbol, nextPlayer, symbols: {opponent}} = this.props
+    new Promise((resolve, reject) => {
+      chooseSymbol()
+      resolve()
+    })
+    .then(() => {
+      if (nextPlayer === opponent) this.autoAiTurn()
+    });
   }
 
   render() {
@@ -146,7 +146,7 @@ export class TTT extends Component {
       <div>
         <Grid
           data={grid}
-          onCellClick={doPlayerTurn}
+          onCellClick={this.handlePlayerTurn}
           gameStatus={gameStatus} />
         <button onClick={resetGame}>Reset</button>
         <ChosePlayerTeam
