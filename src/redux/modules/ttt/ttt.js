@@ -2,6 +2,8 @@
 
 import * as utils from './utils'
 
+const {X, O} = utils.SYMBOLS
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -87,7 +89,7 @@ const ACTION_CREATORS = {
       gameStatus = GAME_STATUSES.FINISHED
     }
     else if (!moves.length) {
-      gameEnding = GAME_STATUSES.DRAW
+      gameEnding = GAME_ENDINGS.DRAW
       gameStatus = GAME_STATUSES.FINISHED
     }
     return { ...state, grid, gameEnding, gameStatus }
@@ -109,13 +111,18 @@ const ACTION_CREATORS = {
       opponent: (score, pred) => !pred() ? score + 1 : score
     }
     const tableUpdater = (entry, participant) => 
-      _.mapValues(entry, (score, type) => 
-        scoreUpdater[participant](score, isPlayer[type])
+      _.mapValues(entry, (score, type) => {
+        if (type === 'draw') {
+          console.log(scoreUpdater.player(score, isPlayer.draw))
+          return scoreUpdater.player(score, isPlayer.draw)
+        } else {
+          return scoreUpdater[participant](score, isPlayer[type])
+        }
+      }
     )
 
     return {
       ...state,
-      scoreUpdated: true,
       scoreTable: _.mapValues(scoreTable, tableUpdater)
     }
   }
@@ -125,7 +132,8 @@ const ACTION_CREATORS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  grid: utils.generateEmptyGrid(),
+  // grid: utils.generateEmptyGrid(),
+  grid: utils.generateDefinedGrid ([[X,null,O], [O,O,null], [O,X,X]]),
   gameStatus: GAME_STATUSES.INITIAL,
   gameEnding: null,
   nextPlayer: null,
@@ -133,8 +141,7 @@ export const initialState = {
     player: null,
     opponent: null
   },
-  scoreTable: new utils.ScoreTable(),
-  scoreUpdated: false
+  scoreTable: new utils.ScoreTable()
 }
 export default function (state = initialState, action) {
   const handler = ACTION_CREATORS[action.type]

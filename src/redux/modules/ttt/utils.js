@@ -31,9 +31,9 @@ export const generateEmptyGrid = () =>
     _.times(GRID_SIZE, (y) => new Cell(x,y,null)))
 
 export const generateDefinedGrid = ([r1,r2,r3]) => ([
-  [new Cell(0,0,r1[0]), new Cell(1,0,r1[1]), new Cell(2,0,r1[2])],
-  [new Cell(0,1,r2[0]), new Cell(1,1,r2[1]), new Cell(2,1,r2[2])],
-  [new Cell(0,2,r3[0]), new Cell(1,2,r3[1]), new Cell(2,2,r3[2])]
+  [new Cell(0,0,r1[0]), new Cell(0,1,r1[1]), new Cell(0,2,r1[2])],
+  [new Cell(1,0,r2[0]), new Cell(1,1,r2[1]), new Cell(1,2,r2[2])],
+  [new Cell(2,0,r3[0]), new Cell(2,1,r3[1]), new Cell(2,2,r3[2])]
 ])
 
 export const makeATurn = (grid, x, y, value) => 

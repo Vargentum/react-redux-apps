@@ -98,7 +98,6 @@ export class TTT extends Component {
   autoAiTurn = () => {
     const {grid, gameStatus, doOpponentTurn, symbols: {opponent}} = this.props
     if (gameStatus === FINISHED) return false
-    // !Cell.isEmpty() || 
     const randomMove = createRandomMove(grid, opponent).move
     doOpponentTurn(randomMove)
   }
@@ -107,15 +106,21 @@ export class TTT extends Component {
     const {gameStatus, updateGameStatus} = this.props
     switch (gameStatus) {
       case INITIAL: return
-      case IN_PROGRESS: updateGameStatus(); break
-      case FINISHED: this.finishGame(); break
+      case IN_PROGRESS: 
+        console.log('provide/InProgress', gameStatus)
+        updateGameStatus(); break
+      case FINISHED: 
+        console.log('provide/Finished', gameStatus)
+        this.finishGame(); break
     }
   }
 
   finishGame = () => {
     const {updateGameScore, resetGame} = this.props
-    updateGameScore()
-    _.delay(resetGame, 3000)
+    new Promise((resolve, reject) => {
+      updateGameScore()
+      resolve()
+    }).then(resetGame)
   }
 
   handlePlayerTurn = (coords) => {
@@ -128,14 +133,14 @@ export class TTT extends Component {
     .then(this.provideGameUpdate)
   }
 
-  handleChooseSybmol = () => {
-    const {choseSymbol, nextPlayer, symbols: {opponent}} = this.props
+  handleChooseSybmol = (symbol) => {
+    const {chooseSymbol, nextPlayer, symbols: {opponent}} = this.props
     new Promise((resolve, reject) => {
-      chooseSymbol()
+      chooseSymbol(symbol)
       resolve()
     })
     .then(() => {
-      if (nextPlayer === opponent) this.autoAiTurn()
+      if (symbol === SYMBOLS.O) this.autoAiTurn()
     });
   }
 
@@ -152,7 +157,7 @@ export class TTT extends Component {
         <ChosePlayerTeam
           disabled={gameStatus === IN_PROGRESS}
           symbols={symbols}
-          onInputChange={chooseSymbol} />
+          onInputChange={this.handleChooseSybmol} />
         <Score data={scoreTable} />
       </div>
     )
