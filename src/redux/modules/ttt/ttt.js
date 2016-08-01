@@ -10,7 +10,7 @@ const {X, O} = utils.SYMBOLS
 export const PLAYER_TURN = 'ttt/player_makes_a_turn'
 export const OPPONENT_TURN = 'ttt/opponent_makes_a_turn'
 export const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
-export const UPDATE_GAME_STATUS = 'ttt/check_game_status'
+export const CHECK_GAME_STATUS = 'ttt/check_game_status'
 const RESET_GAME = 'ttt/reset_game'
 const UPDATE_SCORE = 'ttt/calculate_score'
 
@@ -44,7 +44,7 @@ export const resetGame = () => ({
   payload: {}
 })
 export const updateGameStatus = () => ({
-  type: UPDATE_GAME_STATUS
+  type: CHECK_GAME_STATUS
 })
 export const updateGameScore = () => ({
   type: UPDATE_SCORE
@@ -78,7 +78,7 @@ const ACTION_CREATORS = {
     },
     nextPlayer: utils.SYMBOLS.X
   }),
-  [UPDATE_GAME_STATUS]: (state) => {
+  [CHECK_GAME_STATUS]: (state) => {
     let {grid, nextPlayer, prevPlayer, gameEnding, gameStatus} = _.cloneDeep(state)
     const moves = utils.generatePossibleMoves(grid, nextPlayer)
     const winRow = utils.findWinRow(grid, prevPlayer)
@@ -130,7 +130,6 @@ const ACTION_CREATORS = {
 // ------------------------------------
 export const initialState = {
   grid: utils.generateEmptyGrid(),
-  // grid: utils.generateDefinedGrid ([[X,null,O], [O,O,null], [O,X,X]]),
   gameStatus: GAME_STATUSES.INITIAL,
   gameEnding: null,
   nextPlayer: null,
