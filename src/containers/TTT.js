@@ -102,24 +102,11 @@ export class TTT extends Component {
     doOpponentTurn(randomMove)
   }
 
-  provideGameUpdate = () => {
-    const {gameStatus, updateGameStatus} = this.props
-    switch (gameStatus) {
-      case INITIAL: return
-      case IN_PROGRESS: 
-        console.log('provide/InProgress', gameStatus)
-        updateGameStatus(); break
-      case FINISHED: 
-        console.log('provide/Finished', gameStatus)
-        this.finishGame(); break
-    }
-  }
-
   finishGame = () => {
     const {updateGameScore, resetGame} = this.props
     new Promise((resolve, reject) => {
       updateGameScore()
-      resolve()
+      setTimeout(resolve, 2000);
     }).then(resetGame)
   }
 
@@ -128,9 +115,12 @@ export class TTT extends Component {
       this.props.doPlayerTurn(coords)
       resolve()
     })
-    .then(this.provideGameUpdate)
+    .then(this.props.updateGameStatus)
     .then(this.autoAiTurn)
-    .then(this.provideGameUpdate)
+    .then(this.props.updateGameStatus)
+    .then(() => {
+      if (this.props.gameStatus === FINISHED) this.finishGame()
+    })
   }
 
   handleChooseSybmol = (symbol) => {
