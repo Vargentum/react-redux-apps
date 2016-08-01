@@ -58,7 +58,16 @@ export const findWinRow = (grid, value) => {
   const flatCells = mapGridCells(grid, _.identity).filter(Cell => Cell.value === value)
   const secX = _.groupBy(flatCells, Cell => Cell.coords.y)
   const secY = _.groupBy(flatCells, Cell => Cell.coords.x)
-  const secD = {0: _.filter(flatCells, Cell => Cell.coords.x === Cell.coords.y)}
+  const secD = {
+    d1: _.filter(flatCells, Cell => Cell.coords.x === Cell.coords.y),
+    d2: _.filter(flatCells, Cell => (
+      Cell.coords.x === 2 && Cell.coords.y === 0
+      ||
+      Cell.coords.x === 1 && Cell.coords.y === 1
+      ||
+      Cell.coords.y === 2 && Cell.coords.x === 0
+    ))
+  }
 
   const findWinInSec = (sec) => _.find(sec, (group) => group.length === GRID_SIZE)
   const reduceSecToWin = (p,sec) => findWinInSec(sec) || p

@@ -18,7 +18,7 @@ describe('generateEmptyGrid', () => {
     expect(generateEmptyGrid()).to.has.length
     expect(generateEmptyGrid()[0]).to.has.length
   })
-  it('generate 2 <leve></leve>l deep `square` array', () => {
+  it('generate 2 level deep `square` array', () => {
     expect(generateEmptyGrid()).to.has.lengthOf(3)
     expect(_.flatten(generateEmptyGrid())).to.has.lengthOf(3*3)
   })
@@ -67,15 +67,19 @@ describe(`findWinRow`, () => {
   const winGrids = {
     x: {
       grid: generateDefinedGrid([[X,X,X], [O,O,null], [null,null,null]]),
-      expected: [new Cell(0,0,X), new Cell(1,0,X), new Cell(2,0,X)]
+      expected: [new Cell(0,0,X), new Cell(0,1,X), new Cell(0,2,X)]
     },
     y: {
-      grid: generateDefinedGrid([[O,null,null], [O,X,X], [O,null,null]]),
-      expected: [new Cell(0,0,O), new Cell(0,1,O), new Cell(0,2,O)]
+      grid: generateDefinedGrid([[X,null,null], [X,O,O], [X,null,null]]),
+      expected: [new Cell(0,0,X), new Cell(1,0,X), new Cell(2,0,X)]
     },
-    d: {
+    d1: {
       grid: generateDefinedGrid([[X,null,null], [O,X,O], [null,null,X]]),
       expected: [new Cell(0,0,X), new Cell(1,1,X), new Cell(2,2,X)]
+    },
+    d2: {
+      grid: generateDefinedGrid([[null,null,X], [O,X,O], [X,null,0]]),
+      expected: [new Cell(0,2,X), new Cell(1,1,X), new Cell(2,0,X)]
     },
     dIncorrect: generateDefinedGrid([[X,null,null], [O,X,O], [X,null,null]])
   }
@@ -86,18 +90,15 @@ describe(`findWinRow`, () => {
     expect(actual).to.has.length(GRID_SIZE)
   });
 
-  it(`should return Horisontal (X) wining row`, () => {
-    const actual = findWinRow(winGrids.x.grid, X)
-    expect(actual).to.eql(winGrids.x.expected)
-  });
-  it(`should return Vertical (Y) wining row`, () => {
-    const actual = findWinRow(winGrids.y.grid, O)
-    expect(actual).to.eql(winGrids.y.expected)
-  });
-  it(`should return Diagonal (D) wining row`, () => {
-    const actual = findWinRow(winGrids.d.grid, X)
-    expect(actual).to.eql(winGrids.d.expected)
-  });
+  _(winGrids)
+    .omit(['dIncorrect'])
+    .map(({grid, expected}, k) => {
+      it(`should return ${k} wining row`, () => {
+        const actual = findWinRow(grid, X)
+        expect(actual).to.eql(expected)
+      })  
+  }).value()
+
   it(`shouldn't treat cells in different diagonals as a win`, () => {
     const actual = findWinRow(winGrids.dIncorrect, X)
     expect(actual).to.be.undefined
