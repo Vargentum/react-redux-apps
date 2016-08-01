@@ -112,12 +112,9 @@ const ACTION_CREATORS = {
     }
     const tableUpdater = (entry, participant) => 
       _.mapValues(entry, (score, type) => {
-        if (type === 'draw') {
-          console.log(scoreUpdater.player(score, isPlayer.draw))
-          return scoreUpdater.player(score, isPlayer.draw)
-        } else {
-          return scoreUpdater[participant](score, isPlayer[type])
-        }
+       //correct handling draw case
+        const user = isPlayer.draw() || type === 'draw' ? 'player' : participant
+        return scoreUpdater[user](score, isPlayer[type])
       }
     )
 
@@ -132,8 +129,8 @@ const ACTION_CREATORS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  // grid: utils.generateEmptyGrid(),
-  grid: utils.generateDefinedGrid ([[X,null,O], [O,O,null], [O,X,X]]),
+  grid: utils.generateEmptyGrid(),
+  // grid: utils.generateDefinedGrid ([[X,null,O], [O,O,null], [O,X,X]]),
   gameStatus: GAME_STATUSES.INITIAL,
   gameEnding: null,
   nextPlayer: null,
