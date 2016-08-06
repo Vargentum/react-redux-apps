@@ -1,9 +1,9 @@
-/*@flow*/
+/* @flow */
 
 import * as utils from './utils'
+import _ from 'lodash'
 
 const {X, O} = utils.SYMBOLS
-
 
 // ------------------------------------
 // Constants
@@ -80,7 +80,7 @@ const ACTION_CREATORS = {
     prevPlayer: state.symbols.player,
     gameStatus: GAME_STATUSES.IN_PROGRESS
   }),
-  [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ //TODO: make DRY
+  [OPPONENT_TURN]: (state, {payload: {turn: {x,y}}}) => ({ // TODO: make DRY
     ...state,
     grid: utils.makeATurn(state.grid, x, y, state.symbols.opponent),
     nextPlayer: state.symbols.player,
@@ -91,7 +91,7 @@ const ACTION_CREATORS = {
     ...state,
     symbols: {
       player: symbol,
-      opponent: !symbol, // TODO: make more clearly ?
+      opponent: !symbol // TODO: make more clearly ?
     },
     nextPlayer: utils.SYMBOLS.X
   }),
@@ -104,8 +104,7 @@ const ACTION_CREATORS = {
       grid = utils.highlightWinRow(grid, winRow)
       gameEnding = GAME_ENDINGS.WIN
       gameStatus = GAME_STATUSES.FINISHED
-    }
-    else if (!moves.length) {
+    } else if (!moves.length) {
       gameEnding = GAME_ENDINGS.DRAW
       gameStatus = GAME_STATUSES.FINISHED
     }
@@ -118,7 +117,7 @@ const ACTION_CREATORS = {
   }),
   [RESET_SCORE]: (state) => ({
     ...state,
-    scoreTable: initialState.scoreTable,
+    scoreTable: initialState.scoreTable
   }),
   [UPDATE_SCORE]: (state) => {
     const {gameEnding, nextPlayer, prevPlayer, scoreTable, symbols: {player, opponent}} = _.cloneDeep(state)
@@ -131,9 +130,9 @@ const ACTION_CREATORS = {
       player: (score, pred) => pred() ? score + 1 : score,
       opponent: (score, pred) => !pred() ? score + 1 : score
     }
-    const tableUpdater = (entry, participant) => 
+    const tableUpdater = (entry, participant) =>
       _.mapValues(entry, (score, type) => {
-       //correct handling draw case
+       // correct handling draw case
         const user = isPlayer.draw() || type === 'draw' ? 'player' : participant
         return scoreUpdater[user](score, isPlayer[type])
       }
