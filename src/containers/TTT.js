@@ -1,4 +1,4 @@
-/*@flow*/
+/* @flow */
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -10,7 +10,6 @@ import * as css from 'styles/TTT.styl'
 
 const {INITIAL, IN_PROGRESS, FINISHED} = actions.GAME_STATUSES
 const {WIN, DRAW} = actions.GAME_ENDINGS
-
 
 const Score = ({data}) => {
   const getTotal = (key) => _.sum(_.map(data, key))
@@ -43,7 +42,7 @@ const Score = ({data}) => {
 }
 
 const Grid = ({data, onCellClick, gameStatus}) =>
-  //data: Array, onCellClick: Function, gameStatus: Number
+  // data: Array, onCellClick: Function, gameStatus: Number
   <table className={css.gameField}>
     <tbody>
     {data.map((row: Array) =>
@@ -56,7 +55,7 @@ const Grid = ({data, onCellClick, gameStatus}) =>
               }}
               style={{
                 color: Cell.isWinning ? 'red' : 'dark',
-                cursor: Cell.isEmpty() ? 'pointer': 'default'
+                cursor: Cell.isEmpty() ? 'pointer' : 'default'
               }}>
             {_.findKey(SYMBOLS, (val) => val === Cell.value)}
           </td>
@@ -65,7 +64,6 @@ const Grid = ({data, onCellClick, gameStatus}) =>
     )}
     </tbody>
   </table>
-
 
 const ChosePlayerTeam = ({symbols, onInputChange, disabled}) =>
   // symbols: Array, onInputClick: Function, disabled: boolean
@@ -80,7 +78,6 @@ const ChosePlayerTeam = ({symbols, onInputChange, disabled}) =>
       </label>
     )}
   </div>
-
 
 type Props = {
   doPlayerTurn: Function,
@@ -108,7 +105,7 @@ export class TTT extends Component {
     const {updateGameScore, resetGame} = this.props
     new Promise((resolve, reject) => {
       updateGameScore()
-      setTimeout(resolve, 2000);
+      setTimeout(resolve, 2000)
     }).then(resetGame)
   }
 
@@ -133,12 +130,12 @@ export class TTT extends Component {
     })
     .then(() => {
       if (symbol === SYMBOLS.O) this.autoAiTurn()
-    });
+    })
   }
 
   render() {
     const {grid, symbols, gameStatus, scoreTable,
-           doPlayerTurn, chooseSymbol, resetGame, resetScore} = this.props
+           chooseSymbol, resetGame, resetScore} = this.props
     return (
       <div className={css.wrapper}>
         <Grid

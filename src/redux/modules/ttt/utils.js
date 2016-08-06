@@ -23,11 +23,11 @@ const mapGridCells = (grid, fn) => _.flatten(
     row.map((Cell, x) => fn(Cell)))
 )
 
-const getEmptyCells = (grid) => 
+const getEmptyCells = (grid) =>
   mapGridCells(grid, _.identity).filter((Cell) => Cell.isEmpty())
 
-export const generateEmptyGrid = () => 
-  _.times(GRID_SIZE, (x) => 
+export const generateEmptyGrid = () =>
+  _.times(GRID_SIZE, (x) =>
     _.times(GRID_SIZE, (y) => new Cell(x,y,null)))
 
 export const generateDefinedGrid = ([r1,r2,r3]) => ([
@@ -36,7 +36,7 @@ export const generateDefinedGrid = ([r1,r2,r3]) => ([
   [new Cell(2,0,r3[0]), new Cell(2,1,r3[1]), new Cell(2,2,r3[2])]
 ])
 
-export const makeATurn = (grid, x, y, value) => 
+export const makeATurn = (grid, x, y, value) =>
   _.set(_.cloneDeep(grid), `${x}.${y}`, new Cell(x, y, value))
 
 export const generatePossibleMoves = (grid, value) => {
@@ -55,12 +55,12 @@ export const createRandomMove = (grid, value) => {
 }
 
 export const findWinRow = (grid, value) => {
-  const flatCells = mapGridCells(grid, _.identity).filter(Cell => Cell.value === value)
-  const secX = _.groupBy(flatCells, Cell => Cell.coords.y)
-  const secY = _.groupBy(flatCells, Cell => Cell.coords.x)
+  const flatCells = mapGridCells(grid, _.identity).filter((Cell) => Cell.value === value)
+  const secX = _.groupBy(flatCells, (Cell) => Cell.coords.y)
+  const secY = _.groupBy(flatCells, (Cell) => Cell.coords.x)
   const secD = {
-    d1: _.filter(flatCells, Cell => Cell.coords.x === Cell.coords.y),
-    d2: _.filter(flatCells, Cell => (
+    d1: _.filter(flatCells, (Cell) => Cell.coords.x === Cell.coords.y),
+    d2: _.filter(flatCells, (Cell) => (
       Cell.coords.x === 2 && Cell.coords.y === 0
       ||
       Cell.coords.x === 1 && Cell.coords.y === 1
@@ -83,7 +83,6 @@ export const highlightWinRow = (grid, winRow) => {
   return newGrid
 }
 
-
 export class ScoreTable {
   static entry = {
     win: 0,
@@ -95,7 +94,6 @@ export class ScoreTable {
     this.opponent = _.clone(ScoreTable.entry)
   }
 }
-
 
 /*
 
