@@ -4,6 +4,7 @@ import * as utils from './utils'
 
 const {X, O} = utils.SYMBOLS
 
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -13,6 +14,7 @@ export const CHOOSE_SYMBOL = 'ttt/player_chooses_a_symbol'
 export const CHECK_GAME_STATUS = 'ttt/check_game_status'
 const RESET_GAME = 'ttt/reset_game'
 const UPDATE_SCORE = 'ttt/calculate_score'
+const RESET_SCORE = 'ttt/reset_score'
 
 export const GAME_STATUSES = {
   INITIAL: 'initial',
@@ -22,6 +24,21 @@ export const GAME_STATUSES = {
 export const GAME_ENDINGS = {
   WIN: 'win',
   DRAW: 'draw'
+}
+
+// ------------------------------------
+// Initial state
+// ------------------------------------
+const initialState = {
+  grid: utils.generateEmptyGrid(),
+  gameStatus: GAME_STATUSES.INITIAL,
+  gameEnding: null,
+  nextPlayer: null,
+  symbols: {
+    player: null,
+    opponent: null
+  },
+  scoreTable: new utils.ScoreTable()
 }
 
 // ------------------------------------
@@ -40,8 +57,10 @@ export const chooseSymbol = (symbol: boolean) => ({
   payload: {symbol}
 })
 export const resetGame = () => ({
-  type: RESET_GAME,
-  payload: {}
+  type: RESET_GAME
+})
+export const resetScore = () => ({
+  type: RESET_SCORE
 })
 export const updateGameStatus = () => ({
   type: CHECK_GAME_STATUS
@@ -49,8 +68,6 @@ export const updateGameStatus = () => ({
 export const updateGameScore = () => ({
   type: UPDATE_SCORE
 })
-
-
 
 // ------------------------------------
 // Action Creators
@@ -99,6 +116,10 @@ const ACTION_CREATORS = {
     scoreTable: state.scoreTable,
     symbols: state.symbols
   }),
+  [RESET_SCORE]: (state) => ({
+    ...state,
+    scoreTable: initialState.scoreTable,
+  }),
   [UPDATE_SCORE]: (state) => {
     const {gameEnding, nextPlayer, prevPlayer, scoreTable, symbols: {player, opponent}} = _.cloneDeep(state)
     const isPlayer = {
@@ -128,17 +149,6 @@ const ACTION_CREATORS = {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export const initialState = {
-  grid: utils.generateEmptyGrid(),
-  gameStatus: GAME_STATUSES.INITIAL,
-  gameEnding: null,
-  nextPlayer: null,
-  symbols: {
-    player: null,
-    opponent: null
-  },
-  scoreTable: new utils.ScoreTable()
-}
 export default function (state = initialState, action) {
   const handler = ACTION_CREATORS[action.type]
   return handler ? handler(state, action) : state

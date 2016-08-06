@@ -12,7 +12,7 @@ export class TTTView extends Component {
     return (
       <CommonView
         title="Tic-Tac-Toe game"
-        description="Old-good game with unbeatable AI"
+        description="Old-good game with random moving AI. The AI will become unbeatable in next release)"
         criteriaUrl="https://www.freecodecamp.com/challenges/build-a-tic-tac-toe-game"
         sourceCodeUrl="https://github.com/Vargentum/react-redux-apps/tree/tic-tac-toe"
         Component={TTT}

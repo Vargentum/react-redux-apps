@@ -25,7 +25,7 @@ const Projects = [
   },
   {
     link: 'ttt',
-    name: 'Tic Tac Toe with unbeatable AI'
+    name: 'Tic Tac Toe with random moving AI'
   }
 ]
 

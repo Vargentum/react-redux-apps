@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import * as actions from '../redux/modules/ttt/ttt'
 import {SYMBOLS, createRandomMove} from '../redux/modules/ttt/utils'
-import {grid as gridCls} from 'styles/TTT.styl'
+import * as css from 'styles/TTT.styl'
 
 const {INITIAL, IN_PROGRESS, FINISHED} = actions.GAME_STATUSES
 const {WIN, DRAW} = actions.GAME_ENDINGS
@@ -20,7 +20,7 @@ const Score = ({data}) => {
     </tr>
   )
   return (
-    <table>
+    <table className={css.scoreTable}>
       <tbody>
         <tr>
           <th></th>
@@ -44,7 +44,7 @@ const Score = ({data}) => {
 
 const Grid = ({data, onCellClick, gameStatus}) =>
   //data: Array, onCellClick: Function, gameStatus: Number
-  <table className={gridCls}>
+  <table className={css.gameField}>
     <tbody>
     {data.map((row: Array) =>
       <tr key={_.uniqueId('row-')}>
@@ -55,7 +55,8 @@ const Grid = ({data, onCellClick, gameStatus}) =>
                 onCellClick(Cell.coords)
               }}
               style={{
-                color: Cell.isWinning ? 'red' : 'dark'
+                color: Cell.isWinning ? 'red' : 'dark',
+                cursor: Cell.isEmpty() ? 'pointer': 'default'
               }}>
             {_.findKey(SYMBOLS, (val) => val === Cell.value)}
           </td>
@@ -86,6 +87,7 @@ type Props = {
   doOpponentTurn: Function,
   chooseSymbol: Function,
   resetGame: Function,
+  resetScore: Function,
   updateGameStatus: Function,
   grid: Array,
   gameStatus: Number,
@@ -136,18 +138,21 @@ export class TTT extends Component {
 
   render() {
     const {grid, symbols, gameStatus, scoreTable,
-           doPlayerTurn, chooseSymbol, resetGame} = this.props
+           doPlayerTurn, chooseSymbol, resetGame, resetScore} = this.props
     return (
-      <div>
+      <div className={css.wrapper}>
         <Grid
           data={grid}
           onCellClick={this.handlePlayerTurn}
           gameStatus={gameStatus} />
-        <button onClick={resetGame}>Reset</button>
-        <ChosePlayerTeam
-          disabled={gameStatus === IN_PROGRESS}
-          symbols={symbols}
-          onInputChange={this.handleChooseSybmol} />
+        <div className={css.resetButtons}>
+          <button onClick={resetGame}>Reset Game</button>
+          <button onClick={resetScore}>Reset Score</button>
+          <ChosePlayerTeam
+            disabled={gameStatus === IN_PROGRESS}
+            symbols={symbols}
+            onInputChange={this.handleChooseSybmol} />
+        </div>
         <Score data={scoreTable} />
       </div>
     )
