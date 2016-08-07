@@ -35,8 +35,8 @@ const initialState = {
   gameEnding: null,
   nextPlayer: null,
   symbols: {
-    player: null,
-    opponent: null
+    player: true,
+    opponent: false
   },
   scoreTable: new utils.ScoreTable()
 }
