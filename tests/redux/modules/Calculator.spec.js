@@ -15,10 +15,10 @@ describe(`AddableNumber`, () => {
     expect(number.add(5).getValue()).to.eql(5)
     expect(number.add(4).add(25).getValue()).to.eql(5425)
   })
-  it('Should correctly switchValueSign from positive to negative and vice vera', () => {
-    expect(number.switchValueSign().getValue()).to.eql(-5425)
-    expect(number.switchValueSign().getValue()).to.eql(5425)
-  })
+  // it('Should correctly switchValueSign from positive to negative and vice vera', () => {
+  //   expect(number.switchValueSign().getValue()).to.eql(-5425)
+  //   expect(number.switchValueSign().getValue()).to.eql(5425)
+  // })
   // it('Should correctly change value to float and vice vera', () => {
     // expect(number.switchFloatingPoint().getValue()).to.eql(-5425.0)
     // expect(number.switchFloatingPoint().getValue()).to.eql(5425)

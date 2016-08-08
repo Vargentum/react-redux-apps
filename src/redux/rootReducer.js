@@ -8,6 +8,7 @@ import calculator from './modules/Calculator'
 import gardenizeQuestionsList from './modules/gardenize/QuestionsList'
 import gardenizeQuestionDetails from './modules/gardenize/QuestionDetails'
 import pomodoro from './modules/pomodoro'
+import ttt from './modules/ttt/ttt'
 
 export default combineReducers({
   router,
@@ -18,5 +19,6 @@ export default combineReducers({
   gardenizeQuestionsList,
   gardenizeQuestionDetails,
   calculator,
-  pomodoro
+  pomodoro,
+  ttt
 })

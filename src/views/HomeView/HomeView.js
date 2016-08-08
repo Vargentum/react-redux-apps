@@ -22,6 +22,10 @@ const Projects = [
   {
     link: 'pomodoro',
     name: 'Pomodoro technique timer'
+  },
+  {
+    link: 'ttt',
+    name: 'Tic Tac Toe with random moving AI'
   }
 ]
 
