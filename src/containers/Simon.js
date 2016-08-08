@@ -4,21 +4,16 @@ import React, {PropTypes, Component} from 'react'
 import stamp from 'stamp'
 import { connect } from 'react-redux'
 import * as actions from 'redux/modules/Simon'
-
-type Props = {
-
-}
+import * as ui from 'components/SimonUI/Simon'
 
 const Simon = stamp.compose({
+  displayName: 'SimonContainer',
   render() {
-    const abc = (a: number): Object => { console.log('1') }
     return <div>
-      Hello Simon stamp
-      <button onClick={abc}>Click</button>
+      <ui.SectorsBoard />
     </div>
   }
 })
-
 
 const mapStateToProps = ({Simon}) => ({
   ...Simon

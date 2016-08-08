@@ -5,7 +5,7 @@ import CommonView from 'views/CommonView'
 type Props = {
 
 };
-export class TTTView extends Component {
+export class SimonView extends Component {
   props: Props;
 
   render () {
@@ -21,4 +21,4 @@ export class TTTView extends Component {
   }
 }
 
-export default TTTView
+export default SimonView
