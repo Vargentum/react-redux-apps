@@ -1,23 +1,19 @@
 import React, {PropTypes, Component} from 'react'
+import stamp from 'stamp'
 import { connect } from 'react-redux'
 import * as actions from 'redux/modules/Simon'
 
 type Props = {
 
 }
-export class Simon extends Component {
-  props: Props;
 
+const Simon = stamp.compose({
   render() {
-    const {
-      test
-    } = this.props
-
-    return (
-      <div>Hello Simon</div>
-    )
+    return <div>Hello Simon stamp</div>
   }
-}
+})
+
+
 
 const mapStateToProps = ({Simon}) => ({
   ...Simon
