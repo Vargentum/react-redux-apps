@@ -1,3 +1,5 @@
+// flow
+
 import React, {PropTypes, Component} from 'react'
 import stamp from 'stamp'
 import { connect } from 'react-redux'
@@ -9,10 +11,13 @@ type Props = {
 
 const Simon = stamp.compose({
   render() {
-    return <div>Hello Simon stamp</div>
+    const abc = (a: number): Object => { console.log('1') }
+    return <div>
+      Hello Simon stamp
+      <button onClick={abc}>Click</button>
+    </div>
   }
 })
-
 
 
 const mapStateToProps = ({Simon}) => ({

@@ -44,28 +44,28 @@ const initialState = {
 // ------------------------------------
 // Actions
 // ------------------------------------
- export const doPlayerTurn = (turn: {x:number, y:number}) => ({
+export const doPlayerTurn = (turn: {x:number, y:number}): Object => ({
   type: PLAYER_TURN,
   payload: {turn}
 })
- export const doOpponentTurn = (turn: {x:number, y:number}) => ({
+ export const doOpponentTurn = (turn: {x:number, y:number}): Object => ({
   type: OPPONENT_TURN,
   payload: {turn}
 })
-export const chooseSymbol = (symbol: boolean) => ({
+export const chooseSymbol = (symbol: boolean): Object => ({
   type: CHOOSE_SYMBOL,
   payload: {symbol}
 })
-export const resetGame = () => ({
+export const resetGame = (): Object => ({
   type: RESET_GAME
 })
-export const resetScore = () => ({
+export const resetScore = (): Object => ({
   type: RESET_SCORE
 })
-export const updateGameStatus = () => ({
+export const updateGameStatus = (): Object => ({
   type: CHECK_GAME_STATUS
 })
-export const updateGameScore = () => ({
+export const updateGameScore = (): Object => ({
   type: UPDATE_SCORE
 })
 
@@ -148,7 +148,7 @@ const ACTION_CREATORS = {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function (state = initialState, action) {
+export default function (state: Object = initialState, action: Function): Object {
   const handler = ACTION_CREATORS[action.type]
   return handler ? handler(state, action) : state
 }

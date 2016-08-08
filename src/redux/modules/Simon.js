@@ -1,3 +1,5 @@
+// @flow
+
 import createReducer from 'create-reducer-map'
 
 // ------------------------------------
@@ -8,7 +10,7 @@ const SOME_CONST = ''
 // ------------------------------------
 // Actions
 // ------------------------------------
- export const someAction = () => ({
+ export const someAction = (): Object => ({
   type: SOME_CONST,
   payload: {}
 })
@@ -16,7 +18,15 @@ const SOME_CONST = ''
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export const initialState = {}
+type initialStateType = {
+  foa: number,
+  boa: boolean
+}
+
+export const initialState: initialStateType = {
+  foa: 0,
+  boa: 'test'
+}
 export default createReducer(initialState, {
   [SOME_CONST]: (state, {payload}) => {}
 
