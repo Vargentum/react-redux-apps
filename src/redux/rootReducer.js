@@ -9,6 +9,7 @@ import gardenizeQuestionsList from './modules/gardenize/QuestionsList'
 import gardenizeQuestionDetails from './modules/gardenize/QuestionDetails'
 import pomodoro from './modules/pomodoro'
 import ttt from './modules/ttt/ttt'
+import simon from './modules/Simon'
 
 export default combineReducers({
   router,
@@ -20,5 +21,6 @@ export default combineReducers({
   gardenizeQuestionDetails,
   calculator,
   pomodoro,
-  ttt
+  ttt,
+  simon
 })

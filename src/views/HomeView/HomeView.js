@@ -26,6 +26,10 @@ const Projects = [
   {
     link: 'ttt',
     name: 'Tic Tac Toe with random moving AI'
+  },
+  {
+    link: 'simon',
+    name: 'Simon Game'
   }
 ]
 
