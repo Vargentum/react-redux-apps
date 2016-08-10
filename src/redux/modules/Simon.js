@@ -64,8 +64,9 @@ export const checkUserInput = (sector: number, index: number): Action => ({
 // ------------------------------------
 // Utils
 // ------------------------------------
-const createFlashes = (size: number): Array<number> =>
-  _.times(size, () => _.random(0,3))
+const progressFlash = (flashes: Array<number> = []): Array<number> => ([
+  ...flashes, _.random(0, 3)
+])
 
 // ------------------------------------
 // Reducer
@@ -74,7 +75,7 @@ type initialStateType = {
   level: number,
   status: number,
   mode: number,
-  flashes: ?Object[]
+  flashes: ?Array<Object>
 }
 
 export const initialState: initialStateType = {
@@ -87,7 +88,7 @@ export default createReducer(initialState, {
   [GO_TO_NEXT_LEVEL]: (state) => ({
     ...state,
     level: state.level + 1,
-    flashes: [...state.flashes, createFlashes(state.level + 1)]
+    flashes: [...state.flashes, progressFlash(_.last(state.flashes))]
   }),
   [CHANGE_GAME_MODE]: (state, {payload: {mode}}) => ({
     ...state,

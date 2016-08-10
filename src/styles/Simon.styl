@@ -1,0 +1,32 @@
+$simon = {
+  size: 200px  
+
+  sectors: {
+    topRight: red,
+    bottomRight: green,
+    bottomLeft: blue,
+    topLeft: yellow
+  }
+}
+
+
+.sectorsBoard
+  width: $simon.size
+  height: $simon.size
+  display: flex
+  flex-wrap: wrap
+
+.sector
+  flex-basis: 50%
+  height @width
+  border: 1px solid #666
+  transition: background-color .2s
+
+  for k,v in $simon.sectors
+    &-{k}
+      background-color: v
+      
+    &-{k}Active
+      border-color: v
+      background-color: transparent
+      // background-color: lighten(v, 25%)

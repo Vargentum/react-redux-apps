@@ -10,13 +10,14 @@ const Simon = stamp.compose({
   displayName: 'SimonContainer',
   render() {
     return <div>
-      <ui.SectorsBoard />
+      <ui.Translator flashRow={_.last(this.props.flashes)} />
+      <ui.Control level={this.props.level} onClick={this.props.goToNextLevel} />
     </div>
   }
 })
 
-const mapStateToProps = ({Simon}) => ({
-  ...Simon
+const mapStateToProps = ({simon}) => ({
+  ...simon
 })
 const mapDispatchToProps = {...actions}
 
