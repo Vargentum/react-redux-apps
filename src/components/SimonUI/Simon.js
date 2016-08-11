@@ -38,10 +38,14 @@ export const Control = ({level, onClick}) =>
 
 export class Translator extends Component {
   static propTypes = {
-    flashRow: PT.array
+    flashRow: PT.array,
+    beforeStart: PT.func,
+    afterEnd: PT.func
   }
   static defaultProps = {
-    flashRow: []
+    flashRow: [],
+    beforeStart: _.identity,
+    afterEnd: _.identity
   }
   static defaultState = {
     activeSector: -1
@@ -50,28 +54,37 @@ export class Translator extends Component {
     ...Translator.defaultState
   }
   componentDidMount () {
-    this.startTranslation()
+    this.makeTranslationCycle()
   }
   componentDidUpdate (prevProps, prevState) {
     if (!_.isEqual(prevProps.flashRow, this.props.flashRow)) {
-      this.startTranslation()
+      this.makeTranslationCycle()
     }
   }
-  startTranslation() {
-    this.props.flashRow.forEach((sector, idx) => {
-      _.delay(this.makeFlash, idx * 1500, sector)
-      }
-    )
+  translationToPromise(sector, idx) {
+    return new Promise((resolve, reject) => {
+      _.delay(_.partial(this.makeFlash, resolve), idx * 1500, sector)
+    })
   }
-  makeFlash = (sector) => {
+  doTranslations() {
+    const translations = this.props.flashRow.map(::this.translationToPromise)
+    return Promise.all(translations)
+  }
+  makeTranslationCycle() {
+    Promise
+      .resolve(this.props.beforeStart())
+      .then(::this.doTranslations)
+      .then(::this.props.afterEnd)
+  }
+  makeFlash = (resolve, sector) => {
     this.setState({
       activeSector: sector
-    }, () => _.delay(this.makeUnflash, 500))
+    }, () => _.delay(_.partial(this.makeUnflash, resolve), 500))
   }
-  makeUnflash = () => {
+  makeUnflash = (resolve) => {
     this.setState({
       activeSector: Translator.defaultState.activeSector
-    })
+    }, resolve())
   }
   render() {
     const {flashes, ...props} = this.props

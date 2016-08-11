@@ -10,7 +10,11 @@ const Simon = stamp.compose({
   displayName: 'SimonContainer',
   render() {
     return <div>
-      <ui.Translator flashRow={_.last(this.props.flashes)} />
+      <ui.Translator
+        flashRow={_.last(this.props.flashes)}
+        beforeStart={() => console.log('start')}
+        afterEnd={() => console.log('end')}
+        />
       <ui.Control level={this.props.level} onClick={this.props.goToNextLevel} />
     </div>
   }
