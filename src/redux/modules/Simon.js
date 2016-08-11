@@ -30,14 +30,17 @@ export const GAME_SECTORS = {
 }
 let GS_check: Array<string> = values(GAME_SECTORS)
 
+export const GAME_MAX_LEVEL = 20
 
 /* -----------------------------
   Redux constants
 ----------------------------- */
 const GO_TO_NEXT_LEVEL = 'simon/GO_TO_NEXT_LEVEL'
+const FINISH_GAME = 'simon/FINISH_GAME'
+const RESET_GAME = 'simon/RESET_GAME'
+const RESET_LEVEL = 'simon/RESET_LEVEL'
 const CHANGE_GAME_MODE = 'simon/CHANGE_GAME_MODE'
 const CHANGE_GAME_STATUS = 'simon/CHANGE_GAME_STATUS'
-const CHECK_USER_INPUT = 'simon/CHECK_USER_INPUT'
 
 // ------------------------------------
 // Actions
@@ -45,20 +48,23 @@ const CHECK_USER_INPUT = 'simon/CHECK_USER_INPUT'
 export const goToNextLevel = (): Action => ({
   type: GO_TO_NEXT_LEVEL
 })
+export const finishGame = (): Action => ({
+  type: FINISH_GAME
+})
+export const resetGame = (): Action => ({
+  type: RESET_GAME
+})
+export const resetLevel = (): Action => ({
+  type: RESET_LEVEL
+})
 
 export const changeGameMode = (mode: number): Action => ({
   type: CHANGE_GAME_MODE,
   payload: {mode}
 })
-
 export const changeGameStatus = (status: number): Action => ({
   type: CHANGE_GAME_STATUS,
   payload: {status}
-})
-
-export const checkUserInput = (sector: number, index: number): Action => ({
-  type: CHECK_USER_INPUT,
-  payload: {sector, index}
 })
 
 // ------------------------------------
@@ -90,16 +96,14 @@ export default createReducer(initialState, {
     level: state.level + 1,
     flashes: [...state.flashes, progressFlash(_.last(state.flashes))]
   }),
-  [CHANGE_GAME_MODE]: (state, {payload: {mode}}) => ({
+  [CHANGE_GAME_MODE]: (state, {mode}) => ({
     ...state,
     mode
   }),
-  [CHANGE_GAME_STATUS]: (state, {payload: {status}}) => ({
+  [CHANGE_GAME_STATUS]: (state, {status}) => ({
     ...state,
     status
   }),
-  [CHECK_USER_INPUT]: (state, {payload: {sector, index}}) => ({
-    ...state
-  })
+  [RESET_GAME]: (state) => ({...initialState})
   // [THUNK]: () => (dispatch, getState) => {}
 })

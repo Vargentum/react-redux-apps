@@ -3,17 +3,17 @@
 import React, {PropTypes as PT, Component} from 'react'
 import _ from 'lodash'
 import cls from 'classnames'
-import {GAME_SECTORS} from 'redux/modules/Simon'
+import {GAME_STATUSES, GAME_MODE, GAME_SECTORS} from 'redux/modules/Simon'
 import * as style from 'styles/Simon.styl'
 
-
-const Sector = ({onSectorClick, mod, active}): Object =>
-// onSectorClick: Function, name: string
-  <div className={cls({
-    [style.sector]: true,
-    [style[`sector-${mod}`]]: true,
-    [style[`sector-${mod}Active`]]: active
-  })} />
+const Sector = ({onClick, mod, active, index}) =>
+  <div 
+    onClick={_.partial(onClick, index)}
+    className={cls({
+      [style.sector]: true,
+      [style[`sector-${mod}`]]: true,
+      [style[`sector-${mod}Active`]]: active
+    })} />
 
 export const SectorsBoard = ({onSectorClick, activeSector}) =>
   <div className={style.sectorsBoard}>
@@ -21,9 +21,10 @@ export const SectorsBoard = ({onSectorClick, activeSector}) =>
       const currentIndex = _.findIndex(_.keys(secs), k => k === name)
       return <Sector
         active={activeSector === currentIndex}
+        index={currentIndex}
         key={name}
         mod={name}
-        onSectorClick={onSectorClick}
+        onClick={onSectorClick}
         {...props} />
     }
     )}
@@ -87,9 +88,11 @@ export class Translator extends Component {
     }, resolve())
   }
   render() {
-    const {flashes, ...props} = this.props
+    const {flashes, onSectorClick, ...props} = this.props
     return (
-      <SectorsBoard {...props} activeSector={this.state.activeSector} />
+      <SectorsBoard 
+        onSectorClick={onSectorClick} 
+        activeSector={this.state.activeSector} />
     )
   }
 }

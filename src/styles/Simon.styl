@@ -21,6 +21,9 @@ $simon = {
   height @width
   border: 1px solid #666
   transition: background-color .2s
+  
+  &:active
+    transform: translateY(2px)
 
   for k,v in $simon.sectors
     &-{k}
