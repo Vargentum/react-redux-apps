@@ -5,6 +5,7 @@ import stamp from 'stamp'
 import { connect } from 'react-redux'
 import * as _actions from 'redux/modules/Simon'
 import * as ui from 'components/SimonUI/Simon'
+import soundManager, {SimonSounds} from 'utils/soundManager'
 
 const {GAME_STATUSES, GAME_MODE, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
 
@@ -24,23 +25,36 @@ const Simon = stamp.compose({
     }, ::this.compareFlashes);
   },
   compareFlashes() {
-    const lgth = this.state.repeatedFlashes.length || 1
-    const originFlashes = _.last(this.props.flashes)
-    const originFlashesSec = _.take(originFlashes, lgth)
-    const isValidInput = _.isEqual(this.state.repeatedFlashes, originFlashesSec)
-    console.log(originFlashes, originFlashesSec, isValidInput)
+    const enteredCount = this.state.repeatedFlashes.length || 1
+    const properFlashes = _.last(this.props.flashes)
+    const properFlashesToCompare = _.take(properFlashes, enteredCount)
+    const isValidInput = _.isEqual(this.state.repeatedFlashes, properFlashesToCompare)
+    console.log(properFlashes, properFlashesToCompare, isValidInput)
 
     if (isValidInput) {
-      if (originFlashes.length === lgth) {
-        this.props.level === GAME_MAX_LEVEL
-          ? this.props.finishGame() /*??*/
-          : this.props.goToNextLevel()
+      this.onSuccessInput()
+      if (properFlashes.length === enteredCount) {
+        this.onLevelComplete()
       }
     } else {
-      this.resetLevel()
-      this.props.mode === GAME_MODE.strict
-        && this.props.resetGame()
+      this.onInvalidInput()
     }
+  },
+  onSuccessInput() {
+    soundManager.play(SimonSounds.success)
+    console.log('success input')
+  },
+  onInvalidInput() {
+    soundManager.play(SimonSounds.error)
+    this.resetLevel()
+    this.props.mode === GAME_MODE.strict && this.props.resetGame()
+    console.log('invalid input')
+  },
+  onLevelComplete() {
+    soundManager.play(SimonSounds.levelComplete)
+    this.props.level === GAME_MAX_LEVEL
+      ? this.props.finishGame() /*??*/
+      : this.props.goToNextLevel()
   },
   beforeTranslationStart() {
     this.props.changeGameStatus(GAME_STATUSES.generateHighlighting)

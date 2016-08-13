@@ -87,6 +87,7 @@
     "redux-form": "^5.2.3",
     "redux-thunk": "^2.0.0",
     "reqwest": "^2.0.5",
+    "sound-effect-manager": "^1.0.1",
     "tocktimer": "^1.0.10",
     "urijs": "^1.17.1"
   },
