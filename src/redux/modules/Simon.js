@@ -30,7 +30,6 @@ export const GAME_MAX_LEVEL = 20
   Redux constants
 ----------------------------- */
 const GO_TO_NEXT_LEVEL = 'simon/GO_TO_NEXT_LEVEL'
-const FINISH_GAME = 'simon/FINISH_GAME'
 const RESET_GAME = 'simon/RESET_GAME'
 const RESET_LEVEL = 'simon/RESET_LEVEL'
 const TOGGLE_STRICT_MODE = 'simon/TOGGLE_STRICT_MODE'
@@ -42,9 +41,6 @@ const CHANGE_GAME_STATUS = 'simon/CHANGE_GAME_STATUS'
 // ------------------------------------
 export const goToNextLevel = (): Action => ({
   type: GO_TO_NEXT_LEVEL
-})
-export const finishGame = (): Action => ({
-  type: FINISH_GAME
 })
 export const resetGame = (): Action => ({
   type: RESET_GAME

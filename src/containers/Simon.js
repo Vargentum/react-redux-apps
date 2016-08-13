@@ -53,8 +53,11 @@ const Simon = stamp.compose({
   onLevelComplete() {
     soundManager.play(SimonSounds.levelComplete)
     this.props.level === GAME_MAX_LEVEL
-      ? this.props.finishGame() /*??*/
+      ? this.onGameFinish()
       : this.props.goToNextLevel()
+  },
+  onGameFinish() {
+    alert('Congrats! You have just completed the game.')
   },
   beforeTranslationStart() {
     this.props.changeGameStatus(GAME_STATUSES.generateHighlighting)
