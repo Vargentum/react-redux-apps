@@ -92,7 +92,6 @@ const Simon = stamp.compose({
   },
   render() {
     const {changeGameStatus} = this.props
-    console.log(this.props.mode === GAME_MODE.strict, 'test')
     return <div>
       <ui.Translator
         flashRow={_.last(this.props.flashes)}
@@ -113,7 +112,6 @@ const Simon = stamp.compose({
 const mapStateToProps = ({simon}) => ({
   ...simon
 })
-console.log(actions)
 const mapDispatchToProps = {...actions}
 
 export default connect(

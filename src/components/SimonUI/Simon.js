@@ -5,7 +5,7 @@ import _ from 'lodash'
 import cls from 'classnames'
 import {GAME_STATUSES, GAME_MODE, GAME_SECTORS} from 'redux/modules/Simon'
 import * as style from 'styles/Simon.styl'
-
+import {Button, Input, Tooltip, OverlayTrigger} from 'react-bootstrap'
 
 
 /* -----------------------------
@@ -39,18 +39,28 @@ export const SectorsBoard = ({onSectorClick, activeSector}) =>
 /* -----------------------------
   Controls
 ----------------------------- */
+const TippedCheckbox = ({tip, ...props}) =>
+  <div className="f-box f-align--21-1 f-gap--S">
+    <Input type="checkbox"{...props} />
+    <OverlayTrigger 
+      placement="right" 
+      overlay={<Tooltip id='tooltip'>{tip}</Tooltip>}
+      >
+      <b>?</b>
+    </OverlayTrigger>
+  </div>
+
+
 export const Control = ({level, maxLevel, onGameStart, onGameReset, onStrictModeSwitch, isStrictMode}) =>
-  <div>
-    <span>Level: {level} of {maxLevel}</span>
-    <button onClick={onGameStart}>Start Game</button>
-    <button onClick={onGameReset}>Reset Game</button>
-    <label>
-      <input 
-        type="checkbox" 
-        checked={isStrictMode} 
-        onChange={onStrictModeSwitch} />
-      <span>Strict mode</span>
-    </label>
+  <div className={style.control}>
+    <h2>Level: {level} of {maxLevel}</h2>
+    <Button bsStyle="primary" onClick={onGameStart}>Start Game</Button>
+    <Button bsStyle="warning" onClick={onGameReset}>Reset Game</Button>
+    <TippedCheckbox
+      label="Strict mode"
+      tip="First error will reset all your level progress to zero"
+      checked={isStrictMode} 
+      onChange={onStrictModeSwitch} />
   </div>
 
 
