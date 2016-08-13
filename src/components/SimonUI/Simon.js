@@ -58,18 +58,22 @@ export const Control = ({
 }) =>
   <div className={style.control}>
     <h2>Level: {level} of {maxLevel}</h2>
-    <Button bsStyle="primary" onClick={onGameStart}>Start Game</Button>
-    <Button bsStyle="warning" onClick={onGameReset}>Reset Game</Button>
-    <TippedCheckbox
-      label="Strict mode"
-      tip="First error will reset all your level progress to zero"
-      checked={isStrictMode} 
-      onChange={onStrictModeSwitch} />
-    <TippedCheckbox
-      label="Hard mode"
-      tip="No duplicated highlights"
-      checked={isHardMode} 
-      onChange={onHardModeSwitch} />
+    <div className="f-box f-align--21-1 f-gap--M">
+      <Button bsStyle="primary" onClick={onGameStart}>Start Game</Button>
+      <Button bsStyle="warning" onClick={onGameReset}>Reset Game</Button>
+    </div>
+    <div className="f-box f-align--21-1 f-gap--M">
+      <TippedCheckbox
+        label="Strict mode"
+        tip="First error will reset all your level progress to zero"
+        checked={isStrictMode} 
+        onChange={onStrictModeSwitch} />
+      <TippedCheckbox
+        label="Hard mode"
+        tip="No duplicated highlights"
+        checked={isHardMode} 
+        onChange={onHardModeSwitch} />
+    </div>
   </div>
 
 

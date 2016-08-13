@@ -10,15 +10,6 @@ import soundManager, {SimonSounds} from 'utils/soundManager'
 const {GAME_STATUSES, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
 
 
-// const GameController = stamp.compose({
-
-// })
-
-// const flashesController = stamp.compose({
-
-// })
-
-
 const Simon = stamp.compose({
   displayName: 'SimonContainer',
   state: {
