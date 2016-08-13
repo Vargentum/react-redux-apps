@@ -16,12 +16,6 @@ export const GAME_STATUSES = {
 }
 let GA_check: string[] = values(GAME_STATUSES)
 
-export const GAME_MODE = {
-  normal: 0,
-  strict: 1
-}
-let GM_check: Array<string> = values(GAME_MODE)
-
 export const GAME_SECTORS = {
   topRight: 0,
   bottomRight: 1,
@@ -39,7 +33,8 @@ const GO_TO_NEXT_LEVEL = 'simon/GO_TO_NEXT_LEVEL'
 const FINISH_GAME = 'simon/FINISH_GAME'
 const RESET_GAME = 'simon/RESET_GAME'
 const RESET_LEVEL = 'simon/RESET_LEVEL'
-const CHANGE_GAME_MODE = 'simon/CHANGE_GAME_MODE'
+const TOGGLE_STRICT_MODE = 'simon/TOGGLE_STRICT_MODE'
+const TOGGLE_HARD_MODE = 'simon/TOGGLE_HARD_MODE'
 const CHANGE_GAME_STATUS = 'simon/CHANGE_GAME_STATUS'
 
 // ------------------------------------
@@ -58,9 +53,11 @@ export const resetLevel = (): Action => ({
   type: RESET_LEVEL
 })
 
-export const changeGameMode = (mode: number): Action => ({
-  type: CHANGE_GAME_MODE,
-  payload: {mode}
+export const toggleStrictMode = (): Action => ({
+  type: TOGGLE_STRICT_MODE
+})
+export const toggleHardMode = (): Action => ({
+  type: TOGGLE_HARD_MODE
 })
 export const changeGameStatus = (status: number): Action => ({
   type: CHANGE_GAME_STATUS,
@@ -73,6 +70,13 @@ export const changeGameStatus = (status: number): Action => ({
 const progressFlash = (flashes: Array<number> = []): Array<number> => ([
   ...flashes, _.random(0, 3)
 ])
+const progressUniqueFlash = (flashes: Array<number> = []): Array<number> => {
+  const last = _.last(flashes)
+  let rnd
+  do rnd = _.random(0, 3)
+  while (rnd === last)
+  return [...flashes, rnd] 
+}
 
 // ------------------------------------
 // Reducer
@@ -80,25 +84,36 @@ const progressFlash = (flashes: Array<number> = []): Array<number> => ([
 type initialStateType = {
   level: number,
   status: number,
-  mode: number,
+  isStrict: boolean,
+  isHard: boolean,
   flashes: ?Array<Object>
 }
 
 export const initialState: initialStateType = {
   level: 0,
   status: GAME_STATUSES.notStarted,
-  mode: GAME_MODE.normal,
+  isStrict: false,
+  isHard: false,
   flashes: []
 }
 export default createReducer(initialState, {
   [GO_TO_NEXT_LEVEL]: (state) => ({
     ...state,
     level: state.level + 1,
-    flashes: [...state.flashes, progressFlash(_.last(state.flashes))]
+    flashes: [
+      ...state.flashes, 
+      state.isHard 
+        ? progressUniqueFlash(_.last(state.flashes))
+        : progressFlash(_.last(state.flashes)) 
+    ]
   }),
-  [CHANGE_GAME_MODE]: (state, {mode}) => ({
+  [TOGGLE_STRICT_MODE]: (state) => ({
     ...state,
-    mode
+    isStrict: !state.isStrict
+  }),
+  [TOGGLE_HARD_MODE]: (state) => ({
+    ...state,
+    isHard: !state.isHard
   }),
   [CHANGE_GAME_STATUS]: (state, {status}) => ({
     ...state,

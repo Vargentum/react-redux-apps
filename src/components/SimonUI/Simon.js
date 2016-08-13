@@ -51,7 +51,11 @@ const TippedCheckbox = ({tip, ...props}) =>
   </div>
 
 
-export const Control = ({level, maxLevel, onGameStart, onGameReset, onStrictModeSwitch, isStrictMode}) =>
+export const Control = ({
+  level, maxLevel, onGameStart, onGameReset, 
+  onStrictModeSwitch, isStrictMode,
+  onHardModeSwitch, isHardMode
+}) =>
   <div className={style.control}>
     <h2>Level: {level} of {maxLevel}</h2>
     <Button bsStyle="primary" onClick={onGameStart}>Start Game</Button>
@@ -61,6 +65,11 @@ export const Control = ({level, maxLevel, onGameStart, onGameReset, onStrictMode
       tip="First error will reset all your level progress to zero"
       checked={isStrictMode} 
       onChange={onStrictModeSwitch} />
+    <TippedCheckbox
+      label="Hard mode"
+      tip="No duplicated highlights"
+      checked={isHardMode} 
+      onChange={onHardModeSwitch} />
   </div>
 
 

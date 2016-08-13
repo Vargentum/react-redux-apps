@@ -7,7 +7,7 @@ import * as _actions from 'redux/modules/Simon'
 import * as ui from 'components/SimonUI/Simon'
 import soundManager, {SimonSounds} from 'utils/soundManager'
 
-const {GAME_STATUSES, GAME_MODE, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
+const {GAME_STATUSES, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
 
 
 // const GameController = stamp.compose({
@@ -56,7 +56,7 @@ const Simon = stamp.compose({
   onInvalidInput() {
     soundManager.play(SimonSounds.error)
     this.resetLevel()
-    this.props.mode === GAME_MODE.strict && this.props.resetGame()
+    this.props.isStrict && this.props.resetGame()
     console.log('invalid input')
   },
   onLevelComplete() {
@@ -84,12 +84,6 @@ const Simon = stamp.compose({
   handleGameStart() {
     this.props.goToNextLevel()
   },
-  handleStrictModeSwitch() {
-    const oppositeMode = this.props.mode === GAME_MODE.strict 
-      ? GAME_MODE.normal 
-      : GAME_MODE.strict
-    this.props.changeGameMode(oppositeMode)
-  },
   render() {
     const {changeGameStatus} = this.props
     return <div>
@@ -103,8 +97,11 @@ const Simon = stamp.compose({
         maxLevel={GAME_MAX_LEVEL}
         onGameStart={::this.handleGameStart}
         onGameReset={::this.props.resetGame} 
-        onStrictModeSwitch={::this.handleStrictModeSwitch} 
-        isStrictMode={this.props.mode === GAME_MODE.strict} />
+        onStrictModeSwitch={::this.props.toggleStrictMode} 
+        onHardModeSwitch={::this.props.toggleHardMode} 
+        isStrictMode={this.props.isStrict}
+        isHardMode={this.props.isHard}
+        />
     </div>
   }
 })
