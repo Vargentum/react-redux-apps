@@ -10,6 +10,15 @@ import soundManager, {SimonSounds} from 'utils/soundManager'
 const {GAME_STATUSES, GAME_MODE, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
 
 
+// const GameController = stamp.compose({
+
+// })
+
+// const flashesController = stamp.compose({
+
+// })
+
+
 const Simon = stamp.compose({
   displayName: 'SimonContainer',
   state: {
@@ -72,16 +81,31 @@ const Simon = stamp.compose({
       repeatedFlashes: []
     });
   },
+  handleGameStart() {
+    this.props.goToNextLevel()
+  },
+  handleStrictModeSwitch() {
+    const oppositeMode = this.props.mode === GAME_MODE.strict 
+      ? GAME_MODE.normal 
+      : GAME_MODE.strict
+    this.props.changeGameMode(oppositeMode)
+  },
   render() {
     const {changeGameStatus} = this.props
+    console.log(this.props.mode === GAME_MODE.strict, 'test')
     return <div>
       <ui.Translator
         flashRow={_.last(this.props.flashes)}
         beforeStart={::this.beforeTranslationStart}
         afterEnd={::this.afterTranslationEnd}
-        onSectorClick={::this.handleUserClick}
-        />
-      <ui.Control level={this.props.level} onClick={this.props.goToNextLevel} />
+        onSectorClick={::this.handleUserClick} />
+      <ui.Control 
+        level={this.props.level} 
+        maxLevel={GAME_MAX_LEVEL}
+        onGameStart={::this.handleGameStart}
+        onGameReset={::this.props.resetGame} 
+        onStrictModeSwitch={::this.handleStrictModeSwitch} 
+        isStrictMode={this.props.mode === GAME_MODE.strict} />
     </div>
   }
 })

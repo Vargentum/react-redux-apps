@@ -6,6 +6,11 @@ import cls from 'classnames'
 import {GAME_STATUSES, GAME_MODE, GAME_SECTORS} from 'redux/modules/Simon'
 import * as style from 'styles/Simon.styl'
 
+
+
+/* -----------------------------
+  Board
+----------------------------- */
 const Sector = ({onClick, mod, active, index}) =>
   <div 
     onClick={_.partial(onClick, index)}
@@ -30,13 +35,29 @@ export const SectorsBoard = ({onSectorClick, activeSector}) =>
     )}
   </div>
 
-export const Control = ({level, onClick}) =>
+
+/* -----------------------------
+  Controls
+----------------------------- */
+export const Control = ({level, maxLevel, onGameStart, onGameReset, onStrictModeSwitch, isStrictMode}) =>
   <div>
-    <span>{level}</span>
-    <button onClick={onClick}>Go next</button>
+    <span>Level: {level} of {maxLevel}</span>
+    <button onClick={onGameStart}>Start Game</button>
+    <button onClick={onGameReset}>Reset Game</button>
+    <label>
+      <input 
+        type="checkbox" 
+        checked={isStrictMode} 
+        onChange={onStrictModeSwitch} />
+      <span>Strict mode</span>
+    </label>
   </div>
 
 
+
+/* -----------------------------
+  Translator
+----------------------------- */
 export class Translator extends Component {
   static propTypes = {
     flashRow: PT.array,
@@ -53,9 +74,6 @@ export class Translator extends Component {
   }
   state = {
     ...Translator.defaultState
-  }
-  componentDidMount () {
-    this.makeTranslationCycle()
   }
   componentDidUpdate (prevProps, prevState) {
     if (!_.isEqual(prevProps.flashRow, this.props.flashRow)) {
