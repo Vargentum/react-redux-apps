@@ -71,7 +71,7 @@ const progressUniqueFlash = (flashes: Array<number> = []): Array<number> => {
   let rnd
   do rnd = _.random(0, 3)
   while (rnd === last)
-  return [...flashes, rnd] 
+  return [...flashes, rnd]
 }
 
 // ------------------------------------
@@ -97,10 +97,10 @@ export default createReducer(initialState, {
     ...state,
     level: state.level + 1,
     flashes: [
-      ...state.flashes, 
-      state.isHard 
+      ...state.flashes,
+      state.isHard
         ? progressUniqueFlash(_.last(state.flashes))
-        : progressFlash(_.last(state.flashes)) 
+        : progressFlash(_.last(state.flashes))
     ]
   }),
   [TOGGLE_STRICT_MODE]: (state) => ({

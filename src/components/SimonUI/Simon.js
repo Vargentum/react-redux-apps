@@ -7,12 +7,11 @@ import {GAME_STATUSES, GAME_MODE, GAME_SECTORS} from 'redux/modules/Simon'
 import * as style from 'styles/Simon.styl'
 import {Button, Glyphicon, Input, Tooltip, OverlayTrigger} from 'react-bootstrap'
 
-
 /* -----------------------------
   Board
 ----------------------------- */
 const Sector = ({onClick, mod, active, index}) =>
-  <div 
+  <div
     onClick={_.partial(onClick, index)}
     className={cls({
       [style.sector]: true,
@@ -23,7 +22,7 @@ const Sector = ({onClick, mod, active, index}) =>
 export const SectorsBoard = ({onSectorClick, activeSector}) =>
   <div className={style.sectorsBoard}>
     {_.map(GAME_SECTORS, (props, name, secs) => {
-      const currentIndex = _.findIndex(_.keys(secs), k => k === name)
+      const currentIndex = _.findIndex(_.keys(secs), (k) => k === name)
       return <Sector
         active={activeSector === currentIndex}
         index={currentIndex}
@@ -35,24 +34,22 @@ export const SectorsBoard = ({onSectorClick, activeSector}) =>
     )}
   </div>
 
-
 /* -----------------------------
   Controls
 ----------------------------- */
 const TippedCheckbox = ({tip, ...props}) =>
   <div className="f-box f-align--21-1 f-gap--S">
     <Input type="checkbox"{...props} />
-    <OverlayTrigger 
-      placement="right" 
+    <OverlayTrigger
+      placement="right"
       overlay={<Tooltip id='tooltip'>{tip}</Tooltip>}
       >
       <b>?</b>
     </OverlayTrigger>
   </div>
 
-
 export const Control = ({
-  level, maxLevel, onGameStart, onGameReset, 
+  level, maxLevel, onGameStart, onGameReset,
   onStrictModeSwitch, isStrictMode,
   onHardModeSwitch, isHardMode
 }) =>
@@ -66,17 +63,15 @@ export const Control = ({
       <TippedCheckbox
         label="Strict mode"
         tip="First error will reset all your level progress to zero"
-        checked={isStrictMode} 
+        checked={isStrictMode}
         onChange={onStrictModeSwitch} />
       <TippedCheckbox
         label="Hard mode"
         tip="No duplicated highlights"
-        checked={isHardMode} 
+        checked={isHardMode}
         onChange={onHardModeSwitch} />
     </div>
   </div>
-
-
 
 /* -----------------------------
   Translator
@@ -132,12 +127,12 @@ export class Translator extends Component {
     const {flashes, disableRepeat, onSectorClick, ...props} = this.props
     return (
       <div className={style.translator}>
-        <SectorsBoard 
-          onSectorClick={onSectorClick} 
-          activeSector={this.state.activeSector} 
+        <SectorsBoard
+          onSectorClick={onSectorClick}
+          activeSector={this.state.activeSector}
           />
-        <Button 
-          bsStyle="success" 
+        <Button
+          bsStyle="success"
           className={style.translatorRefresh}
           onClick={::this.makeTranslationCycle}
           disabled={disableRepeat}>

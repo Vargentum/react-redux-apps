@@ -2,13 +2,13 @@
 
 import React, {PropTypes, Component} from 'react'
 import stamp from 'stamp'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import * as _actions from 'redux/modules/Simon'
 import * as ui from 'components/SimonUI/Simon'
 import soundManager, {SimonSounds} from 'utils/soundManager'
 
 const {GAME_STATUSES, GAME_SECTORS, GAME_MAX_LEVEL, ...actions} = _actions
-
 
 const Simon = stamp.compose({
   displayName: 'SimonContainer',
@@ -19,10 +19,10 @@ const Simon = stamp.compose({
     if (this.props.status !== GAME_STATUSES.waitingForUserInput) return
     this.updateRepeatedFlash(sectorIdx)
   },
-  updateRepeatedFlash(val){
+  updateRepeatedFlash(val) {
     this.setState({
       repeatedFlashes: [...this.state.repeatedFlashes, val]
-    }, ::this.compareFlashes);
+    }, ::this.compareFlashes)
   },
   compareFlashes() {
     const enteredCount = this.state.repeatedFlashes.length || 1
@@ -66,14 +66,14 @@ const Simon = stamp.compose({
     this.props.changeGameStatus(GAME_STATUSES.waitingForUserInput)
     this.setState({
       repeatedFlashes: []
-    });
+    })
   },
   resetLevel() {
     this.props.changeGameStatus(GAME_STATUSES.error)
     this.props.changeGameStatus(GAME_STATUSES.waitingForUserInput)
     this.setState({
       repeatedFlashes: []
-    });
+    })
   },
   handleGameStart() {
     this.props.goToNextLevel()
@@ -85,16 +85,16 @@ const Simon = stamp.compose({
         flashRow={_.last(this.props.flashes)}
         beforeStart={::this.beforeTranslationStart}
         afterEnd={::this.afterTranslationEnd}
-        onSectorClick={::this.handleUserClick} 
+        onSectorClick={::this.handleUserClick}
         disableRepeat={this.props.status !== GAME_STATUSES.waitingForUserInput}
         />
-      <ui.Control 
-        level={this.props.level} 
+      <ui.Control
+        level={this.props.level}
         maxLevel={GAME_MAX_LEVEL}
         onGameStart={::this.handleGameStart}
-        onGameReset={::this.props.resetGame} 
-        onStrictModeSwitch={::this.props.toggleStrictMode} 
-        onHardModeSwitch={::this.props.toggleHardMode} 
+        onGameReset={::this.props.resetGame}
+        onStrictModeSwitch={::this.props.toggleStrictMode}
+        onHardModeSwitch={::this.props.toggleHardMode}
         isStrictMode={this.props.isStrict}
         isHardMode={this.props.isHard}
         />
