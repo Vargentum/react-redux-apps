@@ -5,7 +5,7 @@ import _ from 'lodash'
 import cls from 'classnames'
 import {GAME_STATUSES, GAME_MODE, GAME_SECTORS} from 'redux/modules/Simon'
 import * as style from 'styles/Simon.styl'
-import {Button, Input, Tooltip, OverlayTrigger} from 'react-bootstrap'
+import {Button, Glyphicon, Input, Tooltip, OverlayTrigger} from 'react-bootstrap'
 
 
 /* -----------------------------
@@ -129,11 +129,21 @@ export class Translator extends Component {
     }, resolve())
   }
   render() {
-    const {flashes, onSectorClick, ...props} = this.props
+    const {flashes, disableRepeat, onSectorClick, ...props} = this.props
     return (
-      <SectorsBoard 
-        onSectorClick={onSectorClick} 
-        activeSector={this.state.activeSector} />
+      <div className={style.translator}>
+        <SectorsBoard 
+          onSectorClick={onSectorClick} 
+          activeSector={this.state.activeSector} 
+          />
+        <Button 
+          bsStyle="success" 
+          className={style.translatorRefresh}
+          onClick={::this.makeTranslationCycle}
+          disabled={disableRepeat}>
+          <Glyphicon glyph="repeat" />
+        </Button>
+      </div>
     )
   }
 }

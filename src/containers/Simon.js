@@ -82,7 +82,9 @@ const Simon = stamp.compose({
         flashRow={_.last(this.props.flashes)}
         beforeStart={::this.beforeTranslationStart}
         afterEnd={::this.afterTranslationEnd}
-        onSectorClick={::this.handleUserClick} />
+        onSectorClick={::this.handleUserClick} 
+        disableRepeat={this.props.status !== GAME_STATUSES.waitingForUserInput}
+        />
       <ui.Control 
         level={this.props.level} 
         maxLevel={GAME_MAX_LEVEL}
