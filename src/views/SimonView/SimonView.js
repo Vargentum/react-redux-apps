@@ -12,7 +12,7 @@ export class SimonView extends Component {
     return (
       <CommonView
         title="Simon game"
-        description="Check you mind :)"
+        description="You should remember and repeat up to 20 items sequence of flashes. For real heros there are hard and strict mode available :)"
         criteriaUrl="https://www.freecodecamp.com/challenges/build-a-simon-game"
         sourceCodeUrl="https://github.com/Vargentum/react-redux-apps/tree/simon-game"
         Component={Simon}
