@@ -8,8 +8,8 @@ const ASYNC_STAGES = {
 }
 
 const DATA_URL = {
-  questions: '/gardenize/questions.json',
-  answers: '/gardenize/answers.json'
+  questions: '/apps/gardenize/questions.json',
+  answers: '/apps/gardenize/answers.json'
 }
 
 export const getResource = (type, onSuccess, onFail) => {

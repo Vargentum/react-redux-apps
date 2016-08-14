@@ -11,9 +11,9 @@ const utils = {
   Simon game sounds
 ----------------------------- */
 const _SimonSounds = {
-  error: '/simon/error.mp3',
-  success: '/simon/success.mp3',
-  levelComplete: '/simon/nextLevel.mp3'
+  error: '/apps/simon/error.mp3',
+  success: '/apps/simon/success.mp3',
+  levelComplete: '/apps/simon/nextLevel.mp3'
 }
 export const SimonSounds = _.mapValues(_SimonSounds, utils.toKeys)
 
