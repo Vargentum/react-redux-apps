@@ -31,7 +31,6 @@ export const GAME_MAX_LEVEL = 20
 ----------------------------- */
 const GO_TO_NEXT_LEVEL = 'simon/GO_TO_NEXT_LEVEL'
 const RESET_GAME = 'simon/RESET_GAME'
-const RESET_LEVEL = 'simon/RESET_LEVEL'
 const TOGGLE_STRICT_MODE = 'simon/TOGGLE_STRICT_MODE'
 const TOGGLE_HARD_MODE = 'simon/TOGGLE_HARD_MODE'
 const CHANGE_GAME_STATUS = 'simon/CHANGE_GAME_STATUS'
@@ -45,10 +44,6 @@ export const goToNextLevel = (): Action => ({
 export const resetGame = (): Action => ({
   type: RESET_GAME
 })
-export const resetLevel = (): Action => ({
-  type: RESET_LEVEL
-})
-
 export const toggleStrictMode = (): Action => ({
   type: TOGGLE_STRICT_MODE
 })
