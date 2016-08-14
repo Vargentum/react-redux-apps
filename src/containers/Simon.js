@@ -78,8 +78,14 @@ const Simon = stamp.compose({
   handleGameStart() {
     this.props.goToNextLevel()
   },
+  handleGameReset() {
+    Promise
+      .resolve(this.resetLevel())
+      .then(::this.props.resetGame)
+  },
   render() {
     const {changeGameStatus} = this.props
+    const allowToStart = this.props.status === GAME_STATUSES.notStarted
     return <div>
       <ui.Translator
         flashRow={_.last(this.props.flashes)}
@@ -92,11 +98,13 @@ const Simon = stamp.compose({
         level={this.props.level}
         maxLevel={GAME_MAX_LEVEL}
         onGameStart={::this.handleGameStart}
-        onGameReset={::this.props.resetGame}
+        onGameReset={::this.handleGameReset}
         onStrictModeSwitch={::this.props.toggleStrictMode}
         onHardModeSwitch={::this.props.toggleHardMode}
         isStrictMode={this.props.isStrict}
         isHardMode={this.props.isHard}
+        allowToStart={allowToStart}
+        allowToReset={!allowToStart}
         />
     </div>
   }

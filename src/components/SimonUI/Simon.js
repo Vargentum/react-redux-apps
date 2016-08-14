@@ -51,13 +51,14 @@ const TippedCheckbox = ({tip, ...props}) =>
 export const Control = ({
   level, maxLevel, onGameStart, onGameReset,
   onStrictModeSwitch, isStrictMode,
-  onHardModeSwitch, isHardMode
+  onHardModeSwitch, isHardMode,
+  allowToStart, allowToReset
 }) =>
   <div className={style.control}>
     <h2>Level: {level} of {maxLevel}</h2>
     <div className="f-box f-align--21-1 f-gap--M">
-      <Button bsStyle="primary" onClick={onGameStart}>Start Game</Button>
-      <Button bsStyle="warning" onClick={onGameReset}>Reset Game</Button>
+      <Button bsStyle="primary" disabled={!allowToStart} onClick={onGameStart}>Start Game</Button>
+      <Button bsStyle="warning" disabled={!allowToReset} onClick={onGameReset}>Reset Game</Button>
     </div>
     <div className="f-box f-align--21-1 f-gap--M">
       <TippedCheckbox
@@ -94,7 +95,8 @@ export class Translator extends Component {
     ...Translator.defaultState
   }
   componentDidUpdate (prevProps, prevState) {
-    if (!_.isEqual(prevProps.flashRow, this.props.flashRow)) {
+    if (!_.isEqual(prevProps.flashRow, this.props.flashRow)
+        && !_.isEmpty(this.props.flashRow)) {
       this.makeTranslationCycle()
     }
   }
