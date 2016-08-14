@@ -2,13 +2,12 @@ $simon = {
   size: 200px  
 
   sectors: {
-    topRight: red,
-    bottomRight: green,
-    bottomLeft: blue,
-    topLeft: yellow
+    topRight: rgba(197, 175, 164, 1),
+    bottomRight: rgba(207, 77, 111, 1),
+    bottomLeft: rgba(3, 181, 170, 1),
+    topLeft: rgba(219, 254, 135, 1)
   }
 }
-
 
 .sectorsBoard
   width: $simon.size
@@ -30,9 +29,7 @@ $simon = {
       background-color: v
       
     &-{k}Active
-      border-color: v
-      background-color: transparent
-      // background-color: lighten(v, 25%)
+      background-color: alpha(v, 25%)
         
 
 .translator
