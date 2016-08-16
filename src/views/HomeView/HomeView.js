@@ -30,6 +30,10 @@ const Projects = [
   {
     link: 'simon',
     name: 'Simon Game'
+  },
+  {
+    link: 'markdown',
+    name: 'Simple markdown editor'
   }
 ]
 
