@@ -22,7 +22,7 @@ Hello markdown
     this.setState({
       input,
       output: marked(input)
-    });
+    })
   }
 
   handleInputUpdate(e) {
@@ -34,7 +34,7 @@ Hello markdown
     return (
       <div className={style.wrapper}>
         <ui.Input onUpdate={::this.handleInputUpdate} value={input} />
-        <ui.Output 
+        <ui.Output
           dangerouslySetInnerHTML={{__html: output}} />
       </div>
     )

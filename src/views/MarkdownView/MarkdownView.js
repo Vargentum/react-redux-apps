@@ -2,13 +2,7 @@ import React, {Component} from 'react'
 import Markdown from 'containers/Markdown'
 import CommonView from 'views/CommonView'
 
-type Props = {
-
-};
-
 export class MarkdownView extends Component {
-  props: Props;
-
   render () {
     return (
       <CommonView
