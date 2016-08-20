@@ -9,6 +9,7 @@ import PomodoroView from 'views/PomodoroView'
 import TTTView from 'views/TTTView'
 import SimonView from 'views/SimonView'
 import MarkdownView from 'views/MarkdownView'
+import CamperLeaderboardView from 'views/CamperLeaderboardView'
 
 // gardenize
 import QuestionsListView from '../views/GardenizeView/QuestionsListView'
@@ -30,5 +31,6 @@ export default (store) => (
     <Route path='/ttt' component={TTTView} />
     <Route path='/simon' component={SimonView} />
     <Route path='/markdown' component={MarkdownView} />
+    <Route path='/leaderboard' component={CamperLeaderboardView} />
   </Route>
 )

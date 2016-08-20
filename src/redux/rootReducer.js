@@ -10,6 +10,7 @@ import gardenizeQuestionDetails from './modules/gardenize/QuestionDetails'
 import pomodoro from './modules/pomodoro'
 import ttt from './modules/ttt/ttt'
 import simon from './modules/Simon'
+import CamperLeaderboard from './modules/CamperLeaderboard'
 
 export default combineReducers({
   router,
@@ -22,5 +23,6 @@ export default combineReducers({
   calculator,
   pomodoro,
   ttt,
-  simon
+  simon,
+  CamperLeaderboard
 })

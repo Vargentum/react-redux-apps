@@ -34,6 +34,10 @@ const Projects = [
   {
     link: 'markdown',
     name: 'Simple markdown editor'
+  },
+  {
+    link: 'leaderboard',
+    name: 'Freecodecamp users leaderboard'
   }
 ]
 
