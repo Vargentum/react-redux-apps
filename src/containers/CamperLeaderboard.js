@@ -9,12 +9,11 @@ export class CamperLeaderboard extends Component {
   props: Props;
 
   render() {
-    const {
-
-    } = this.props
 
     return (
-      <div>hello camper</div>
+      <div>hello camper
+        <button onClick={this.props.loadUsers}>Load campers</button>
+      </div>
     )
   }
 }
