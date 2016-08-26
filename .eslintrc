@@ -37,6 +37,7 @@
     "comma-spacing": 0,
     'react/prop-types': 0,
     'no-unused-vars': 0,
-    'space-infix-ops': 0
+    'space-infix-ops': 0,
+    "generator-star-spacing": ["error", {"before": true, "after": false}]
   }
 }
