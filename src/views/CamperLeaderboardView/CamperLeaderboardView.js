@@ -10,6 +10,7 @@ export class CamperLeaderboardView extends Component {
         description={`Shows brownie's points leaders`}
         criteriaUrl="https://www.freecodecamp.com/challenges/build-a-camper-leaderboard"
         sourceCodeUrl="https://github.com/Vargentum/react-redux-apps/tree/camper-leaderboard"
+        usedLibraries={['redux-saga', 'fixed-data-table']}
         Component={CamperLeaderboard}
       />
     )

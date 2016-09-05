@@ -13,8 +13,12 @@ type Props = {
 class CommonView extends Component {
   props: Props;
 
+  static defaultProps = {
+    usedLibraries: []
+  }
+
   render () {
-    const {title, description, criteriaUrl, sourceCodeUrl, Component} = this.props
+    const {title, usedLibraries, description, criteriaUrl, sourceCodeUrl, Component} = this.props
 
     return (
       <Row>
@@ -31,6 +35,11 @@ class CommonView extends Component {
             You can check out the source code <a target="_blank"
             href={sourceCodeUrl}>here.</a>
           </p>
+          {!!usedLibraries.length &&
+            <p>
+              Used libraries: {usedLibraries.join(', ')}.
+            </p>
+          }
           <h6>by Vargentum</h6>
         </Jumbotron>
 
