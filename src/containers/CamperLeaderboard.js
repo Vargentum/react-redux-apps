@@ -4,6 +4,7 @@ import {FETCH_RECENT, FETCH_ALLTIME, loadUsers} from 'redux/modules/CamperLeader
 import * as ui from 'components/CamperLeaderboardUI/CamperLeaderboard'
 import {Table, Column, Cell} from 'fixed-data-table'
 import cls from 'classnames'
+import * as styl from 'styles/CamperLeaderboard.styl'
 
 require('!style!css!fixed-data-table/dist/fixed-data-table-base.min.css')
 require('!style!css!fixed-data-table/dist/fixed-data-table-style.min.css')
@@ -45,8 +46,8 @@ export class CamperLeaderboard extends Component {
   r_controlCell (label, type) {
     return <Cell
       onClick={_.partial(::this.onDataRequest, type)}
-      className={cls('test', {
-        'is-active': this.state.currentDataType === type
+      className={cls(styl.heading, {
+        [styl.headingActive]: this.state.currentDataType === type
       })}>{label}</Cell>
   }
 
