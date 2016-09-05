@@ -41,7 +41,7 @@ const ACTION_CREATORS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  initDataType: FETCH_RECENT, 
+  initDataType: FETCH_RECENT,
   loading: false,
   users: {
     [FETCH_RECENT]: [],

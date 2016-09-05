@@ -16,6 +16,6 @@ export function CamperEntry ({username, img, alltime, recent, ...rest}) {
 
 export function TriggerableHeading ({onTrigger, label, ...props}) {
   return <div {...props}>
-    
+
   </div>
 }
