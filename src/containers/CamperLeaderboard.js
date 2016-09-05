@@ -2,23 +2,31 @@ import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
 import * as actions from 'redux/modules/CamperLeaderboard'
 import * as ui from 'components/CamperLeaderboardUI/CamperLeaderboard'
-import Table from 'responsive-fixed-data-table'
-import {Column, Cell} from 'fixed-data-table'
+import {Table, Column, Cell} from 'fixed-data-table'
+
+require('!style!css!fixed-data-table/dist/fixed-data-table-base.min.css')
+require('!style!css!fixed-data-table/dist/fixed-data-table-style.min.css')
 
 function cellory (data, type) {
-  return function Cell ({rowIndex, ...props}) {
-    return <div>
-      {data[rowIndex][type]}
-    </div>
-  }  
+  return function _Cell ({rowIndex, ...props}) {
+    const value = data[rowIndex][type]
+    return <Cell {...props} className="test">
+      {type === 'img' 
+        ? <img style={{width: 30, height: 30}} src={value} /> 
+        : value
+      }
+    </Cell>
+  }
 }
-
 
 type Props = {
 
 }
 export class CamperLeaderboard extends Component {
   props: Props;
+  static tableWidth = 960
+  static columnsTotal = 4
+  static imgColumnWidth = 50
 
   r_cell (type) {
     return cellory(this.props.users, type)
@@ -30,29 +38,32 @@ export class CamperLeaderboard extends Component {
 
   render() {
     const {users, loadUsers} = this.props
+    const otherColumnWidth = (CamperLeaderboard.tableWidth - CamperLeaderboard.imgColumnWidth) / (CamperLeaderboard.columnsTotal - 1)
+
     return (
       <div>
         <Table
           rowsCount={users.length}
           headerHeight={50}
           rowHeight={50}
-          width={500}
+          width={CamperLeaderboard.tableWidth}
+          height={500}
           >
           <Column
-            width={100} 
-            header={<Cell>Image</Cell>} 
+            width={CamperLeaderboard.imgColumnWidth}
+            header={<Cell>Img</Cell>}
             cell={this.r_cell('img')}/>
           <Column
-            width={100} 
-            header={<Cell>Username</Cell>} 
+            width={otherColumnWidth}
+            header={<Cell>Username</Cell>}
             cell={this.r_cell('username')}/>
           <Column
-            width={100} 
-            header={<Cell>Recent</Cell>} 
+            width={otherColumnWidth}
+            header={<Cell>Recent</Cell>}
             cell={this.r_cell('recent')}/>
           <Column
-            width={100} 
-            header={<Cell>Alltime</Cell>} 
+            width={otherColumnWidth}
+            header={<Cell>Alltime</Cell>}
             cell={this.r_cell('alltime')}/>
         </Table>
       </div>
