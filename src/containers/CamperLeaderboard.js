@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import {FETCH_RECENT, FETCH_ALLTIME, loadUsers} from 'redux/modules/CamperLeaderboard'
 import * as ui from 'components/CamperLeaderboardUI/CamperLeaderboard'
@@ -36,7 +37,7 @@ export class CamperLeaderboard extends Component {
     if (!this.props.users[type].length) {
       this.props.loadUsers(type)
     }
-    this.setState({currentDataType: type});
+    this.setState({currentDataType: type})
   }
 
   r_cell (type) {
@@ -54,16 +55,24 @@ export class CamperLeaderboard extends Component {
   componentDidMount () {
     this.onDataRequest(this.state.currentDataType)
   }
+  r_area (label, className='') {
+    return <Column
+      header={<Cell className={className}>{label}</Cell>}
+      width={CamperLeaderboard.tableWidth}
+      cell={<div />}
+      />
+  }
 
   r_loadingArea() {
-    return <Column
-      header={<Cell>Loading...</Cell>}
-      width={CamperLeaderboard.tableWidth}
-      cell={<div />} />
+    return this.r_area('Loading...')
+  }
+  r_errorArea(e) {
+    return this.r_area('We got an error here :(', styl.headingError)
   }
 
   r_body() {
-    const otherColumnWidth = (CamperLeaderboard.tableWidth - CamperLeaderboard.imgColumnWidth) / (CamperLeaderboard.columnsTotal - 1)
+    const otherColumnWidth =
+      (CamperLeaderboard.tableWidth - CamperLeaderboard.imgColumnWidth) / (CamperLeaderboard.columnsTotal - 1)
     return [
       <Column
         key={0}
@@ -89,32 +98,26 @@ export class CamperLeaderboard extends Component {
   }
 
   render() {
-    const {users, loadUsers, loading} = this.props
+    const {users, loadUsers, loading, error} = this.props
     const {currentDataType} = this.state
 
     return (
       <div>
         <Table
-          rowsCount={loading ? 1 : users[currentDataType].length} //reserve one row for empty area
+          rowsCount={users[currentDataType].length}
           headerHeight={50}
           rowHeight={50}
           width={CamperLeaderboard.tableWidth}
           height={500}
           >
-          {loading 
-            ? this.r_loadingArea()
-            : this.r_body()
-          }
+          {loading && this.r_loadingArea()}
+          {error && this.r_errorArea(error)}
+          {!loading && !error && this.r_body()}
         </Table>
       </div>
     )
   }
 }
-/*username:"ndburrus"
-img:"https://avatars.githubusercontent.com/u/15148847?v=3"
-alltime:1484
-recent:679
-lastUpdate:"2016-08-21T12:06:18.722Z"*/
 
 const mapStateToProps = ({CamperLeaderboard}) => ({
   ...CamperLeaderboard
