@@ -1,8 +1,8 @@
-import {watcher as camperLeaderboardWatcher} from './CamperLeaderboard'
+import {watchRecent, watchAlltime} from './CamperLeaderboard'
+import {fork} from 'redux-saga/effects'
 
 
 export default function *rootSaga() {
-  yield [
-    camperLeaderboardWatcher()
-  ]
+  yield fork(watchRecent)
+  yield fork(watchAlltime)
 }

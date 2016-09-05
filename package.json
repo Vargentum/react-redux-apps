@@ -69,6 +69,7 @@
     "debug": "^2.2.0",
     "fixed-data-table": "^0.6.3",
     "history": "^2.0.0",
+    "immutability-helper": "2.0.0",
     "immutable": "^3.8.1",
     "koa": "^2.0.0-alpha.3",
     "koa-connect-history-api-fallback": "^0.3.0",
